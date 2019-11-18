@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="payroll_final/src"/>
+	<classpathentry kind="lib" path="payroll_final/lib/jcalendar-1.4.jar"/>
+	<classpathentry kind="lib" path="payroll_final/lib/mysql-connector-java-5.1.48.jar"/>
+	<classpathentry kind="lib" path="payroll_final/lib/swingx-core-1.6.5-sources.jar"/>
+	<classpathentry kind="lib" path="PMS.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
