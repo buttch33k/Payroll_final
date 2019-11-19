@@ -7,8 +7,12 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.GridLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 import javax.swing.JSeparator;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JRadioButton;
@@ -41,7 +45,25 @@ public class addEmployee extends JFrame {
 				try {
 					addEmployee frame = new addEmployee();
 					frame.setVisible(true);
-					
+					 WindowAdapter exitListener = new WindowAdapter() {
+
+				            @Override
+				            public void windowClosing(WindowEvent e) {
+				                int confirm = JOptionPane.showOptionDialog(frame,
+				                        "Are You Sure to Close this Application?",
+				                        "Exit Confirmation", JOptionPane.YES_NO_CANCEL_OPTION,
+				                        JOptionPane.QUESTION_MESSAGE, null, null, null);
+				                if(confirm == JOptionPane.YES_OPTION){
+				                	frame.setDefaultCloseOperation(frame.DISPOSE_ON_CLOSE);//yes
+
+				                } else if (confirm == JOptionPane.CANCEL_OPTION) {
+				                	frame.setDefaultCloseOperation(frame.DO_NOTHING_ON_CLOSE);//cancel
+				                } else {
+				                	frame.setDefaultCloseOperation(frame.DO_NOTHING_ON_CLOSE);//no
+				                }
+				            }
+				        };
+				        frame. addWindowListener(exitListener);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

@@ -6,6 +6,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import Main.EmployeeName;
+
 import javax.swing.JMenuBar;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -50,10 +53,6 @@ public class AdminMenu extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblHiAdmin = new JLabel("hi admin");
-		lblHiAdmin.setBounds(160, 166, 69, 20);
-		contentPane.add(lblHiAdmin);
-		
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBounds(0, 0, 730, 31);
 		contentPane.add(menuBar);
@@ -74,6 +73,14 @@ public class AdminMenu extends JFrame {
 		mnEmployee.add(mntmAddEmployee);
 		
 		JMenuItem mntmUpdateEmployee = new JMenuItem("UPDATE EMPLOYEE");
+		mntmUpdateEmployee.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				UpdateEmployee uptemp = new UpdateEmployee();
+				uptemp.setVisible(true);
+				uptemp.setTitle("Update Employee");
+				
+			}
+		});
 		mntmUpdateEmployee.setHorizontalAlignment(SwingConstants.LEFT);
 		mnEmployee.add(mntmUpdateEmployee);
 		
@@ -88,5 +95,25 @@ public class AdminMenu extends JFrame {
 		
 		JMenu mnPayslip = new JMenu("PAYSLIP");
 		menuBar.add(mnPayslip);
+		
+		JLabel lblNewLabel = new JLabel("Logged in As:");
+		lblNewLabel.setBounds(10, 42, 80, 14);
+		contentPane.add(lblNewLabel);
+		
+		JLabel lbl_emp = new JLabel("emp");
+		lbl_emp.setText(String.valueOf(EmployeeName.empid).toString());
+		lbl_emp.setBounds(117, 67, 46, 14);
+		contentPane.add(lbl_emp);
+		
+		JLabel lblEmployee = new JLabel("Employee #:");
+		lblEmployee.setBounds(10, 67, 80, 14);
+		contentPane.add(lblEmployee);
+		
+		JLabel lblNewLabel_logas = new JLabel("");
+		lblNewLabel_logas.setText(String.valueOf(EmployeeName.emp_lstname).toString());
+		lblNewLabel_logas.setBounds(117, 42, 46, 14);
+		contentPane.add(lblNewLabel_logas);
+		
+		
 	}
 }

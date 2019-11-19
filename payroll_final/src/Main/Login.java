@@ -108,16 +108,21 @@ public class Login extends JFrame {
 		btnLogin.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
+				
 				String query = ("call checklog()");
 				String username = textField_username.getText();
 				String passwords = textField_password.getText();
-				
+
+						
 				try {
 					
-					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/scratchpayroll?autoReconnect=true&useSSL=false","root", "Qwerty120995!");
+					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "Qwerty120995!");
 					PreparedStatement pst = conn.prepareStatement(query);
 					stmt = conn.prepareCall(query);
 					ResultSet rs = stmt.executeQuery(query);
+					
+					
+					
 					boolean flag = false;
 					String roleAdmin = "1";
 					String roleEmployee = "2";
@@ -129,6 +134,13 @@ public class Login extends JFrame {
 						if (username.equals(rs.getString(1)) && passwords.equals(rs.getString(2)) && roleAdmin.equals(rs.getString(3))) {
 							  //  block of code to be executed if condition1 is true
 							dispose();
+							String empidz = rs.getString("emp_id");
+							EmployeeName.empid =empidz;
+							
+							String loginas = rs.getString("last_name");
+							EmployeeName.emp_lstname =loginas;
+							
+							
 							AdminMenu admin = new AdminMenu();
 							admin.setVisible(true);
 							flag = true;
@@ -136,6 +148,15 @@ public class Login extends JFrame {
 							} else if (username.equals(rs.getString(1)) && passwords.equals(rs.getString(2)) && roleEmployee.equals(rs.getString(3))) {
 							  //  block of code to be executed if the condition1 is false and condition2 is true
 								dispose();
+								String empid = rs.getString("emp_id");
+								EmployeeName.empid =empid;
+								
+								String loginas = rs.getString("last_name");
+								EmployeeName.emp_lstname =loginas;
+								
+							
+								
+								
 								EmployeeMenu empMenu = new EmployeeMenu();
 								empMenu.setVisible(true);
 								empMenu.setTitle("Employee Menu");
@@ -145,6 +166,7 @@ public class Login extends JFrame {
 					}
 					if(!flag) {
 						System.out.println("INVALID try again");
+						JOptionPane.showMessageDialog(null, "Username or Password is Incorrect");
 						
 					}
 					

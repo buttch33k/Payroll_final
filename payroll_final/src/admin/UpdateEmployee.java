@@ -1,7 +1,8 @@
 package admin;
 
-import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -12,7 +13,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import javax.swing.ButtonGroup;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -27,11 +27,10 @@ import javax.swing.border.EmptyBorder;
 import com.toedter.calendar.JDateChooser;
 
 import Main.ConnectDB;
-
-import org.jdesktop.xswingx.JXTextField;
 import org.jdesktop.xswingx.JXSearchField;
+import org.jdesktop.xswingx.PromptSupport;
+import org.jdesktop.xswingx.PromptSupport.FocusBehavior;
 import org.jdesktop.xswingx.JXSearchField.LayoutStyle;
-import org.jdesktop.xswingx.JXSearchField.SearchMode;
 import javax.swing.JButton;
 
 public class UpdateEmployee extends JFrame {
@@ -46,9 +45,9 @@ public class UpdateEmployee extends JFrame {
 	private JTextField textField_email;
 	private JTextField textField_Mobile;
 	
-	static Connection conn;
-	static Statement stmt;
-	static ResultSet rs;
+	Connection conn;
+	Statement stmt;
+	ResultSet rs;
 	
 	
 
@@ -107,22 +106,22 @@ public class UpdateEmployee extends JFrame {
 		contentPane.add(lblDateOfBirth);
 		
 		textField_firstname = new JTextField();
-		textField_firstname.setBounds(148, 111, 146, 26);
+		textField_firstname.setBounds(148, 186, 146, 26);
 		contentPane.add(textField_firstname);
 		textField_firstname.setColumns(10);
 		
 		textField_lastname = new JTextField();
-		textField_lastname.setBounds(148, 147, 146, 26);
+		textField_lastname.setBounds(148, 222, 146, 26);
 		contentPane.add(textField_lastname);
 		textField_lastname.setColumns(10);
 		
 		textField_username = new JTextField();
-		textField_username.setBounds(148, 186, 146, 26);
+		textField_username.setBounds(148, 114, 146, 26);
 		contentPane.add(textField_username);
 		textField_username.setColumns(10);
 		
 		textField_password = new JTextField();
-		textField_password.setBounds(148, 219, 146, 26);
+		textField_password.setBounds(148, 150, 146, 26);
 		contentPane.add(textField_password);
 		textField_password.setColumns(10);
 		
@@ -158,7 +157,7 @@ public class UpdateEmployee extends JFrame {
 		
 		String[] c= new String[]{"US", "PH", "CHINA"};
 		JComboBox comboBox = new JComboBox(c);
-		comboBox.setBounds(148, 405, 146, 26);
+		comboBox.setBounds(148, 400, 146, 26);
 		contentPane.add(comboBox);
 		
 		JSeparator separator_1 = new JSeparator();
@@ -201,18 +200,10 @@ public class UpdateEmployee extends JFrame {
 		contentPane.add(textField_Mobile);
 		textField_Mobile.setColumns(10);
 		
-		JLabel lblEmployeeType = new JLabel("Employee Type: ");
-		lblEmployeeType.setBounds(399, 331, 135, 20);
-		contentPane.add(lblEmployeeType);
-		JRadioButton rdbtnAdmin = new JRadioButton("Admin");
-		rdbtnAdmin.setBounds(393, 364, 129, 29);
-		contentPane.add(rdbtnAdmin);
-		JRadioButton rdbtnEmployee = new JRadioButton("Employee");
-		rdbtnEmployee.setBounds(393, 396, 123, 29);
-		contentPane.add(rdbtnEmployee);
-		ButtonGroup type = new ButtonGroup();
-		type.add(rdbtnAdmin);
-		type.add(rdbtnEmployee);
+//		JLabel lblEmployeeType = new JLabel("Employee Type: ");
+//		lblEmployeeType.setBounds(399, 331, 83, 20);
+//		contentPane.add(lblEmployeeType);
+//		ButtonGroup type = new ButtonGroup();
 		
 		
 		JSeparator separator_2 = new JSeparator();
@@ -220,18 +211,18 @@ public class UpdateEmployee extends JFrame {
 		separator_2.setBounds(540, 309, 12, 132);
 		contentPane.add(separator_2);
 		
-		JLabel lblStatusId = new JLabel("Status ID:");
-		lblStatusId.setBounds(567, 331, 109, 20);
-		contentPane.add(lblStatusId);
-		JRadioButton rdbtnActive = new JRadioButton("Active");
-		rdbtnActive.setBounds(563, 364, 146, 29);
-		contentPane.add(rdbtnActive);
-		JRadioButton rdbtnInactive = new JRadioButton("Inactive");
-		rdbtnInactive.setBounds(563, 396, 135, 29);
-		contentPane.add(rdbtnInactive);
-		ButtonGroup Stat = new ButtonGroup();
-		Stat.add(rdbtnActive);
-		Stat.add(rdbtnInactive);
+//		JLabel lblStatusId = new JLabel("Status ID:");
+//		lblStatusId.setBounds(567, 331, 109, 20);
+//		contentPane.add(lblStatusId);
+//		JRadioButton rdbtnActive = new JRadioButton("2");
+//		rdbtnActive.setBounds(563, 364, 146, 29);
+//		contentPane.add(rdbtnActive);
+//		JRadioButton rdbtnInactive = new JRadioButton("1");
+//		rdbtnInactive.setBounds(563, 396, 135, 29);
+//		contentPane.add(rdbtnInactive);
+//		ButtonGroup Stat = new ButtonGroup();
+//		Stat.add(rdbtnActive);
+//		Stat.add(rdbtnInactive);
 		
 		JLabel lblupdate = new JLabel("");
 		lblupdate.setBounds(252, 65, 253, 14);
@@ -240,6 +231,11 @@ public class UpdateEmployee extends JFrame {
 		JLabel labelnotFOund = new JLabel("");
 		labelnotFOund.setBounds(148, 59, 109, 20);
 		contentPane.add(labelnotFOund);
+		
+		
+		
+		
+		
 		
 		JXSearchField srchfldEnterempId = new JXSearchField();
 		srchfldEnterempId.setToolTipText("Search");
@@ -251,10 +247,10 @@ public class UpdateEmployee extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					String sql = "Select * from employee_Table  where emp_id = '"+srchfldEnterempId.getText().toString()+"' "; 
-					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "Qwerty120995!");
-					PreparedStatement pst = conn.prepareStatement(sql);
+//					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "Qwerty120995!");
+//					PreparedStatement pst = conn.prepareStatement(sql);
 					stmt = conn.prepareCall(sql);
-					ResultSet rs = stmt.executeQuery(sql);
+//					ResultSet rs = stmt.executeQuery(sql);
 
 
 					
@@ -265,10 +261,10 @@ public class UpdateEmployee extends JFrame {
 						    labelnotFOund.setText("No Record Found");
 						    java.util.Date d = new java.util.Date();
 						    d.toString();
-						    textField_firstname.setText("");
-						    textField_lastname.setText("");
 						    textField_username.setText("");
 						    textField_password.setText("");
+						    textField_firstname.setText("");
+						    textField_lastname.setText("");
 						    textField_city.setText("");
 						    textField_email.setText("");
 							textField_Mobile.setText("");
@@ -280,11 +276,11 @@ public class UpdateEmployee extends JFrame {
 							rdbtnMale.setSelected(false);
 							rdbtnFemale.setSelected(false);
 							
-							rdbtnAdmin.setSelected(false);
-							rdbtnInactive.setSelected(false);
-							
-							rdbtnActive.setSelected(false);
-							rdbtnInactive.setSelected(false);
+//							rdbtnAdmin.setSelected(false);
+//							rdbtnInactive.setSelected(false);
+//							
+//							rdbtnActive.setSelected(false);
+//							rdbtnInactive.setSelected(false);
 							lblupdate.setText("");
 							
 						    
@@ -294,10 +290,11 @@ public class UpdateEmployee extends JFrame {
 						
 						while(rs.next()){
 							labelnotFOund.setText("");
-							textField_firstname.setText(rs.getString("first_name"));
-							textField_lastname.setText(rs.getString("last_name"));
+							
 							textField_username.setText(rs.getString("username"));
 							textField_password.setText(rs.getString("passwords"));
+							textField_firstname.setText(rs.getString("first_name"));
+							textField_lastname.setText(rs.getString("last_name"));
 							dateChooser.setDate(rs.getDate("dob"));
 							textField_age.setText(rs.getString("age"));
 							comboBox.setSelectedItem(rs.getString("country"));
@@ -320,25 +317,25 @@ public class UpdateEmployee extends JFrame {
 							rdbtnFemale.setSelected(true);
 							rdbtnMale.setSelected(false);
 						}
-						int type= rs.getInt("emp_type");	
-						if(type == 1){
-							rdbtnAdmin.setSelected(true);
-							rdbtnEmployee.setSelected(false);
-						}
-						else{
-							rdbtnAdmin.setSelected(false);
-							rdbtnEmployee.setSelected(true);
-						}
-						int status= rs.getInt("status_id");	
-						System.out.println(status);
-						if(type == 1){
-							rdbtnActive.setSelected(true);
-							rdbtnInactive.setSelected(false);
-						}
-						else{
-							rdbtnActive.setSelected(false);
-							rdbtnInactive.setSelected(true);
-						}								
+//						int type= rs.getInt("emp_type");	
+//						if(type == 1){
+//							rdbtnAdmin.setSelected(true);
+//							rdbtnEmployee.setSelected(false);
+//						}
+//						else{
+//							rdbtnAdmin.setSelected(false);
+//							rdbtnEmployee.setSelected(true);
+//						}
+//						int status= rs.getInt("status_id");	
+//						System.out.println(status);
+//						if(type == 1){
+//							rdbtnActive.setSelected(true);
+//							rdbtnInactive.setSelected(false);
+//						}
+//						else{
+//							rdbtnActive.setSelected(false);
+//							rdbtnInactive.setSelected(true);
+//						}								
 						
 						
 						}
@@ -353,7 +350,7 @@ public class UpdateEmployee extends JFrame {
 			}
 		});
 		srchfldEnterempId.setPrompt("Enter Employee ID\r\n");
-		srchfldEnterempId.setBounds(20, 59, 129, 20);
+		srchfldEnterempId.setBounds(20, 59, 118, 20);
 		contentPane.add(srchfldEnterempId);
 		
 		JButton btnCancel = new JButton("CANCEL");
@@ -379,11 +376,9 @@ public class UpdateEmployee extends JFrame {
 				String country = comboBox.getSelectedItem().toString();
 				String add = textArea.getText();
 				String gen  =bG.getSelection().getActionCommand();
-//				int type  =type.
-//				int Stat  =Stat.getSelection().getActionCommand();
-				
+//			
 				try {
-					String sql = "update employee_Table set last_name = '"+lname+"',first_name ='"+fname+"',dob = '"+dat+"',gender = '"+gen+"',country ='"+country+ "', city = '"+City+"', address ='"+add+"',email='"+ emil+"', mobile_no = '"+num+"' where emp_id = '"+srchfldEnterempId.getText().toString()+"' ";
+					String sql = "update employee_Table set username = '"+Usern+"',passwords = '"+Passw+"',last_name = '"+lname+"',first_name ='"+fname+"',dob = '"+dat+"',gender = '"+gen+"',country ='"+country+ "', city = '"+City+"', address ='"+add+"',email='"+ emil+"', mobile_no = '"+num+"' where emp_id = '"+srchfldEnterempId.getText().toString()+"' ";
 					
 					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "Qwerty120995!");
 					PreparedStatement pst = conn.prepareStatement(sql);
@@ -408,15 +403,17 @@ public class UpdateEmployee extends JFrame {
 		
 		
 		
+		
+		
 		JXSearchField searchField = new JXSearchField();
 		searchField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					String sql = "Select * from employee_Table where emp_id = '"+srchfldEnterempId.getText().toString()+"' "; 
-					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "Qwerty120995!");
-					PreparedStatement pst = conn.prepareStatement(sql);
-					stmt = conn.prepareCall(sql);
-					ResultSet rs = stmt.executeQuery(sql);
+//					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "Qwerty120995!");
+//					PreparedStatement pst = conn.prepareStatement(sql);
+//					stmt = conn.prepareCall(sql);
+//					ResultSet rs = stmt.executeQuery(sql);
 
 
 					
@@ -442,11 +439,11 @@ public class UpdateEmployee extends JFrame {
 							rdbtnMale.setSelected(false);
 							rdbtnFemale.setSelected(false);
 							
-							rdbtnAdmin.setSelected(false);
-							rdbtnInactive.setSelected(false);
-							
-							rdbtnActive.setSelected(false);
-							rdbtnInactive.setSelected(false);
+//							rdbtnAdmin.setSelected(false);
+//							rdbtnInactive.setSelected(false);
+//							
+//							rdbtnActive.setSelected(false);
+//							rdbtnInactive.setSelected(false);
 							
 						    
 						    
@@ -473,27 +470,27 @@ public class UpdateEmployee extends JFrame {
 							rdbtnMale.setSelected(false);
 						}
 							String type = rs.getString("emp_type");
-						if(type.equals("1")){
-							rdbtnAdmin.setSelected(true);
-							rdbtnEmployee.setSelected(false);
-						}else if(type.equals("2")) {
-							rdbtnAdmin.setSelected(true);
-							rdbtnEmployee.setSelected(false);
-						}
-						else{
-							rdbtnAdmin.setSelected(true);
-							rdbtnEmployee.setSelected(false);
-						}
-						String Status = rs.getString("status_id");
-						if(Status.equals("1")){
-							rdbtnActive.setSelected(true);
-							rdbtnInactive.setSelected(false);
-						}
-						else{
-							rdbtnActive.setSelected(true);
-							rdbtnInactive.setSelected(false);
-						}
-						
+//						if(type.equals("1")){
+//							rdbtnAdmin.setSelected(true);
+//							rdbtnEmployee.setSelected(false);
+//						}else if(type.equals("2")) {
+//							rdbtnAdmin.setSelected(true);
+//							rdbtnEmployee.setSelected(false);
+//						}
+//						else{
+//							rdbtnAdmin.setSelected(true);
+//							rdbtnEmployee.setSelected(false);
+//						}
+//						String Status = rs.getString("status_id");
+//						if(Status.equals("1")){
+//							rdbtnActive.setSelected(true);
+//							rdbtnInactive.setSelected(false);
+//						}
+//						else{
+//							rdbtnActive.setSelected(true);
+//							rdbtnInactive.setSelected(false);
+//						}
+//						
 						
 						
 						comboBox.setSelectedItem(rs.getString("country"));
