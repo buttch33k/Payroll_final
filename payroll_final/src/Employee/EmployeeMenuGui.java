@@ -35,7 +35,7 @@ import javax.swing.SwingConstants;
 import org.jdesktop.xswingx.JXSearchField;
 import org.jdesktop.xswingx.JXSearchField.LayoutStyle;
 
-public class EmployeeMenu extends JFrame {
+public class EmployeeMenuGui extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField;
@@ -60,7 +60,7 @@ public class EmployeeMenu extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					EmployeeMenu frame = new EmployeeMenu();
+					EmployeeMenuGui frame = new EmployeeMenuGui();
 					frame.setVisible(true);
 					frame.setTitle("Employee Menu");
 					 WindowAdapter exitListener = new WindowAdapter() {
@@ -92,7 +92,7 @@ public class EmployeeMenu extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public EmployeeMenu() {
+	public EmployeeMenuGui() {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 670, 482);
@@ -149,126 +149,126 @@ public class EmployeeMenu extends JFrame {
 		lblLastname.setBounds(101, 17, 101, 14);
 		panel_time.add(lblLastname);
 		
-		JPanel panel = new JPanel();
-		tabbedPane.addTab("Update Details", null, panel, null);
-		panel.setLayout(null);
+		JPanel panel_updatedetails = new JPanel();
+		tabbedPane.addTab("Update Details", null, panel_updatedetails, null);
+		panel_updatedetails.setLayout(null);
 		
 		JLabel label = new JLabel("Username: ");
 		label.setBounds(10, 38, 98, 20);
-		panel.add(label);
+		panel_updatedetails.add(label);
 		
 		textField_username = new JTextField();
 		textField_username.setBounds(138, 38, 86, 20);
-		panel.add(textField_username);
+		panel_updatedetails.add(textField_username);
 		textField_username.setColumns(10);
 		
 		JLabel label_1 = new JLabel("Password: ");
 		label_1.setBounds(10, 69, 118, 20);
-		panel.add(label_1);
+		panel_updatedetails.add(label_1);
 		
 		textField_password = new JTextField();
 		textField_password.setBounds(138, 69, 86, 20);
-		panel.add(textField_password);
+		panel_updatedetails.add(textField_password);
 		textField_password.setColumns(10);
 		
 		JLabel label_2 = new JLabel("Firstname: ");
 		label_2.setBounds(10, 100, 118, 20);
-		panel.add(label_2);
+		panel_updatedetails.add(label_2);
 		
 		textField_firstname = new JTextField();
 		textField_firstname.setBounds(138, 100, 86, 20);
-		panel.add(textField_firstname);
+		panel_updatedetails.add(textField_firstname);
 		textField_firstname.setColumns(10);
 		
 		JLabel label_3 = new JLabel("Lastname: ");
 		label_3.setBounds(10, 131, 118, 20);
-		panel.add(label_3);
+		panel_updatedetails.add(label_3);
 		
 		textField_lastname = new JTextField();
 		textField_lastname.setBounds(138, 131, 86, 20);
-		panel.add(textField_lastname);
+		panel_updatedetails.add(textField_lastname);
 		textField_lastname.setColumns(10);
 		
 		JLabel label_4 = new JLabel("Date of Birth:");
 		label_4.setBounds(10, 162, 98, 20);
-		panel.add(label_4);
+		panel_updatedetails.add(label_4);
 		
 		JDateChooser dateChooser = new JDateChooser();
 		dateChooser.setBounds(138, 162, 91, 20);
-		panel.add(dateChooser);
+		panel_updatedetails.add(dateChooser);
 		
 		JLabel label_5 = new JLabel("Age: ");
 		label_5.setBounds(10, 193, 69, 20);
-		panel.add(label_5);
+		panel_updatedetails.add(label_5);
 		
 		textField_age = new JTextField();
 		textField_age.setBounds(138, 193, 86, 20);
-		panel.add(textField_age);
+		panel_updatedetails.add(textField_age);
 		textField_age.setColumns(10);
 		
 		JLabel label_6 = new JLabel("Gender: ");
 		label_6.setBounds(10, 224, 118, 20);
-		panel.add(label_6);
+		panel_updatedetails.add(label_6);
 		
 		JRadioButton rdbtnMale = new JRadioButton("Male");
 		rdbtnMale.setBounds(138, 220, 86, 24);
-		panel.add(rdbtnMale);
+		panel_updatedetails.add(rdbtnMale);
 		
 		JRadioButton rdbtnFemale = new JRadioButton("Female");
 		rdbtnFemale.setBounds(138, 247, 86, 24);
-		panel.add(rdbtnFemale);
+		panel_updatedetails.add(rdbtnFemale);
 		ButtonGroup bG = new ButtonGroup();
 	     bG.add(rdbtnMale);
 	     bG.add(rdbtnFemale);
 		
 		JLabel label_7 = new JLabel("Country: ");
 		label_7.setBounds(10, 274, 118, 20);
-		panel.add(label_7);
+		panel_updatedetails.add(label_7);
 		
 		JComboBox comboBox = new JComboBox(new Object[]{});
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"US", "PH", "CHINA"}));
 		comboBox.setBounds(138, 274, 86, 26);
-		panel.add(comboBox);
+		panel_updatedetails.add(comboBox);
 		
 		JLabel label_8 = new JLabel("Address: ");
 		label_8.setBounds(330, 41, 103, 20);
-		panel.add(label_8);
+		panel_updatedetails.add(label_8);
 		
 		JTextArea textArea = new JTextArea();
 		textArea.setBounds(408, 36, 197, 77);
-		panel.add(textArea);
+		panel_updatedetails.add(textArea);
 		
 		JLabel label_9 = new JLabel("City: ");
 		label_9.setBounds(330, 131, 103, 20);
-		panel.add(label_9);
+		panel_updatedetails.add(label_9);
 		
 		textField_city = new JTextField();
 		textField_city.setBounds(408, 131, 86, 20);
-		panel.add(textField_city);
+		panel_updatedetails.add(textField_city);
 		textField_city.setColumns(10);
 		
 		JLabel label_10 = new JLabel("Email: ");
 		label_10.setBounds(330, 165, 78, 20);
-		panel.add(label_10);
+		panel_updatedetails.add(label_10);
 		
 		textField_email = new JTextField();
 		textField_email.setBounds(408, 162, 86, 20);
-		panel.add(textField_email);
+		panel_updatedetails.add(textField_email);
 		textField_email.setColumns(10);
 		
 		JLabel label_11 = new JLabel("Mobile: ");
 		label_11.setBounds(330, 196, 69, 20);
-		panel.add(label_11);
+		panel_updatedetails.add(label_11);
 		
 		textField_Mobile = new JTextField();
 		textField_Mobile.setBounds(408, 193, 86, 20);
-		panel.add(textField_Mobile);
+		panel_updatedetails.add(textField_Mobile);
 		textField_Mobile.setColumns(10);
 		
 		JLabel lblupdate = new JLabel("");
 		lblupdate.setHorizontalAlignment(SwingConstants.CENTER);
 		lblupdate.setBounds(250, 11, 128, 14);
-		panel.add(lblupdate);
+		panel_updatedetails.add(lblupdate);
 		
 		JXSearchField srchfldEnterempId = new JXSearchField();
 		srchfldEnterempId.setText(String.valueOf(EmployeeName.empid).toString());
@@ -377,7 +377,7 @@ public class EmployeeMenu extends JFrame {
 			}
 		});
 		srchfldEnterempId.setBounds(10, 7, 86, 20);
-		panel.add(srchfldEnterempId);
+		panel_updatedetails.add(srchfldEnterempId);
 		
 		JButton btnUpdate = new JButton("UPDATE");
 		btnUpdate.addActionListener(new ActionListener() {
@@ -417,11 +417,14 @@ public class EmployeeMenu extends JFrame {
 				
 		
 		btnUpdate.setBounds(207, 350, 89, 23);
-		panel.add(btnUpdate);
+		panel_updatedetails.add(btnUpdate);
 		
 		JButton btnCancel = new JButton("CANCEL");
 		btnCancel.setBounds(306, 350, 89, 23);
-		panel.add(btnCancel);
+		panel_updatedetails.add(btnCancel);
+		
+		JPanel panel_payslipgen = new JPanel();
+		tabbedPane.addTab("New tab", null, panel_payslipgen, null);
 		
 		
 		

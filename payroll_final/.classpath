@@ -6,5 +6,6 @@
 	<classpathentry kind="lib" path="lib/jcalendar-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/jgoodies-forms-1.8.0.jar"/>
 	<classpathentry kind="lib" path="lib/jfx-autocomplete-textfield-0.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/PMS.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

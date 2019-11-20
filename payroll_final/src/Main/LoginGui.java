@@ -1,6 +1,7 @@
 package Main;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -14,21 +15,23 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import Employee.EmployeeMenu;
+import Employee.EmployeeMenuGui;
 import Main.ConnectDB;
-import admin.AdminMenu;
 
+import admin.adminMenuGui;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 
-public class Login extends JFrame {
+public class LoginGui extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField_username;
@@ -44,7 +47,7 @@ public class Login extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Login frame = new Login();
+					LoginGui frame = new LoginGui();
 					frame.setVisible(true);
 					frame.setTitle("Login");
 
@@ -77,7 +80,9 @@ public class Login extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Login() {
+	public LoginGui() {
+		setResizable(false);
+		setAlwaysOnTop(true);
 		conn = ConnectDB.doConnect();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -141,7 +146,7 @@ public class Login extends JFrame {
 							EmployeeName.emp_lstname =loginas;
 							
 							
-							AdminMenu admin = new AdminMenu();
+							adminMenuGui admin = new adminMenuGui();
 							admin.setVisible(true);
 							flag = true;
 							break;
@@ -157,7 +162,7 @@ public class Login extends JFrame {
 							
 								
 								
-								EmployeeMenu empMenu = new EmployeeMenu();
+								EmployeeMenuGui empMenu = new EmployeeMenuGui();
 								empMenu.setVisible(true);
 								empMenu.setTitle("Employee Menu");
 								flag = true;
@@ -165,10 +170,22 @@ public class Login extends JFrame {
 							}
 					}
 					if(!flag) {
-						System.out.println("INVALID try again");
-						JOptionPane.showMessageDialog(null, "Username or Password is Incorrect");
+						int input = JOptionPane.showConfirmDialog(null, " Account doesn't exist do you want to register");
 						
-					}
+					      if(input == 0) {
+					         System.out.println("Pressed YES");
+					         RegisterGui frame = new RegisterGui();
+					      }
+					      else if (input == 1){
+					         System.out.println("Pressed NO");
+					          dispose();
+					         
+					      } else {
+					         System.out.println("Pressed CANCEL");
+					         LoginGui frame = new LoginGui();
+					      }
+					   }
+					
 					
 					
 				
