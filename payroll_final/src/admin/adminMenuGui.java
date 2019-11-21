@@ -1,6 +1,5 @@
 package admin;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,7 +13,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.ButtonGroup;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -30,13 +28,16 @@ import com.toedter.calendar.JDateChooser;
 import Main.ConnectDB;
 import Main.EmployeeName;
 import Main.LoginGui;
+import net.proteanit.sql.DbUtils;
 
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import org.jdesktop.xswingx.JXSearchField;
 import org.jdesktop.xswingx.JXSearchField.LayoutStyle;
+import javax.swing.JScrollPane;
 
 public class adminMenuGui extends JFrame {
 
@@ -69,6 +70,8 @@ public class adminMenuGui extends JFrame {
 	private JTextField textField_mobil;
 	private JTextField textField_Empt;
 	private JTextField textField_Stat;
+	
+	private JTable table;
 	
 
 	/**
@@ -213,11 +216,11 @@ public class adminMenuGui extends JFrame {
 		label_6.setBounds(10, 241, 118, 20);
 		panel_addEmp.add(label_6);
 		
-		JRadioButton rdbtnMale = new JRadioButton("Male");
+		JRadioButton rdbtnMale = new JRadioButton("male");
 		rdbtnMale.setBounds(138, 238, 146, 20);
 		panel_addEmp.add(rdbtnMale);
 		
-		JRadioButton rdbtnFemale = new JRadioButton("Female");
+		JRadioButton rdbtnFemale = new JRadioButton("female");
 		rdbtnFemale.setBounds(138, 261, 155, 20);
 		panel_addEmp.add(rdbtnFemale);
 		
@@ -326,7 +329,7 @@ public class adminMenuGui extends JFrame {
 				java.sql.Date dat = new java.sql.Date(dateChooser.getDate().getTime());
 				String country = comboBox.getSelectedItem().toString();
 				String addres = textArea.getText();
-				String gen  =bG.getSelection().getActionCommand();
+				String gender  = bG.getSelection().getActionCommand();
 				String empT = textField_emptype.getText().toString();
 				String empStat = textField_stat.getText().toString();;
 				
@@ -352,7 +355,7 @@ public class adminMenuGui extends JFrame {
 				try {
 					
 				String sqladd = "insert into employee_Table(username, passwords, emp_type, status_id,last_name,first_name,dob,age,gender,country,city,address,email,mobile_no)"
-				+"values('"+Usern+"','"+Passw+"','"+empT+"','"+empStat+"','"+lname+"','"+fname+"','"+dat+"','"+Age+"','"+gen+"','"+country+"','"+City+"','"+addres+"','"+emil+"','"+num+"')";
+				+"values('"+Usern+"','"+Passw+"','"+empT+"','"+empStat+"','"+lname+"','"+fname+"','"+dat+"','"+Age+"','"+gender+"','"+country+"','"+City+"','"+addres+"','"+emil+"','"+num+"')";
 				
 						if(testEmail && testMob){
 						JOptionPane.showMessageDialog(null, "Are You Sure to add this Record?");
@@ -374,7 +377,7 @@ public class adminMenuGui extends JFrame {
 			}
 		}
 	});
-		button.setBounds(264, 322, 140, 23);
+		button.setBounds(264, 322, 169, 23);
 		panel_addEmp.add(button);
 		
 		JSeparator separator_3 = new JSeparator();
@@ -466,18 +469,18 @@ public class adminMenuGui extends JFrame {
 		textField_Age.setBounds(138, 203, 146, 26);
 		panel_updtEmp.add(textField_Age);
 		
-		JRadioButton radioButton = new JRadioButton("Male");
+		JRadioButton radioButton = new JRadioButton("male");
 		radioButton.setBounds(134, 231, 56, 29);
 		panel_updtEmp.add(radioButton);
 		
-		JRadioButton radioButton_1 = new JRadioButton("Female");
+		JRadioButton radioButton_1 = new JRadioButton("female");
 		radioButton_1.setBounds(192, 231, 92, 29);
 		panel_updtEmp.add(radioButton_1);
 		ButtonGroup bG1 = new ButtonGroup();
-	     bG1.add(radioButton);
-	     bG1.add(radioButton_1);
+			bG1.add(radioButton);
+			bG1.add(radioButton_1);
 		
-	     String[] cb= new String[]{"US", "PH", "CHINA"};
+	    String[] cb= new String[]{"US", "PH", "CHINA"};
 		JComboBox comboBox_1 = new JComboBox(cb);
 		comboBox_1.setBounds(138, 271, 146, 26);
 		panel_updtEmp.add(comboBox_1);
@@ -591,8 +594,8 @@ public class adminMenuGui extends JFrame {
 							comboBox_1.setSelectedItem("Select Country");
 							
 							textArea_1.setText("");
-							rdbtnMale.setSelected(false);
-							rdbtnFemale.setSelected(false);
+							radioButton.setSelected(false);
+							radioButton_1.setSelected(false);
 							
 //							rdbtnAdmin.setSelected(false);
 //							rdbtnInactive.setSelected(false);
@@ -614,15 +617,15 @@ public class adminMenuGui extends JFrame {
 							dateChooser_1.setDate(rs.getDate("dob"));
 							textField_Age.setText(rs.getString("age"));
 						
-							String gen= rs.getString("gender");
+							String gen1= rs.getString("gender");
 							
-						if(gen.equals("Female")){
+						if(gen1.equals("male")){
 							radioButton.setSelected(true);
 							radioButton_1.setSelected(false);
 						}
 						else{
-							radioButton.setSelected(true);
-							radioButton_1.setSelected(false);
+							radioButton.setSelected(false);
+							radioButton_1.setSelected(true);
 						}
 							String type = rs.getString("emp_type");
 						
@@ -668,9 +671,9 @@ public class adminMenuGui extends JFrame {
 				String emil1 =  textField_Email.getText().toString();
 				String num1 = textField_mobil.getText().toString();
 				String Age1 = textField_Age.getText().toString();
-				java.sql.Date dat1 = new java.sql.Date(dateChooser.getDate().getTime());
+				java.sql.Date dat1 = new java.sql.Date(dateChooser_1.getDate().getTime());
 				String country1 = comboBox_1.getSelectedItem().toString();
-				String add1 = textArea.getText();
+				String add1 = textArea_1.getText();
 				String gen1  =bG1.getSelection().getActionCommand();
 //			
 				try {
@@ -695,6 +698,44 @@ public class adminMenuGui extends JFrame {
 		
 		button_1.setBounds(296, 329, 89, 23);
 		panel_updtEmp.add(button_1);
+		
+		JPanel panel_PendingEmployee = new JPanel();
+		panel_PendingEmployee.setToolTipText("");
+		tabbedPane_1.addTab("Pending Employee", null, panel_PendingEmployee, null);
+		panel_PendingEmployee.setLayout(null);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 11, 688, 167);
+		panel_PendingEmployee.add(scrollPane);
+		
+		table = new JTable();
+		scrollPane.setViewportView(table);
+		try {
+			stmt = conn.createStatement();
+		} catch (SQLException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
+		JButton btnShowAllPending = new JButton("Show all pending Employee");
+		btnShowAllPending.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					String sql = "call viewAllInactiveUser()";
+					
+						rs=stmt.executeQuery(sql);
+						table.setModel(DbUtils.resultSetToTableModel(rs));
+						
+						
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
+		
+		btnShowAllPending.setBounds(10, 189, 177, 23);
+		panel_PendingEmployee.add(btnShowAllPending);
 		
 		
 		

@@ -81,8 +81,8 @@ public class LoginGui extends JFrame {
 	 * Create the frame.
 	 */
 	public LoginGui() {
+		setTitle("Login ");
 		setResizable(false);
-		setAlwaysOnTop(true);
 		conn = ConnectDB.doConnect();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
