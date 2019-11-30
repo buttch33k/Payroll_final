@@ -34,6 +34,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.SwingConstants;
 import org.jdesktop.xswingx.JXSearchField;
 import org.jdesktop.xswingx.JXSearchField.LayoutStyle;
+import java.awt.Color;
 
 public class EmployeeMenuGui extends JFrame {
 
@@ -110,20 +111,20 @@ public class EmployeeMenuGui extends JFrame {
 		panel_time.setLayout(null);
 		
 		JLabel lblTimeIn = new JLabel("Time in:");
-		lblTimeIn.setBounds(10, 83, 46, 14);
+		lblTimeIn.setBounds(10, 83, 89, 14);
 		panel_time.add(lblTimeIn);
 		
 		textField = new JTextField();
-		textField.setBounds(75, 80, 86, 20);
+		textField.setBounds(111, 80, 86, 20);
 		panel_time.add(textField);
 		textField.setColumns(10);
 		
 		JLabel lblTimeOut = new JLabel("Time out:");
-		lblTimeOut.setBounds(10, 108, 46, 14);
+		lblTimeOut.setBounds(10, 108, 89, 14);
 		panel_time.add(lblTimeOut);
 		
 		textField_1 = new JTextField();
-		textField_1.setBounds(75, 105, 86, 20);
+		textField_1.setBounds(111, 105, 86, 20);
 		panel_time.add(textField_1);
 		textField_1.setColumns(10);
 		
@@ -271,6 +272,8 @@ public class EmployeeMenuGui extends JFrame {
 		panel_updatedetails.add(lblupdate);
 		
 		JXSearchField srchfldEnterempId = new JXSearchField();
+		srchfldEnterempId.setCaretColor(Color.RED);
+		srchfldEnterempId.setEditable(false);
 		srchfldEnterempId.setText(String.valueOf(EmployeeName.empid).toString());
 		srchfldEnterempId.setToolTipText("Search");
 		srchfldEnterempId.setPromptFontStyle(2);

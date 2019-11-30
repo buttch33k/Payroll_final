@@ -38,6 +38,7 @@ import javax.swing.SwingConstants;
 import org.jdesktop.xswingx.JXSearchField;
 import org.jdesktop.xswingx.JXSearchField.LayoutStyle;
 import javax.swing.JScrollPane;
+import java.awt.ScrollPane;
 
 public class adminMenuGui extends JFrame {
 
@@ -68,11 +69,16 @@ public class adminMenuGui extends JFrame {
 	private JTextField textField_City;
 	private JTextField textField_Email;
 	private JTextField textField_mobil;
-	private JTextField textField_Empt;
-	private JTextField textField_Stat;
+	private JTextField textField_Empt1;
+	private JTextField textField_Stat1;
 	
 	private JTable table;
-	
+	private JTextField textField_lastnamePay;
+	private JTextField textField_firstnamepayslip;
+	private JTextField textField_jobId;
+	private JTextField textField_jobtitle;
+	private JTextField textField_salaray;
+	private JTable table1;
 
 	/**
 	 * Launch the application.
@@ -118,11 +124,11 @@ public class adminMenuGui extends JFrame {
 		panel_home.add(lblhiz);
 		
 		JLabel label_39 = new JLabel("Logged in As:");
-		label_39.setBounds(10, 11, 80, 14);
+		label_39.setBounds(10, 11, 101, 14);
 		panel_home.add(label_39);
 		
 		JLabel label_40 = new JLabel("Employee #:");
-		label_40.setBounds(10, 36, 71, 14);
+		label_40.setBounds(10, 36, 101, 14);
 		panel_home.add(label_40);
 		
 		JLabel label_41 = new JLabel("null");
@@ -311,10 +317,6 @@ public class adminMenuGui extends JFrame {
 		label_18.setBounds(533, 287, 89, 14);
 		panel_addEmp.add(label_18);
 		
-		JLabel lblrecord_suc = new JLabel("");
-		lblrecord_suc.setBounds(282, 12, 169, 14);
-		panel_addEmp.add(lblrecord_suc);
-		
 		JButton button = new JButton("Register Employeee");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -365,7 +367,7 @@ public class adminMenuGui extends JFrame {
 							Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "Qwerty120995!");
 							stmt = conn.prepareCall(sqladd);
 							stmt.executeUpdate(sqladd);	
-							lblrecord_suc.setText("Record Added Successfully");
+							
 							JOptionPane.showMessageDialog(null, "Record Added Successfully");
 							LoginGui frame = new LoginGui();
 				} catch (SQLException | ClassNotFoundException e1) {
@@ -532,10 +534,10 @@ public class adminMenuGui extends JFrame {
 		label_33.setBounds(377, 277, 103, 14);
 		panel_updtEmp.add(label_33);
 		
-		textField_Empt = new JTextField();
-		textField_Empt.setBounds(463, 240, 34, 20);
-		panel_updtEmp.add(textField_Empt);
-		textField_Empt.setColumns(10);
+		textField_Empt1 = new JTextField();
+		textField_Empt1.setBounds(463, 240, 34, 20);
+		panel_updtEmp.add(textField_Empt1);
+		textField_Empt1.setColumns(10);
 		
 		JLabel label_34 = new JLabel("Employee Status:");
 		label_34.setBounds(507, 243, 102, 14);
@@ -553,10 +555,10 @@ public class adminMenuGui extends JFrame {
 		label_37.setBounds(507, 293, 89, 14);
 		panel_updtEmp.add(label_37);
 		
-		textField_Stat = new JTextField();
-		textField_Stat.setBounds(609, 240, 34, 20);
-		panel_updtEmp.add(textField_Stat);
-		textField_Stat.setColumns(10);
+		textField_Stat1 = new JTextField();
+		textField_Stat1.setBounds(609, 240, 34, 20);
+		panel_updtEmp.add(textField_Stat1);
+		textField_Stat1.setColumns(10);
 		
 		JLabel label_38 = new JLabel("");
 		label_38.setBounds(260, 13, 164, 14);
@@ -588,8 +590,8 @@ public class adminMenuGui extends JFrame {
 						    textField_Email.setText("");
 							textField_mobil.setText("");
 							textField_Age.setText("");
-							textField_Empt.setText("");
-							textField_Stat.setText("");
+							textField_Empt1.setText("");
+							textField_Stat1.setText("");
 							dateChooser_1.setDate(d);
 							comboBox_1.setSelectedItem("Select Country");
 							
@@ -634,8 +636,8 @@ public class adminMenuGui extends JFrame {
 						textArea_1.setText(rs.getString("address"));
 						textField_Email.setText(rs.getString("email"));
 						textField_mobil.setText(rs.getString("mobile_no"));
-						textField_Empt.setText(rs.getString("emp_type"));
-						textField_Stat.setText(rs.getString("status_id"));
+						textField_Empt1.setText(rs.getString("emp_type"));
+						textField_Stat1.setText(rs.getString("status_id"));
 						
 						
 						}
@@ -675,16 +677,19 @@ public class adminMenuGui extends JFrame {
 				String country1 = comboBox_1.getSelectedItem().toString();
 				String add1 = textArea_1.getText();
 				String gen1  =bG1.getSelection().getActionCommand();
+				int emptypers = Integer.parseInt(textField_Empt1.getText());
+				int empStatus= Integer.parseInt(textField_Stat1.getText());
 //			
 				try {
-					String sql = "update employee_Table set username = '"+Usern1+"',passwords = '"+Passw1+"',last_name = '"+lname1+"',first_name ='"+fname1+"',dob = '"+dat1+"',gender = '"+gen1+"',country ='"+country1+ "', city = '"+City1+"', address ='"+add1+"',email='"+ emil1+"', mobile_no = '"+num1+"' where emp_id = '"+srchfldEnterempId.getText().toString()+"' ";
+					String sql = "update employee_Table set emp_type = '"+emptypers+"', status_id = '"+empStatus+"', username = '"+Usern1+"',passwords = '"+Passw1+"',last_name = '"+lname1+"',first_name ='"+fname1+"',dob = '"+dat1+"',gender = '"+gen1+"',country ='"+country1+ "', city = '"+City1+"', address ='"+add1+"',email='"+ emil1+"', mobile_no = '"+num1+"' where emp_id = '"+srchfldEnterempId.getText().toString()+"' ";
 					
 					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "Qwerty120995!");
 					PreparedStatement pst = conn.prepareStatement(sql);
 					stmt = conn.prepareCall(sql);
 					stmt.executeUpdate(sql);
 					System.out.println(sql);
-					label_38.setText("Your Records are Successfully Updated");
+					
+					JOptionPane.showMessageDialog(null, "Your Records are Successfully Updated");
 								
 					
 					} catch (SQLException e1) {
@@ -736,6 +741,198 @@ public class adminMenuGui extends JFrame {
 		
 		btnShowAllPending.setBounds(10, 189, 177, 23);
 		panel_PendingEmployee.add(btnShowAllPending);
+		
+		JPanel panel_addjobdetails = new JPanel();
+		tabbedPane_1.addTab("Add Job Details", null, panel_addjobdetails, null);
+		panel_addjobdetails.setLayout(null);
+		
+		JXSearchField searchFieldjobid = new JXSearchField();
+		searchFieldjobid.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					String sqljob = "Select * from JobTitle_Table where emp_id_job = '"+searchFieldjobid.getText().toString()+"' "; 
+					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "Qwerty120995!");
+					PreparedStatement pst = conn.prepareStatement(sqljob);
+					stmt = conn.prepareCall(sqljob);
+					ResultSet rs = stmt.executeQuery(sqljob);
+
+
+						rs = stmt.executeQuery(sqljob);
+						System.out.println(sqljob);
+						if (!rs.isBeforeFirst()) {
+						    System.out.println("no data found");
+						    JOptionPane.showMessageDialog(null, "NO Data Found");
+						    textField_jobId.setText("");
+						    
+						    textField_jobtitle.setText("");
+						    textField_salaray.setText("");
+						   
+						} 
+						else {
+						
+						while(rs.next()){
+						
+						    textField_jobId.setText(rs.getString("job_id"));
+						    textField_jobtitle.setText(rs.getString("job_title"));
+						    textField_salaray.setText(rs.getString("job_salary"));
+						    
+						}
+						
+						}
+						
+						
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				
+			}
+		});
+		
+		searchFieldjobid.setBounds(113, 11, 104, 20);
+		panel_addjobdetails.add(searchFieldjobid);
+		
+		JLabel lblEmployeeId = new JLabel("Employee id");
+		lblEmployeeId.setBounds(10, 14, 93, 14);
+		panel_addjobdetails.add(lblEmployeeId);
+		
+		JLabel lblJobId = new JLabel("Job Id");
+		lblJobId.setBounds(10, 39, 93, 14);
+		panel_addjobdetails.add(lblJobId);
+		
+		textField_jobId = new JTextField();
+		textField_jobId.setBounds(113, 36, 104, 20);
+		panel_addjobdetails.add(textField_jobId);
+		textField_jobId.setColumns(10);
+		
+		JLabel lblJobTitle = new JLabel("Job Title");
+		lblJobTitle.setBounds(10, 64, 93, 14);
+		panel_addjobdetails.add(lblJobTitle);
+		
+		textField_jobtitle = new JTextField();
+		textField_jobtitle.setBounds(113, 61, 104, 20);
+		panel_addjobdetails.add(textField_jobtitle);
+		textField_jobtitle.setColumns(10);
+		
+		JLabel lblJobSalary = new JLabel("Job Salary");
+		lblJobSalary.setBounds(10, 89, 93, 14);
+		panel_addjobdetails.add(lblJobSalary);
+		
+		textField_salaray = new JTextField();
+		textField_salaray.setBounds(113, 86, 104, 20);
+		panel_addjobdetails.add(textField_salaray);
+		textField_salaray.setColumns(10);
+		
+		JButton btnSaveDetails = new JButton("Save Details");
+		btnSaveDetails.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String j_id = textField_jobId.getText().toString();
+				String e_id = searchFieldjobid.getText().toString();
+				String j_title = textField_jobtitle.getText();
+				String j_salary = textField_salaray.getText();
+				
+				try {
+					
+					String sql = "insert into JobTitle_Table(job_id,job_title,job_salary,emp_id_job) values('"+j_id+"','"+j_title+"','"+j_salary+"','"+e_id+"')";
+				
+					stmt.executeUpdate(sql);
+					System.out.print(sql);
+					JOptionPane.showMessageDialog(null, "Record Added Successfully");
+				
+					
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+		JScrollPane scrollPane_showjobRecords = new JScrollPane();
+		scrollPane_showjobRecords.setBounds(278, 11, 420, 311);
+		panel_addjobdetails.add(scrollPane_showjobRecords);
+				
+		btnSaveDetails.setBounds(10, 124, 104, 23);
+		panel_addjobdetails.add(btnSaveDetails);
+		
+		table1 = new JTable();
+		scrollPane_showjobRecords.setViewportView(table1);
+		try {
+			stmt = conn.createStatement();
+		} catch (SQLException e3) {
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
+		}
+		
+		JButton btnShowAllJob = new JButton("Show all job record");
+		btnShowAllJob.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					String sqljob = "call viewAllJOb()";
+					
+						rs=stmt.executeQuery(sqljob);
+						table1.setModel(DbUtils.resultSetToTableModel(rs));
+						
+						
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
+		btnShowAllJob.setBounds(426, 333, 149, 23);
+		panel_addjobdetails.add(btnShowAllJob);
+		
+		
+		
+		JPanel panel_4 = new JPanel();
+		tabbedPane.addTab("Payroll", null, panel_4, null);
+		
+		JPanel panel_1 = new JPanel();
+		tabbedPane.addTab("Reports", null, panel_1, null);
+		panel_1.setLayout(null);
+		
+		JTabbedPane tabbedPane_2 = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane_2.setBounds(12, 13, 709, 389);
+		panel_1.add(tabbedPane_2);
+		
+		JPanel panel_2 = new JPanel();
+		tabbedPane_2.addTab("Generate all Employee", null, panel_2, null);
+		panel_2.setLayout(null);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(12, 13, 680, 302);
+		panel_2.add(scrollPane_1);
+		
+		JButton btnShowAllEmployee = new JButton("Show All Employee");
+		btnShowAllEmployee.setBounds(284, 328, 141, 25);
+		panel_2.add(btnShowAllEmployee);
+		
+		JPanel panel_3 = new JPanel();
+		tabbedPane_2.addTab("Payslip", null, panel_3, null);
+		panel_3.setLayout(null);
+		
+		JLabel lblLastname = new JLabel("Lastname:");
+		lblLastname.setBounds(12, 13, 91, 16);
+		panel_3.add(lblLastname);
+		
+		JLabel lblLastname_1 = new JLabel("Firstname:");
+		lblLastname_1.setBounds(12, 42, 104, 16);
+		panel_3.add(lblLastname_1);
+		
+		textField_lastnamePay = new JTextField();
+		textField_lastnamePay.setBounds(128, 10, 116, 22);
+		panel_3.add(textField_lastnamePay);
+		textField_lastnamePay.setColumns(10);
+		
+		textField_firstnamepayslip = new JTextField();
+		textField_firstnamepayslip.setBounds(128, 39, 116, 22);
+		panel_3.add(textField_firstnamepayslip);
+		textField_firstnamepayslip.setColumns(10);
+		
+		JXSearchField srchfldEnterEmployeeId = new JXSearchField();
+		srchfldEnterEmployeeId.setPrompt("Enter employee ID: ");
+		srchfldEnterEmployeeId.setBounds(200, 324, 138, 22);
+		panel_3.add(srchfldEnterEmployeeId);
 		
 		
 		
