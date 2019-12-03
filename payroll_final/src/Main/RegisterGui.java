@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -60,25 +58,7 @@ public class RegisterGui extends JFrame {
 			public void run() {
 				try {
 					RegisterGui frame = new RegisterGui();
-					 WindowAdapter exitListener = new WindowAdapter() {
-
-				            @Override
-				            public void windowClosing(WindowEvent e) {
-				                int confirm = JOptionPane.showOptionDialog(frame,
-				                        "Are You Sure to Close this Application?",
-				                        "Exit Confirmation", JOptionPane.YES_NO_CANCEL_OPTION,
-				                        JOptionPane.QUESTION_MESSAGE, null, null, null);
-				                if(confirm == JOptionPane.YES_OPTION){
-				                	frame.setDefaultCloseOperation(frame.DISPOSE_ON_CLOSE);//yes
-
-				                } else if (confirm == JOptionPane.CANCEL_OPTION) {
-				                	frame.setDefaultCloseOperation(frame.DO_NOTHING_ON_CLOSE);//cancel
-				                } else {
-				                	frame.setDefaultCloseOperation(frame.DO_NOTHING_ON_CLOSE);//no
-				                }
-				            }
-				        };
-				        frame. addWindowListener(exitListener);
+					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -90,10 +70,7 @@ public class RegisterGui extends JFrame {
 	 * Create the frame.
 	 */
 	public RegisterGui() {
-		setTitle("Register");
-		setVisible(true);
-		setResizable(false);
-		
+		conn = ConnectDB.doConnect();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 813, 542);
 		contentPane = new JPanel();
@@ -316,7 +293,7 @@ public class RegisterGui extends JFrame {
 						}
 							System.out.println(sqladd);
 							Class.forName("com.mysql.jdbc.Driver");
-							Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "Qwerty120995!");
+							Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "root");
 							stmt = conn.prepareCall(sqladd);
 							stmt.executeUpdate(sqladd);	
 							lblrecord_suc.setText("Successfully Registered");

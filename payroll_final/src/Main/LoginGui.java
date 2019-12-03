@@ -13,6 +13,7 @@ import java.sql.Statement;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 
 import Employee.EmployeeMenuGui;
@@ -26,16 +27,22 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class LoginGui extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField_username;
 	private JTextField textField_password;
+	private JPasswordField passwordField;
+	private JCheckBox chckbxShowPassword;
 	static Connection conn;
 	static Statement stmt;
 	static ResultSet rs;
@@ -44,6 +51,7 @@ public class LoginGui extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -81,8 +89,8 @@ public class LoginGui extends JFrame {
 	 * Create the frame.
 	 */
 	public LoginGui() {
-		setTitle("Login ");
 		setResizable(false);
+		setAlwaysOnTop(true);
 		conn = ConnectDB.doConnect();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -104,11 +112,6 @@ public class LoginGui extends JFrame {
 		contentPane.add(textField_username);
 		textField_username.setColumns(10);
 		
-		textField_password = new JTextField();
-		textField_password.setBounds(211, 124, 146, 26);
-		contentPane.add(textField_password);
-		textField_password.setColumns(10);
-		
 		JButton btnLogin = new JButton("Login");
 		btnLogin.addActionListener(new ActionListener() {
 
@@ -116,7 +119,7 @@ public class LoginGui extends JFrame {
 				
 				String query = ("call checklog()");
 				String username = textField_username.getText();
-				String passwords = textField_password.getText();
+				String passwords = passwordField.getText();
 
 						
 				try {
@@ -133,9 +136,6 @@ public class LoginGui extends JFrame {
 					String roleEmployee = "2";
 					while (rs.next()) {
 						
-//						System.out.println(rs.getString(1));
-//						System.out.println(rs.getString(2));
-//						System.out.println(rs.getString(1) + " " + rs.getString(2)+ " " +rs.getString(3));
 						if (username.equals(rs.getString(1)) && passwords.equals(rs.getString(2)) && roleAdmin.equals(rs.getString(3))) {
 							  //  block of code to be executed if condition1 is true
 							dispose();
@@ -158,9 +158,7 @@ public class LoginGui extends JFrame {
 								
 								String loginas = rs.getString("last_name");
 								EmployeeName.emp_lstname =loginas;
-								
-							
-								
+										
 								
 								EmployeeMenuGui empMenu = new EmployeeMenuGui();
 								empMenu.setVisible(true);
@@ -199,7 +197,34 @@ public class LoginGui extends JFrame {
 				
 			}
 		});
-		btnLogin.setBounds(145, 176, 115, 29);
+		btnLogin.setBounds(145, 184, 115, 29);
 		contentPane.add(btnLogin);
+		
+		passwordField = new JPasswordField();
+		passwordField.setBounds(211, 124, 146, 26);
+		contentPane.add(passwordField);
+		passwordField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode()==KeyEvent.VK_ENTER) {
+					btnLogin.doClick();
+		            }
+			}
+		});
+		
+		
+		chckbxShowPassword = new JCheckBox("Show Password");
+		
+		chckbxShowPassword.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(chckbxShowPassword.isSelected()) {
+					passwordField.setEchoChar((char)0);
+				}else
+					passwordField.setEchoChar('*');
+			}
+		});
+		chckbxShowPassword.setBounds(211, 157, 140, 20);
+		contentPane.add(chckbxShowPassword);
+	
 	}
 }

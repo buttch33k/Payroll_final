@@ -73,12 +73,20 @@ public class adminMenuGui extends JFrame {
 	private JTextField textField_Stat1;
 	
 	private JTable table;
-	private JTextField textField_lastnamePay;
-	private JTextField textField_firstnamepayslip;
 	private JTextField textField_jobId;
 	private JTextField textField_jobtitle;
 	private JTextField textField_salaray;
 	private JTable table1;
+	private JTextField textField_EMpid_ps;
+	private JTextField textField_name_ps;
+	private JTextField textField_1_jobtitle_ps;
+	private JTextField textField_rateperhour_ps;
+	private JTextField textField_TAX_PS;
+	private JTextField textField_sss_ps;
+	private JTextField textField_pagibig_ps;
+	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_jobIdz;
 
 	/**
 	 * Launch the application.
@@ -245,16 +253,19 @@ public class adminMenuGui extends JFrame {
 		
 				
 		JLabel label_8 = new JLabel("Address: ");
-		label_8.setBounds(383, 56, 103, 20);
+		label_8.setBounds(383, 56, 55, 20);
 		panel_addEmp.add(label_8);
 		
+		JScrollPane scrollPane_2 = new JScrollPane();
+		scrollPane_2.setBounds(443, 54, 146, 56);
+		panel_addEmp.add(scrollPane_2);
+		
 		JTextArea textArea = new JTextArea();
-		textArea.setBounds(443, 54, 235, 56);
-		panel_addEmp.add(textArea);
+		scrollPane_2.setViewportView(textArea);
 		
 		textField_city = new JTextField();
 		textField_city.setColumns(10);
-		textField_city.setBounds(443, 118, 146, 26);
+		textField_city.setBounds(443, 118, 123, 26);
 		panel_addEmp.add(textField_city);
 		
 		JLabel label_9 = new JLabel("City: ");
@@ -267,7 +278,7 @@ public class adminMenuGui extends JFrame {
 		
 		textField_email = new JTextField();
 		textField_email.setColumns(10);
-		textField_email.setBounds(443, 149, 146, 26);
+		textField_email.setBounds(443, 149, 123, 26);
 		panel_addEmp.add(textField_email);
 		
 		JLabel label_11 = new JLabel("Mobile: ");
@@ -276,7 +287,7 @@ public class adminMenuGui extends JFrame {
 		
 		textField_Mobile = new JTextField();
 		textField_Mobile.setColumns(10);
-		textField_Mobile.setBounds(443, 180, 146, 26);
+		textField_Mobile.setBounds(443, 180, 123, 26);
 		panel_addEmp.add(textField_Mobile);
 		
 		JLabel label_12 = new JLabel("Employee type:");
@@ -333,7 +344,10 @@ public class adminMenuGui extends JFrame {
 				String addres = textArea.getText();
 				String gender  = bG.getSelection().getActionCommand();
 				String empT = textField_emptype.getText().toString();
-				String empStat = textField_stat.getText().toString();;
+				String empStat = textField_stat.getText().toString();
+				String jabD = textField_jobIdz.getText().toString();
+			
+				
 				
 				boolean testEmail, testMob,testpin;
 				Pattern patternEmail, patternMob,patternpin;
@@ -356,8 +370,8 @@ public class adminMenuGui extends JFrame {
 				
 				try {
 					
-				String sqladd = "insert into employee_Table(username, passwords, emp_type, status_id,last_name,first_name,dob,age,gender,country,city,address,email,mobile_no)"
-				+"values('"+Usern+"','"+Passw+"','"+empT+"','"+empStat+"','"+lname+"','"+fname+"','"+dat+"','"+Age+"','"+gender+"','"+country+"','"+City+"','"+addres+"','"+emil+"','"+num+"')";
+				String sqladd = "insert into employee_Table(username, passwords, emp_type, status_id,job_id_emp,last_name,first_name,dob,age,gender,country,city,address,email,mobile_no)"
+				+"values('"+Usern+"','"+Passw+"','"+empT+"','"+empStat+"','"+jabD+"','"+lname+"','"+fname+"','"+dat+"','"+Age+"','"+gender+"','"+country+"','"+City+"','"+addres+"','"+emil+"','"+num+"')";
 				
 						if(testEmail && testMob){
 						JOptionPane.showMessageDialog(null, "Are You Sure to add this Record?");
@@ -386,6 +400,18 @@ public class adminMenuGui extends JFrame {
 		separator_3.setOrientation(SwingConstants.VERTICAL);
 		separator_3.setBounds(341, 56, 12, 248);
 		panel_addEmp.add(separator_3);
+		
+		JLabel lblJobId_1 = new JLabel("JOB ID:");
+		lblJobId_1.setBounds(576, 124, 46, 14);
+		panel_addEmp.add(lblJobId_1);
+		
+		textField_jobIdz = new JTextField();
+		textField_jobIdz.setName("");
+		
+		
+		textField_jobIdz.setBounds(635, 121, 50, 20);
+		panel_addEmp.add(textField_jobIdz);
+		textField_jobIdz.setColumns(10);
 		
 		
 		
@@ -578,8 +604,7 @@ public class adminMenuGui extends JFrame {
 						rs = stmt.executeQuery(sql);
 						System.out.println(sql);
 						if (!rs.isBeforeFirst()) {
-						    System.out.println("no data found");
-						    notfound.setText("No Record Found");
+							JOptionPane.showMessageDialog(null, "No Data Found");
 						    java.util.Date d = new java.util.Date();
 						    d.toString();
 						    textField_Firstname.setText("");
@@ -783,6 +808,7 @@ public class adminMenuGui extends JFrame {
 						
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
+						 JOptionPane.showMessageDialog(null, "NO EMployee ID FOund");
 						e1.printStackTrace();
 					}
 				
@@ -842,6 +868,7 @@ public class adminMenuGui extends JFrame {
 					
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(null, "Duplicate job ID");
 					e1.printStackTrace();
 				}
 				
@@ -885,7 +912,128 @@ public class adminMenuGui extends JFrame {
 		
 		
 		JPanel panel_4 = new JPanel();
+		panel_4.setToolTipText("Enter Employee ID");
 		tabbedPane.addTab("Payroll", null, panel_4, null);
+		panel_4.setLayout(null);
+		
+		JTabbedPane tabbedPane_3 = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane_3.setBounds(10, 11, 713, 395);
+		panel_4.add(tabbedPane_3);
+		
+		JPanel panel_3 = new JPanel();
+		tabbedPane_3.addTab("Payslip", null, panel_3, null);
+		panel_3.setLayout(null);
+		
+		JLabel lblEmployeeId_1 = new JLabel("Employee ID");
+		lblEmployeeId_1.setBounds(10, 11, 83, 14);
+		panel_3.add(lblEmployeeId_1);
+		
+		textField_EMpid_ps = new JTextField();
+		textField_EMpid_ps.setEditable(false);
+		textField_EMpid_ps.setBounds(103, 8, 86, 20);
+		panel_3.add(textField_EMpid_ps);
+		textField_EMpid_ps.setColumns(10);
+		
+		JLabel lblName = new JLabel("Name");
+		lblName.setBounds(10, 36, 83, 14);
+		panel_3.add(lblName);
+		
+		textField_name_ps = new JTextField();
+		textField_name_ps.setBounds(103, 33, 116, 20);
+		panel_3.add(textField_name_ps);
+		textField_name_ps.setColumns(10);
+		
+		JLabel lblJobTitle_1 = new JLabel("Job Title");
+		lblJobTitle_1.setBounds(10, 61, 83, 14);
+		panel_3.add(lblJobTitle_1);
+		
+		textField_1_jobtitle_ps = new JTextField();
+		textField_1_jobtitle_ps.setBounds(103, 58, 116, 20);
+		panel_3.add(textField_1_jobtitle_ps);
+		textField_1_jobtitle_ps.setColumns(10);
+		
+		JLabel lblDate = new JLabel("Date");
+		lblDate.setBounds(10, 86, 46, 14);
+		panel_3.add(lblDate);
+		
+		JDateChooser dateChooser_today_ps = new JDateChooser();
+		dateChooser_today_ps.setBounds(103, 80, 116, 20);
+		panel_3.add(dateChooser_today_ps);
+		
+		JLabel lblRatePerHour = new JLabel("Rate Per hour");
+		lblRatePerHour.setBounds(10, 111, 83, 14);
+		panel_3.add(lblRatePerHour);
+		
+		textField_rateperhour_ps = new JTextField();
+		textField_rateperhour_ps.setEditable(false);
+		textField_rateperhour_ps.setBounds(103, 108, 86, 20);
+		panel_3.add(textField_rateperhour_ps);
+		textField_rateperhour_ps.setColumns(10);
+		
+		JSeparator separator_4 = new JSeparator();
+		separator_4.setBounds(10, 137, 688, 2);
+		panel_3.add(separator_4);
+		
+		JLabel lblDedution = new JLabel("Dedution:");
+		lblDedution.setBounds(10, 145, 83, 14);
+		panel_3.add(lblDedution);
+		
+		JLabel lblTax = new JLabel("Tax");
+		lblTax.setBounds(10, 170, 46, 14);
+		panel_3.add(lblTax);
+		
+		JLabel lblSss = new JLabel("SSS");
+		lblSss.setBounds(10, 195, 46, 14);
+		panel_3.add(lblSss);
+		
+		JLabel lblPagIbig = new JLabel("PAG IBIG");
+		lblPagIbig.setBounds(10, 220, 46, 14);
+		panel_3.add(lblPagIbig);
+		
+		textField_TAX_PS = new JTextField();
+		textField_TAX_PS.setEditable(false);
+		textField_TAX_PS.setBounds(103, 167, 86, 20);
+		panel_3.add(textField_TAX_PS);
+		textField_TAX_PS.setColumns(10);
+		
+		textField_sss_ps = new JTextField();
+		textField_sss_ps.setEditable(false);
+		textField_sss_ps.setBounds(103, 192, 86, 20);
+		panel_3.add(textField_sss_ps);
+		textField_sss_ps.setColumns(10);
+		
+		textField_pagibig_ps = new JTextField();
+		textField_pagibig_ps.setEditable(false);
+		textField_pagibig_ps.setBounds(103, 217, 86, 20);
+		panel_3.add(textField_pagibig_ps);
+		textField_pagibig_ps.setColumns(10);
+		
+		JLabel lblAdditional = new JLabel("Additional:");
+		lblAdditional.setBounds(10, 245, 83, 14);
+		panel_3.add(lblAdditional);
+		
+		textField = new JTextField();
+		textField.setBounds(103, 242, 86, 20);
+		panel_3.add(textField);
+		textField.setColumns(10);
+		
+		JLabel lblNetpay = new JLabel("Netpay");
+		lblNetpay.setBounds(10, 270, 46, 14);
+		panel_3.add(lblNetpay);
+		
+		textField_1 = new JTextField();
+		textField_1.setBounds(103, 267, 86, 20);
+		panel_3.add(textField_1);
+		textField_1.setColumns(10);
+		
+		JXSearchField searchField = new JXSearchField();
+		searchField.setPrompt("Enter Employee ID");
+		searchField.setBounds(408, 11, 122, 20);
+		panel_3.add(searchField);
+		
+		JPanel panel_5 = new JPanel();
+		tabbedPane_3.addTab("New tab", null, panel_5, null);
+		panel_5.setLayout(null);
 		
 		JPanel panel_1 = new JPanel();
 		tabbedPane.addTab("Reports", null, panel_1, null);
@@ -906,33 +1054,6 @@ public class adminMenuGui extends JFrame {
 		JButton btnShowAllEmployee = new JButton("Show All Employee");
 		btnShowAllEmployee.setBounds(284, 328, 141, 25);
 		panel_2.add(btnShowAllEmployee);
-		
-		JPanel panel_3 = new JPanel();
-		tabbedPane_2.addTab("Payslip", null, panel_3, null);
-		panel_3.setLayout(null);
-		
-		JLabel lblLastname = new JLabel("Lastname:");
-		lblLastname.setBounds(12, 13, 91, 16);
-		panel_3.add(lblLastname);
-		
-		JLabel lblLastname_1 = new JLabel("Firstname:");
-		lblLastname_1.setBounds(12, 42, 104, 16);
-		panel_3.add(lblLastname_1);
-		
-		textField_lastnamePay = new JTextField();
-		textField_lastnamePay.setBounds(128, 10, 116, 22);
-		panel_3.add(textField_lastnamePay);
-		textField_lastnamePay.setColumns(10);
-		
-		textField_firstnamepayslip = new JTextField();
-		textField_firstnamepayslip.setBounds(128, 39, 116, 22);
-		panel_3.add(textField_firstnamepayslip);
-		textField_firstnamepayslip.setColumns(10);
-		
-		JXSearchField srchfldEnterEmployeeId = new JXSearchField();
-		srchfldEnterEmployeeId.setPrompt("Enter employee ID: ");
-		srchfldEnterEmployeeId.setBounds(200, 324, 138, 22);
-		panel_3.add(srchfldEnterEmployeeId);
 		
 		
 		
