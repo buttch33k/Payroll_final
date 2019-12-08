@@ -23,6 +23,8 @@ import javax.swing.JTextField;
 import javax.swing.JSpinner;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
+
+import com.sun.org.apache.bcel.internal.classfile.Method;
 import com.toedter.calendar.JDateChooser;
 
 import Main.EmployeeName;
@@ -44,7 +46,9 @@ import java.awt.event.MouseEvent;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Scanner;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -64,7 +68,6 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 
 public class EmployeeMenuGui extends JFrame {
-
 	LoginGui emp;
 	private JPanel contentPane;
 	private JTextField textField_username;
@@ -75,7 +78,7 @@ public class EmployeeMenuGui extends JFrame {
 	private JTextField textField_city;
 	private JTextField textField_email;
 	private JTextField textField_Mobile;
-
+	private static JLabel lblClock;
 	Connection conn;
 	Statement stmt;
 	ResultSet rs;
@@ -106,6 +109,7 @@ public class EmployeeMenuGui extends JFrame {
 					EmployeeMenuGui frame = new EmployeeMenuGui();
 					frame.setVisible(true);
 					frame.setTitle("Employee Menu");
+					clock();
 					WindowAdapter exitListener = new WindowAdapter() {
 
 						@Override
@@ -130,15 +134,37 @@ public class EmployeeMenuGui extends JFrame {
 			}
 		});
 	}
+	public static void clock() {
+		Thread clock = new Thread() {
+			public void run() {
+
+					try {
+						for(;;) {
+						Calendar calz = new GregorianCalendar();
+						
+						int second = calz.get(Calendar.SECOND);
+						int minute = calz.get(Calendar.MINUTE);
+						int hour = calz.get(Calendar.HOUR);
+						
+						lblClock.setText("Time: " + hour + ";"+ minute + ";" + second);
+						sleep(1000);
+						}
+					} catch(InterruptedException e){
+						e.printStackTrace();			
+					}
+				}
+	};
+		clock.start();
+	}
 
 	/**
 	 * Create the frame.
 	 */
 	public EmployeeMenuGui(){
-		
+		 
 	//	dtf = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
 		//textField_TI.setEditable(true);
-
+		
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 670, 482);
@@ -308,12 +334,10 @@ public class EmployeeMenuGui extends JFrame {
 		JLabel lblHi = new JLabel("");
 		lblHi.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-//				 Connection conn = null;
-//				 PreparedStatement pst = null;
-//				 ResultSet rs = null;
+
 				String empId = lblHi.getText();
 				String datenow = dtf1.format(now);
-				//boolean check = false;
+	
 				
 					try {
 						Class.forName("com.mysql.jdbc.Driver");
@@ -331,11 +355,9 @@ public class EmployeeMenuGui extends JFrame {
 							if(rs.getString(1).equals(empId) && rs.getString(2).equals(datenow)) {
 								btnTimeI.setEnabled(false);
 								Time_I.setEnabled(false);
-								
-								//check = true;
+	
 								break;
-//							}if(!check) {	
-//								btnTimeI.setEnabled(true);
+
 							}
 								
 						}
@@ -380,88 +402,7 @@ public class EmployeeMenuGui extends JFrame {
 		lblHi.setBounds(101, 42, 101, 14);
 		panel_time.add(lblHi);
 		
-//		txtField_TI = new JTextField();
-//		txtField_TI.setBounds(20, 80, 120, 20);
-//		panel_time.add(txtField_TI);
-//		txtField_TI.setColumns(10);
-//		txtField_TI.addKeyListener(new KeyAdapter() {
-//			@Override
-//			public void keyPressed(KeyEvent e) {
-//				if (e.getKeyCode()==KeyEvent.VK_ENTER) {
-//					btnTimeI.doClick();
-//					if(!txtField_TI.getText().isEmpty()) {
-//						btnTimeI.setEnabled(false);
-//						txtField_TO.setEditable(true);
-//					}
-//				}			
-//			}
-//		});
-//		txtField_TI.addMouseListener(new MouseAdapter() {
-//			@Override
-//			public void mouseClicked(MouseEvent e) {
-//				
-//				btnTimeI.setEnabled(false);
-//
-//			}
-//			public void mouseReleased(MouseEvent e) {
-//				
-//				btnTimeI.setEnabled(false);
-//
-//			}
-//			
-//		});
-//		txtField_TI.addCaretListener(new CaretListener() {
-//			public void caretUpdate(CaretEvent e) {
-//
-//				if(txtField_TI.getText().isEmpty()) 
-//					txtField_TI.setEditable(true);
-//					btnTimeI.setEnabled(true);
-//				if(!lblpleaseEnter.getText().isEmpty()) 
-//					lblpleaseEnter.setText(null);
-//							
-//			}
-//		});
 
-		
-//		txtField_TO = new JTextField();
-//		txtField_TO.setBounds(20, 111, 120, 20);
-//		panel_time.add(txtField_TO);
-//		txtField_TO.setColumns(10);
-//		txtField_TO.addKeyListener(new KeyAdapter() {
-//			@Override
-//			public void keyPressed(KeyEvent e) {
-//				if (e.getKeyCode()==KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_TAB) {
-//					btnTimeOut.doClick();
-//					txtField_TO.setEditable(false);
-//					
-//		            }
-//			}
-//		});
-//		txtField_TO.addMouseListener(new MouseAdapter() {
-//			@Override
-//			public void mouseClicked(MouseEvent e) {
-//
-//				btnTimeOut.setEnabled(false);
-//
-//
-//			}	
-//			public void mouseReleased(MouseEvent e) {
-//
-//				btnTimeOut.setEnabled(false);
-//
-//
-//			}	
-//		});
-//		txtField_TO.addCaretListener(new CaretListener() {
-//			public void caretUpdate(CaretEvent e) {
-//				
-//				if(txtField_TO.getText().isEmpty()) 
-//					txtField_TO.setEditable(true);
-//					btnTimeOut.setEnabled(true);
-//				if(!lblpleaseEnter.getText().isEmpty()) 
-//					lblpleaseEnter.setText(null);
-//			}
-//		});
 		
 
 		JLabel lblEmployee = new JLabel("Employee #:");
@@ -495,6 +436,10 @@ public class EmployeeMenuGui extends JFrame {
 		JLabel lblDate = new JLabel(dtf1.format(now));
 		lblDate.setBounds(310, 17, 101, 14);
 		panel_time.add(lblDate);
+		
+		lblClock = new JLabel("Clock");
+		lblClock.setBounds(50, 165, 138, 14);
+		panel_time.add(lblClock);
 
 		JPanel panel_updatedetails = new JPanel();
 		tabbedPane.addTab("Update Details", null, panel_updatedetails, null);
@@ -747,7 +692,8 @@ public class EmployeeMenuGui extends JFrame {
 		panel_updatedetails.add(btnCancel);
 
 		JPanel panel_payslipgen = new JPanel();
-		tabbedPane.addTab("New tab", null, panel_payslipgen, null);
+		tabbedPane.addTab("Payslip", null, panel_payslipgen, null);
+		panel_payslipgen.setLayout(null);
 
 	}
 }

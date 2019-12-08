@@ -88,6 +88,7 @@ public class LoginGui extends JFrame {
 	/**
 	 * Create the frame.
 	 */
+	
 	public LoginGui() {
 		setResizable(false);
 		setAlwaysOnTop(true);

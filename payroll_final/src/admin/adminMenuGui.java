@@ -94,8 +94,6 @@ public class adminMenuGui extends JFrame {
 	private JTextField textField_Stat1;
 
 	private JTable table;
-	private JTextField textField_lastnamePay;
-	private JTextField textField_firstnamepayslip;
 	private JTextField textField_jobId;
 	private JTextField textField_jobtitle;
 	private JTextField textField_salaray;
@@ -131,9 +129,8 @@ public class adminMenuGui extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
+//	 * Create the frame
+	
 	public adminMenuGui() {
 		conn = ConnectDB.doConnect();
 
@@ -391,7 +388,7 @@ public class adminMenuGui extends JFrame {
 				LoginGui frame = new LoginGui();
 			}
 		});
-		btnLogOut.setBounds(518, 322, 89, 23);
+		btnLogOut.setBounds(10, 370, 89, 23);
 		btnLogOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -1138,11 +1135,6 @@ public class adminMenuGui extends JFrame {
 		btnShowAllJob.setBounds(426, 333, 149, 23);
 		panel_addjobdetails.add(btnShowAllJob);
 
-
-
-		JPanel panel_4 = new JPanel();
-		tabbedPane.addTab("Payroll", null, panel_4, null);
-
 		JPanel panel_1 = new JPanel();
 		tabbedPane.addTab("Reports", null, panel_1, null);
 		panel_1.setLayout(null);
@@ -1162,33 +1154,6 @@ public class adminMenuGui extends JFrame {
 		JButton btnShowAllEmployee = new JButton("Show All Employee");
 		btnShowAllEmployee.setBounds(284, 328, 141, 25);
 		panel_2.add(btnShowAllEmployee);
-
-		JPanel panel_3 = new JPanel();
-		tabbedPane_2.addTab("Payslip", null, panel_3, null);
-		panel_3.setLayout(null);
-
-		JLabel lblLastname = new JLabel("Lastname:");
-		lblLastname.setBounds(12, 13, 91, 16);
-		panel_3.add(lblLastname);
-
-		JLabel lblLastname_1 = new JLabel("Firstname:");
-		lblLastname_1.setBounds(12, 42, 104, 16);
-		panel_3.add(lblLastname_1);
-
-		textField_lastnamePay = new JTextField();
-		textField_lastnamePay.setBounds(128, 10, 116, 22);
-		panel_3.add(textField_lastnamePay);
-		textField_lastnamePay.setColumns(10);
-
-		textField_firstnamepayslip = new JTextField();
-		textField_firstnamepayslip.setBounds(128, 39, 116, 22);
-		panel_3.add(textField_firstnamepayslip);
-		textField_firstnamepayslip.setColumns(10);
-
-		JXSearchField srchfldEnterEmployeeId = new JXSearchField();
-		srchfldEnterEmployeeId.setPrompt("Enter employee ID: ");
-		srchfldEnterEmployeeId.setBounds(200, 324, 138, 22);
-		panel_3.add(srchfldEnterEmployeeId);
 
 
 
