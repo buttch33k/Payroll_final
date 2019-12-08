@@ -20,15 +20,7 @@ delimiter ;
 call viewAllInactiveUser();
 drop procedure viewAllInactiveUser;
 
-/*clock*/
-DELIMITER &&
-CREATE PROCEDURE insertAttend(in empID int, in petsa varchar(255), in pumasok varchar(255), IN timeout varchar(255), IN totalhours varchar(255))
-BEGIN
-INSERT INTO Attendance_Now(employee_id, date, time_in,time_out,no_of_hours) VALUES (empID, petsa,pumasok,timeout, totalhours);
-SELECT * FROM Attendance_Now;
-END &&
-DELIMITER ;
-drop procedure insertAttend;
+
 
 select A.emp_id, A.username, A.passwords, B.date, B.time_in,B.time_out,B.no_of_hours 
 from employee_Table A inner join Attendance_Now B on A.emp_id= B.employee_id;

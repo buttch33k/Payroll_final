@@ -124,7 +124,7 @@ public class LoginGui extends JFrame {
 						
 				try {
 					
-					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "Qwerty120995!");
+					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "root");
 					PreparedStatement pst = conn.prepareStatement(query);
 					stmt = conn.prepareCall(query);
 					ResultSet rs = stmt.executeQuery(query);

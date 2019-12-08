@@ -69,27 +69,93 @@ primary key(status_id)
 insert into userStatus_table
 values(1, 'ACTIVE'),(2, 'INACTIVE'),(3, 'DEACTIVATED');
 
-ALTER TABLE  Attendance_Now
+create table Attendance_NowTI(
+employee_id int not null,
+date varchar(255) not null,
+time_in varchar(255) default null
+
+);
+drop table Attendance_NowTI;
+drop table timeout;
+
+delimiter \\
+create procedure ccheckti()
+begin
+select *
+from Attendance_NowTI;
+end \\
+delimiter ; 
+call ccheckti;
+
+insert into Attendance_NowTI(employee_id, date, time_in)values
+(5, CURDATE(), "8:01 am");
+
+create table timeout(
+e_id int not null,
+time_out varchar(255) default null,
+no_of_hours long default null
+);
+
+insert into timeout()values
+(5,"5:00pm",8);
+
+#foreign key
+ALTER TABLE  Attendance_NowTI
 ADD constraint fk_employee_id
 FOREIGN KEY (employee_id) REFERENCES employee_Table(emp_id);
 
-create table Attendance_Now(
-employee_id int not null,
-date varchar(255) not null,
-time_in varchar(255) not null,
-time_out varchar(255) not null,
-no_of_hours long not null
-);
-
-drop table Attendance_Now;
-
-insert into Attendance_Now(employee_id, date, time_in,time_out,no_of_hours)values
-(5, CURDATE(), "8:01 am","5:00pm",8);
+ALTER TABLE  timeout
+ADD constraint fk_e_id
+FOREIGN KEY (e_id) REFERENCES employee_Table(emp_id);
 
 
-Select * from employee_Table e INNER join JobTitle_Table j on e.emp_id =j.job_id where emp_id = 1;
+
+DELIMITER &&
+CREATE PROCEDURE insertTI(in empID int, in petsa varchar(255), in pumasok varchar(255))
+BEGIN
+INSERT INTO Attendance_NowTI(employee_id, date, time_in) VALUES (empID, petsa,pumasok);
+SELECT * FROM Attendance_NowTI;
+END &&
+DELIMITER ;
+
+drop procedure insertti;
+
+Delimiter &&
+create procedure inserTO(in empid int,IN timeout varchar(255), IN totalhours varchar(255))
+begin
+insert into timeout(e_id, time_out, no_of_hours) values (empid, timeout, totalhours);
+select * from timeout;
+end &&
+delimiter ;
+drop procedure inserTO;
 
 
+
+delimiter \\
+create procedure viewtime()
+begin
+select A.emp_id, A.username, A.passwords, A.emp_type, B.date, B.time_in,C.time_out,C.no_of_hours 
+from employee_Table A inner join Attendance_NowTI B on A.emp_id= B.employee_id join timeout C on A.emp_id = C.e_id;
+end \\
+delimiter ;
+
+call viewtime;
+
+select * from Attendance_NowTI ;
+select * from timeout ;
+
+delimiter \\
+create procedure checktimeindate()
+begin
+select employee_id,  date from Attendance_NowTI;
+
+end \\
+delimiter ;
+drop procedure checktimeindate;
+call checktimeindate();
+
+select A.emp_id, A.username, A.passwords, A.emp_type, B.date, B.time_in,C.time_out,C.no_of_hours 
+from employee_Table A inner join Attendance_NowTI B on A.emp_id= B.employee_id join timeout C on A.emp_id = C.e_id;
 
 
 

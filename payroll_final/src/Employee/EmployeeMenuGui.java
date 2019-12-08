@@ -27,6 +27,7 @@ import com.toedter.calendar.JDateChooser;
 
 import Main.EmployeeName;
 import Main.LoginGui;
+import net.proteanit.sql.DbUtils;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -46,7 +47,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import javax.swing.event.CaretListener;
@@ -57,13 +60,13 @@ import java.awt.event.InputMethodListener;
 import java.awt.event.InputMethodEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 public class EmployeeMenuGui extends JFrame {
 
 	LoginGui emp;
 	private JPanel contentPane;
-	private JTextField txtField_TI;
-	private JTextField txtField_TO;
 	private JTextField textField_username;
 	private JTextField textField_password;
 	private JTextField textField_firstname;
@@ -73,19 +76,30 @@ public class EmployeeMenuGui extends JFrame {
 	private JTextField textField_email;
 	private JTextField textField_Mobile;
 
-	static Connection conn;
-	static Statement stmt;
-	static ResultSet rs;
+	Connection conn;
+	Statement stmt;
+	ResultSet rs;
 	
-	static float hours;
+	float hours;
 	
-	static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-	static LocalDateTime now = LocalDateTime.now();
+	JLabel Time_O = new JLabel(dtf.format(lt));
+	JButton btnTimeOut = new JButton("Time out");
+	JLabel Time_I = new JLabel(dtf.format(lt));
+	String timein = Time_I.getText();
+	String timeout = Time_O.getText();
+	
+	DateTimeFormatter dtf1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	LocalDateTime now = LocalDateTime.now();
+	
+	static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm a");
+	static LocalTime lt = LocalTime.now();
+	
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args){
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -120,8 +134,9 @@ public class EmployeeMenuGui extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public EmployeeMenuGui() {
+	public EmployeeMenuGui(){
 		
+	//	dtf = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
 		//textField_TI.setEditable(true);
 
 		setResizable(false);
@@ -141,205 +156,313 @@ public class EmployeeMenuGui extends JFrame {
 		tabbedPane.addTab("Time in/out", null, panel_time, null);
 		panel_time.setLayout(null);
 		
-		JLabel lblpleaseEnter = new JLabel("");
-		lblpleaseEnter.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblpleaseEnter.setForeground(new Color(128, 0, 0));
-		lblpleaseEnter.setBounds(103, 168, 156, 14);
-		panel_time.add(lblpleaseEnter);
+//		JLabel lblpleaseEnter = new JLabel("");
+//		lblpleaseEnter.setFont(new Font("Tahoma", Font.BOLD, 13));
+//		lblpleaseEnter.setForeground(new Color(128, 0, 0));
+//		lblpleaseEnter.setBounds(103, 168, 156, 14);
+//		panel_time.add(lblpleaseEnter);
+		
+		Time_I.setBackground(Color.WHITE);
+		Time_I.setFont(new Font("Times New Roman", Font.PLAIN, 15));
+		Time_I.setForeground(Color.RED);
+		Time_I.setBounds(50, 80, 120, 20);
+		panel_time.add(Time_I);
 		
 		JButton btnTimeI = new JButton("Time in");
-		btnTimeI.setEnabled(false);
+		btnTimeI.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				
+					if(!btnTimeI.isEnabled()) {
+						btnTimeOut.setEnabled(true);
+						Time_O.setEnabled(true);
+					}
+			}
+		});
 		btnTimeI.setBounds(202, 79, 89, 23);
 		panel_time.add(btnTimeI);
 		btnTimeI.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-					if(e.getActionCommand().equals("Time in")&& (!txtField_TI.getText().isEmpty())) {
-						txtField_TI.setEditable(false);
-						btnTimeI.setEnabled(false);
-						txtField_TO.setEditable(true);
-					}else 
-						lblpleaseEnter.setText("Please Enter Time in...");
-				    	//btnTimeOut.setEnabled(false);
-						txtField_TO.setEditable(false);
 					
+					if(e.getActionCommand().equals("Time in")) {
+						btnTimeI.setEnabled(false);
+						Time_I.setEnabled(false);
+//						btnTimeOut.setEnabled(true);
+						
+						try {
+						
+						Class.forName("com.mysql.jdbc.Driver");
+						Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "root");
+						
+					 	 CallableStatement statement = conn.prepareCall("CALL insertTI(?,?,?)");
+					     statement.setString(1, String.valueOf(EmployeeName.empid).toString());
+						 statement.setString(2, dtf1.format(now));
+						 statement.setString(3, timein);
+						 
+						 statement.executeQuery();
+						 
+						 btnTimeI.setEnabled(false);
+						 
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (ClassNotFoundException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+//					}else 
+//						lblpleaseEnter.setText("Please Enter Time in...");
+//				    	//btnTimeOut.setEnabled(false);
+//						txtField_TO.setEditable(false);
+					}	
 			}
 		});
-
-		JButton btnTimeOut = new JButton("Time out");
+		Time_O.setEnabled(false);			
+		Time_O.setBackground(Color.WHITE);
+		Time_O.setFont(new Font("Times New Roman", Font.PLAIN, 15));
+		Time_O.setForeground(Color.RED);
+		Time_O.setBounds(50, 111, 120, 20);
+		panel_time.add(Time_O);
+		
+//		JButton btnTimeOut = new JButton("Time out");
+//		btnTimeOut.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//				if(!btnTimeI.isEnabled()) {
+//					btnTimeOut.setEnabled(true);
+//				}
+//					
+//			}
+//			@Override
+//			public void mouseReleased(MouseEvent e) {
+//				if(!btnTimeI.isEnabled()) {
+//					btnTimeOut.setEnabled(true);
+//				}
+//			}
+//		});
 		btnTimeOut.setEnabled(false);
 		btnTimeOut.setBounds(202, 110, 89, 23);
 		panel_time.add(btnTimeOut);
 		btnTimeOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				if(e.getActionCommand().equals("Time out") && (!txtField_TO.getText().isEmpty())) {
-					txtField_TO.setEditable(false);
+						
+				if(e.getActionCommand().equals("Time out") || (!btnTimeOut.isEnabled())){
 					btnTimeOut.setEnabled(false);
+					Time_O.setEnabled(false);
 					
 					try {
-					
-					Class.forName("com.mysql.jdbc.Driver");
-					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "Qwerty120995!");
-					
-					 hours =0;
-					 String timein = txtField_TI.getText();
-					 String timeout = txtField_TO.getText();
-					 
-					 DateFormat sdf = new SimpleDateFormat("hh:mm aa");
-					 Date d1 = sdf.parse(timein);
-					 Date d2 = sdf.parse(timeout);
-					 
-					 
-					 if(d1.after(d2)){
-					     float diffMs = d1.getTime() - d2.getTime();
-					     float diffSec = diffMs / 1000;
-					    
-					     float min = diffSec / 60;
-					      hours = (min /60)-1;
-					   
-					     //System.out.println("Difference in Hours "+hours);
-					     
-					    }
-					    if(d1.before(d2)){
-					     float diffMs = d2.getTime() - d1.getTime();
-					     float diffSec = diffMs / 1000;
-					    
-					    
-					     float min = diffSec / 60;
-					      hours = (min /60)-1;
-					     
-					     //System.out.println("Difference in Hours "+hours);
-					    
-					    }
 
-					    if(d1.equals(d2)){
-					     System.out.println("The difference is 0 minutes and 0 seconds.");
-					    }
-					    
-//					    if (hours > 8.0) {
-//					    	double extraHours = hours - 8.0;
-//					        double pay = ( 8* rate ) + ( extraHours * rate );
-//					        System.out.println(pay);
-//					    	} else {
-//					    		double pay = hours * rate;
-//					    		System.out.println(pay);
-//					    	}
-					    
-					    String hr = Float.toString(hours);
-					    
-					     CallableStatement statement = conn.prepareCall("CALL insertAttend(?,?,?,?,?)");
-					     statement.setString(1, String.valueOf(EmployeeName.empid).toString());
-						 statement.setString(2, dtf.format(now));
-						 statement.setString(3, timein);
-						 statement.setString(4,timeout);
-						 statement.setFloat(5, hours);
-						 ResultSet rs = statement.executeQuery();
-					 
-						 JOptionPane.showMessageDialog(null, "Successfully added");	
-				//	}
+						Class.forName("com.mysql.jdbc.Driver");
+						Connection conn1 = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "root");
 
-				} catch (ClassNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (ParseException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				}else
-					lblpleaseEnter.setText("Please Enter Time out...");
-			}	
-		});
-		
-		txtField_TI = new JTextField();
-		txtField_TI.setBounds(20, 80, 120, 20);
-		panel_time.add(txtField_TI);
-		txtField_TI.setColumns(10);
-		txtField_TI.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode()==KeyEvent.VK_ENTER) {
-					btnTimeI.doClick();
-					if(!txtField_TI.getText().isEmpty()) {
-						txtField_TO.setEditable(true);
+						timeout = Time_O.getText();
+						
+						DateFormat sdf = new SimpleDateFormat("hh:mm aa");
+						Date d1 = sdf.parse(timein);
+						Date d2 = sdf.parse(timeout);
+
+
+						if(d1.after(d2)){
+							float diffMs = d1.getTime() - d2.getTime();
+							float diffSec = diffMs / 1000;
+
+							float min = diffSec / 60;
+							hours = (min /60)-1;
+
+							//System.out.println("Difference in Hours "+hours);
+
+						}
+
+						if(d1.equals(d2)){
+							System.out.println("The difference is 0 minutes and 0 seconds.");
+						}
+
+//						String hr = Float.toString(hours);
+
+						CallableStatement statement1 = conn1.prepareCall("CALL inserTO(?,?,?)");
+						statement1.setString(1, String.valueOf(EmployeeName.empid).toString());
+						statement1.setString(2,timeout);
+						statement1.setFloat(3, hours);
+						
+						statement1.executeUpdate();
+						
+						JOptionPane.showMessageDialog(null, "Successfully added");	
+						//	}
+
+					} catch (ClassNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (ParseException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
 					}
-				}			
-			}
-		});
-		txtField_TI.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				
-				btnTimeI.setEnabled(false);
-
-			}
-			public void mouseReleased(MouseEvent e) {
-				
-				btnTimeI.setEnabled(false);
-
-			}
-			
-		});
-		txtField_TI.addCaretListener(new CaretListener() {
-			public void caretUpdate(CaretEvent e) {
-
-				if(txtField_TI.getText().isEmpty()) 
-					txtField_TI.setEditable(true);
-					btnTimeI.setEnabled(true);
-				if(!lblpleaseEnter.getText().isEmpty()) 
-					lblpleaseEnter.setText(null);
-							
-			}
-		});
-
-		
-		txtField_TO = new JTextField();
-		txtField_TO.setBounds(20, 111, 120, 20);
-		panel_time.add(txtField_TO);
-		txtField_TO.setColumns(10);
-		txtField_TO.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode()==KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_TAB) {
-					btnTimeOut.doClick();
-					txtField_TO.setEditable(false);
-					
-		            }
-			}
-		});
-		txtField_TO.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-			
+					//				}else
+					//					lblpleaseEnter.setText("Please Enter Time out...");
+				}else
 					btnTimeOut.setEnabled(false);
-					
-				
 			}	
-			public void mouseReleased(MouseEvent e) {
-
-				btnTimeOut.setEnabled(false);
-				
-				
-			}	
-		});
-		txtField_TO.addCaretListener(new CaretListener() {
-			public void caretUpdate(CaretEvent e) {
-				
-				if(txtField_TO.getText().isEmpty()) 
-					txtField_TO.setEditable(true);
-					btnTimeOut.setEnabled(true);
-				if(!lblpleaseEnter.getText().isEmpty()) 
-					lblpleaseEnter.setText(null);
-			}
 		});
 		
 		JLabel lblHi = new JLabel("");
+		lblHi.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+//				 Connection conn = null;
+//				 PreparedStatement pst = null;
+//				 ResultSet rs = null;
+				String empId = lblHi.getText();
+				String datenow = dtf1.format(now);
+				//boolean check = false;
+				
+					try {
+						Class.forName("com.mysql.jdbc.Driver");
+						Connection conn2 = DriverManager
+								.getConnection(
+								"jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false",
+								"root", "root");
+						
+						PreparedStatement pst = null;
+						pst = conn2.prepareStatement("select * from Attendance_NowTI");
+						rs = pst.executeQuery();
+						
+						while(rs.next()) {
+							
+							if(rs.getString(1).equals(empId) && rs.getString(2).equals(datenow)) {
+								btnTimeI.setEnabled(false);
+								Time_I.setEnabled(false);
+								
+								//check = true;
+								break;
+//							}if(!check) {	
+//								btnTimeI.setEnabled(true);
+							}
+								
+						}
+						
+					} catch (ClassNotFoundException | SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					try {
+						Class.forName("com.mysql.jdbc.Driver");
+						Connection conn2 = DriverManager
+								.getConnection(
+								"jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false",
+								"root", "root");
+						
+						PreparedStatement pst = null;
+						pst = conn2.prepareStatement("select A.emp_id, A.username, A.passwords, A.emp_type, B.date, B.time_in,C.time_out,C.no_of_hours \r\n" + 
+								"from employee_Table A inner join Attendance_NowTI B on A.emp_id= B.employee_id join timeout C on A.emp_id = C.e_id;");
+						rs = pst.executeQuery();
+						
+						while(rs.next()) {
+							
+							if(rs.getString(1).equals(empId) && rs.getString(5).equals(datenow)) {
+								btnTimeOut.setEnabled(false);
+								Time_O.setEnabled(false);
+								//check = true;
+								break;
+//							}if(!check) {	
+//								btnTimeI.setEnabled(true);
+							}
+						}
+						
+					} catch (ClassNotFoundException | SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+			}
+		});
 		lblHi.setText(String.valueOf(EmployeeName.empid).toString());
 		lblHi.setBounds(101, 42, 101, 14);
 		panel_time.add(lblHi);
+		
+//		txtField_TI = new JTextField();
+//		txtField_TI.setBounds(20, 80, 120, 20);
+//		panel_time.add(txtField_TI);
+//		txtField_TI.setColumns(10);
+//		txtField_TI.addKeyListener(new KeyAdapter() {
+//			@Override
+//			public void keyPressed(KeyEvent e) {
+//				if (e.getKeyCode()==KeyEvent.VK_ENTER) {
+//					btnTimeI.doClick();
+//					if(!txtField_TI.getText().isEmpty()) {
+//						btnTimeI.setEnabled(false);
+//						txtField_TO.setEditable(true);
+//					}
+//				}			
+//			}
+//		});
+//		txtField_TI.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//				
+//				btnTimeI.setEnabled(false);
+//
+//			}
+//			public void mouseReleased(MouseEvent e) {
+//				
+//				btnTimeI.setEnabled(false);
+//
+//			}
+//			
+//		});
+//		txtField_TI.addCaretListener(new CaretListener() {
+//			public void caretUpdate(CaretEvent e) {
+//
+//				if(txtField_TI.getText().isEmpty()) 
+//					txtField_TI.setEditable(true);
+//					btnTimeI.setEnabled(true);
+//				if(!lblpleaseEnter.getText().isEmpty()) 
+//					lblpleaseEnter.setText(null);
+//							
+//			}
+//		});
+
+		
+//		txtField_TO = new JTextField();
+//		txtField_TO.setBounds(20, 111, 120, 20);
+//		panel_time.add(txtField_TO);
+//		txtField_TO.setColumns(10);
+//		txtField_TO.addKeyListener(new KeyAdapter() {
+//			@Override
+//			public void keyPressed(KeyEvent e) {
+//				if (e.getKeyCode()==KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_TAB) {
+//					btnTimeOut.doClick();
+//					txtField_TO.setEditable(false);
+//					
+//		            }
+//			}
+//		});
+//		txtField_TO.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//
+//				btnTimeOut.setEnabled(false);
+//
+//
+//			}	
+//			public void mouseReleased(MouseEvent e) {
+//
+//				btnTimeOut.setEnabled(false);
+//
+//
+//			}	
+//		});
+//		txtField_TO.addCaretListener(new CaretListener() {
+//			public void caretUpdate(CaretEvent e) {
+//				
+//				if(txtField_TO.getText().isEmpty()) 
+//					txtField_TO.setEditable(true);
+//					btnTimeOut.setEnabled(true);
+//				if(!lblpleaseEnter.getText().isEmpty()) 
+//					lblpleaseEnter.setText(null);
+//			}
+//		});
+		
 
 		JLabel lblEmployee = new JLabel("Employee #:");
 		lblEmployee.setBounds(9, 42, 71, 14);
@@ -369,7 +492,7 @@ public class EmployeeMenuGui extends JFrame {
 		btnLogOut.setBounds(489, 374, 89, 23);
 		panel_time.add(btnLogOut);
 		
-		JLabel lblDate = new JLabel(dtf.format(now));
+		JLabel lblDate = new JLabel(dtf1.format(now));
 		lblDate.setBounds(310, 17, 101, 14);
 		panel_time.add(lblDate);
 
@@ -507,7 +630,8 @@ public class EmployeeMenuGui extends JFrame {
 					String sql = "Select * from employee_Table  where emp_id = '"
 							+ srchfldEnterempId.getText().toString() + "' ";
 					Connection conn = DriverManager.getConnection(
-							"jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false", "root","Qwerty120995!");
+							"jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false", "root",
+							"root");
 					PreparedStatement pst = conn.prepareStatement(sql);
 					stmt = conn.prepareCall(sql);
 					ResultSet rs = stmt.executeQuery(sql);
@@ -598,7 +722,8 @@ public class EmployeeMenuGui extends JFrame {
 							+ srchfldEnterempId.getText().toString() + "' ";
 
 					Connection conn = DriverManager.getConnection(
-							"jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false", "root","Qwerty120995!");
+							"jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false", "root",
+							"root");
 					PreparedStatement pst = conn.prepareStatement(sql);
 					stmt = conn.prepareCall(sql);
 					stmt.executeUpdate(sql);

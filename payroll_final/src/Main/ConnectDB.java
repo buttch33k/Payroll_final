@@ -13,7 +13,7 @@ Connection conn;
 		
 		String host = "jdbc:mysql://localhost:3306/payroll_final"; 
         String uName = "root";
-        String uPass = "Qwerty120995!";
+        String uPass = "root";
         
         try {
         	Class.forName("com.mysql.jdbc.Driver");
