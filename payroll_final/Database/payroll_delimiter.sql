@@ -18,6 +18,7 @@ on employee_Table.status_id = userStatus_table.status_id;
 end \\
 delimiter ;
 call viewAllInactiveUser();
+call viewAllInactiveUser();
 drop procedure viewAllInactiveUser;
 
 
