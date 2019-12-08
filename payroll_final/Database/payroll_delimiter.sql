@@ -32,3 +32,20 @@ drop procedure insertAttend;
 
 select A.emp_id, A.username, A.passwords, B.date, B.time_in,B.time_out,B.no_of_hours 
 from employee_Table A inner join Attendance_Now B on A.emp_id= B.employee_id;
+
+/*View all job by employee*/
+delimiter \\
+create procedure viewAlljob()
+begin
+select employee_Table.emp_id, employee_Table.last_name, employee_Table.first_name, employee_Table.email, JobTitle_Table.job_code from employee_Table
+join JobTitle_Table
+on employee_Table.job_id = JobTitle_Table.job_id;
+end \\
+delimiter ;
+call viewAlljob();
+drop procedure viewAlljob;
+
+
+
+
+
