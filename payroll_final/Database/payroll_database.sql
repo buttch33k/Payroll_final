@@ -157,6 +157,7 @@ call checktimeindate();
 select A.emp_id, A.username, A.passwords, A.emp_type, B.date, B.time_in,C.time_out,C.no_of_hours 
 from employee_Table A inner join Attendance_NowTI B on A.emp_id= B.employee_id join timeout C on A.emp_id = C.e_id;
 
+select a.emp_id  B.
 
 
-
+Select * from employee_Table e INNER join JobTitle_Table j on e.emp_id =j.job_id where emp_id = 1;
