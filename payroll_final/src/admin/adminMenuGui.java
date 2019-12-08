@@ -52,7 +52,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Scanner;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -60,6 +61,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.InputMethodListener;
 import java.awt.event.InputMethodEvent;
+import org.jdesktop.xswingx.JXTextField;
 
 public class adminMenuGui extends JFrame {
 
@@ -100,15 +102,6 @@ public class adminMenuGui extends JFrame {
 	private JTextField textField_jobtitle;
 	private JTextField textField_salaray;
 	private JTable table1;
-	private JTextField textField_EMpid_ps;
-	private JTextField textField_name_ps;
-	private JTextField textField_1_jobtitle_ps;
-	private JTextField textField_rateperhour_ps;
-	private JTextField textField_TAX_PS;
-	private JTextField textField_sss_ps;
-	private JTextField textField_pagibig_ps;
-	private JTextField textField;
-	private JTextField textField_1;
 	private JTextField textField_jobIdz;
 	private JTextField textField_TIn;
 	private JTextField textField_Tout;
@@ -121,8 +114,26 @@ public class adminMenuGui extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					adminMenuGui frame = new adminMenuGui();
-					frame.setVisible(true);
+					adminMenuGui adminframe = new adminMenuGui();
+					adminframe.setVisible(true);
+					WindowAdapter exitListener = new WindowAdapter() {
+
+						@Override
+						public void windowClosing(WindowEvent e) {
+							int confirm = JOptionPane.showOptionDialog(adminframe, "Are You Sure to Close this Application?",
+									"Exit Confirmation", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+									null, null, null);
+							if (confirm == JOptionPane.YES_OPTION) {
+								adminframe.setDefaultCloseOperation(adminframe.DISPOSE_ON_CLOSE);// yes
+
+							} else if (confirm == JOptionPane.CANCEL_OPTION) {
+								adminframe.setDefaultCloseOperation(adminframe.DO_NOTHING_ON_CLOSE);// cancel
+							} else {
+								adminframe.setDefaultCloseOperation(adminframe.DO_NOTHING_ON_CLOSE);// no
+							}
+						}
+					};
+					adminframe.addWindowListener(exitListener);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -299,12 +310,12 @@ public class adminMenuGui extends JFrame {
 		textField_TIn.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode()==KeyEvent.VK_ENTER) {
-					textField_TIn.doClick();
-					if(!textField_TIn.getText().isEmpty()) {
-						textField_Tout.setEditable(true);
-					}
-				}			
+//				if (e.getKeyCode()==KeyEvent.VK_ENTER) {
+//					textField_TIn.doClick();
+//					if(!textField_TIn.getText().isEmpty()) {
+//						textField_Tout.setEditable(true);
+//					}
+//				}			
 			}
 		});
 		textField_TIn.addMouseListener(new MouseAdapter() {
@@ -341,40 +352,19 @@ public class adminMenuGui extends JFrame {
 		textField_Tout.setBounds(10, 92, 86, 20);
 		panel_home.add(textField_Tout);
 		textField_Tout.setColumns(10);
-		textField_Tout.addKeyListener(new KeyAdapter() {
-		@Override
-		public void keyPressed(KeyEvent e) {
-			if (e.getKeyCode()==KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_TAB) {
-				textField_Tout.doClick();
-				textField_Tout.setEditable(false);
-				}
-			}
-		});
-		textField_Tout.addMouseListener(new MouseAdapter() {
-		@Override
-		public void mouseClicked(MouseEvent e) {
 		
-			textField_Tout.setEnabled(false);
+		JButton btnPayroll = new JButton("PAYROLL");
+		btnPayroll.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				payrollGui Payframe = new payrollGui();
+				Payframe.setVisible(true);
 				
-			
-		}	
-		public void mouseReleased(MouseEvent e) {
-
-			textField_Tout.setEnabled(false);
-			
-			
-			}	
-		});
-			textField_Tout.addCaretListener(new CaretListener() {
-			public void caretUpdate(CaretEvent e) {
-				
-				if(textField_Tout.getText().isEmpty()) 
-					textField_Tout.setEditable(true);
-				textField_Tout.setEnabled(true);
-	//			if(!lblpleaseEnter.getText().isEmpty()) 
-	//				lblpleaseEnter.setText(null);
 			}
 		});
+		
+		btnPayroll.setBounds(585, 7, 136, 23);
+		panel_home.add(btnPayroll);
+		
 		
 		JPanel panel = new JPanel();
 		tabbedPane.addTab("Employee Settings", null, panel, null);
@@ -1113,7 +1103,7 @@ public class adminMenuGui extends JFrame {
 		btnShowAllJob.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					String sqljob = "call viewAllJOb()";
+					String sqljob = "select job_code,job_title,job_salary from JobTitle_Table";
 					
 						rs=stmt.executeQuery(sqljob);
 						table1.setModel(DbUtils.resultSetToTableModel(rs));
@@ -1127,132 +1117,6 @@ public class adminMenuGui extends JFrame {
 			});
 		btnShowAllJob.setBounds(426, 333, 149, 23);
 		panel_addjobdetails.add(btnShowAllJob);
-		
-		
-		
-		JPanel panel_4 = new JPanel();
-		panel_4.setToolTipText("Enter Employee ID");
-		tabbedPane.addTab("Payroll", null, panel_4, null);
-		panel_4.setLayout(null);
-		
-		JTabbedPane tabbedPane_3 = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane_3.setBounds(10, 11, 713, 395);
-		panel_4.add(tabbedPane_3);
-		
-		JPanel panel_3 = new JPanel();
-		tabbedPane_3.addTab("Payslip", null, panel_3, null);
-		panel_3.setLayout(null);
-		
-		JLabel lblEmployeeId_1 = new JLabel("Employee ID");
-		lblEmployeeId_1.setBounds(10, 11, 83, 14);
-		panel_3.add(lblEmployeeId_1);
-		
-		textField_EMpid_ps = new JTextField();
-		textField_EMpid_ps.setEditable(false);
-		textField_EMpid_ps.setBounds(103, 8, 86, 20);
-		panel_3.add(textField_EMpid_ps);
-		textField_EMpid_ps.setColumns(10);
-		
-		JLabel lblName = new JLabel("Name");
-		lblName.setBounds(10, 36, 83, 14);
-		panel_3.add(lblName);
-		
-		textField_name_ps = new JTextField();
-		textField_name_ps.setBounds(103, 33, 116, 20);
-		panel_3.add(textField_name_ps);
-		textField_name_ps.setColumns(10);
-		
-		JLabel lblJobTitle_1 = new JLabel("Job Title");
-		lblJobTitle_1.setBounds(10, 61, 83, 14);
-		panel_3.add(lblJobTitle_1);
-		
-		textField_1_jobtitle_ps = new JTextField();
-		textField_1_jobtitle_ps.setBounds(103, 58, 116, 20);
-		panel_3.add(textField_1_jobtitle_ps);
-		textField_1_jobtitle_ps.setColumns(10);
-		
-		JLabel lblDate = new JLabel("Date");
-		lblDate.setBounds(10, 86, 46, 14);
-		panel_3.add(lblDate);
-		
-		JDateChooser dateChooser_today_ps = new JDateChooser();
-		dateChooser_today_ps.setBounds(103, 80, 116, 20);
-		panel_3.add(dateChooser_today_ps);
-		
-		JLabel lblRatePerHour = new JLabel("Rate Per hour");
-		lblRatePerHour.setBounds(10, 111, 83, 14);
-		panel_3.add(lblRatePerHour);
-		
-		textField_rateperhour_ps = new JTextField();
-		textField_rateperhour_ps.setEditable(false);
-		textField_rateperhour_ps.setBounds(103, 108, 86, 20);
-		panel_3.add(textField_rateperhour_ps);
-		textField_rateperhour_ps.setColumns(10);
-		
-		JSeparator separator_4 = new JSeparator();
-		separator_4.setBounds(10, 137, 688, 2);
-		panel_3.add(separator_4);
-		
-		JLabel lblDedution = new JLabel("Dedution:");
-		lblDedution.setBounds(10, 145, 83, 14);
-		panel_3.add(lblDedution);
-		
-		JLabel lblTax = new JLabel("Tax");
-		lblTax.setBounds(10, 170, 46, 14);
-		panel_3.add(lblTax);
-		
-		JLabel lblSss = new JLabel("SSS");
-		lblSss.setBounds(10, 195, 46, 14);
-		panel_3.add(lblSss);
-		
-		JLabel lblPagIbig = new JLabel("PAG IBIG");
-		lblPagIbig.setBounds(10, 220, 46, 14);
-		panel_3.add(lblPagIbig);
-		
-		textField_TAX_PS = new JTextField();
-		textField_TAX_PS.setEditable(false);
-		textField_TAX_PS.setBounds(103, 167, 86, 20);
-		panel_3.add(textField_TAX_PS);
-		textField_TAX_PS.setColumns(10);
-		
-		textField_sss_ps = new JTextField();
-		textField_sss_ps.setEditable(false);
-		textField_sss_ps.setBounds(103, 192, 86, 20);
-		panel_3.add(textField_sss_ps);
-		textField_sss_ps.setColumns(10);
-		
-		textField_pagibig_ps = new JTextField();
-		textField_pagibig_ps.setEditable(false);
-		textField_pagibig_ps.setBounds(103, 217, 86, 20);
-		panel_3.add(textField_pagibig_ps);
-		textField_pagibig_ps.setColumns(10);
-		
-		JLabel lblAdditional = new JLabel("Additional:");
-		lblAdditional.setBounds(10, 245, 83, 14);
-		panel_3.add(lblAdditional);
-		
-		textField = new JTextField();
-		textField.setBounds(103, 242, 86, 20);
-		panel_3.add(textField);
-		textField.setColumns(10);
-		
-		JLabel lblNetpay = new JLabel("Netpay");
-		lblNetpay.setBounds(10, 270, 46, 14);
-		panel_3.add(lblNetpay);
-		
-		textField_1 = new JTextField();
-		textField_1.setBounds(103, 267, 86, 20);
-		panel_3.add(textField_1);
-		textField_1.setColumns(10);
-		
-		JXSearchField searchField = new JXSearchField();
-		searchField.setPrompt("Enter Employee ID");
-		searchField.setBounds(408, 11, 122, 20);
-		panel_3.add(searchField);
-		
-		JPanel panel_5 = new JPanel();
-		tabbedPane_3.addTab("New tab", null, panel_5, null);
-		panel_5.setLayout(null);
 		
 		JPanel panel_1 = new JPanel();
 		tabbedPane.addTab("Reports", null, panel_1, null);
@@ -1273,10 +1137,6 @@ public class adminMenuGui extends JFrame {
 		JButton btnShowAllEmployee = new JButton("Show All Employee");
 		btnShowAllEmployee.setBounds(284, 328, 141, 25);
 		panel_2.add(btnShowAllEmployee);
-		
-		
-		
-		
 		
 		
 	}

@@ -117,7 +117,7 @@ public class LoginGui extends JFrame {
 
 			public void actionPerformed(ActionEvent arg0) {
 				
-				String query = ("call checklog()");
+				String query = ("call checklogz()");
 				String username = textField_username.getText();
 				String passwords = passwordField.getText();
 
@@ -172,7 +172,8 @@ public class LoginGui extends JFrame {
 						
 					      if(input == 0) {
 					         System.out.println("Pressed YES");
-					         RegisterGui frame = new RegisterGui();
+					         RegisterGui regisframe = new RegisterGui();
+					         regisframe.setVisible(true);
 					      }
 					      else if (input == 1){
 					         System.out.println("Pressed NO");
