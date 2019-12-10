@@ -15,7 +15,7 @@ values(0,250000,0,0),(250000,400000,0,.20),(400000,800000,30000,.25),(800000,200
 DELIMITER \\
 CREATE PROCEDURE allTax()
 BEGIN
-SELECT tax_Min,tax_Max,tax_TaxOnLowerLimit,tax_TaxOnExcessOverLimit FROM Taxtable_Table;
+SELECT tax_id,tax_Min,tax_Max,tax_TaxOnLowerLimit,tax_TaxOnExcessOverLimit FROM Taxtable_Table;
 END \\
 DELIMITER ;
 call allTax();
@@ -31,7 +31,7 @@ create table sss_table(
     sss_ee double not null,
     sss_total double not null
 );
-
+ 
 insert into sss_table (sss_min, sss_max, sss_ec, sss_er, sss_ee, sss_total) 
 values 
 (0, 2250, 10.00, 170.00, 80, 250.00), 
@@ -80,3 +80,57 @@ END \\
 DELIMITER ;
 call allTax_sss();
 drop procedure allTax;
+
+
+create table Philhealth_table(
+	Philhealth_id int primary key auto_increment not null,
+	Philhealth_min double not null,
+    Philhealth_max double not null,
+    Philhealth_employeeShare double not null,
+    Philhealth_employerShare double not null,
+    Philhealth_totalMonthlyPremium double not null
+);
+
+insert into Philhealth_table(Philhealth_min,Philhealth_max,Philhealth_employeeShare,Philhealth_employerShare,Philhealth_totalMonthlyPremium)
+values
+(	0.00	,	10000.00	,	137.00	,	137.50	,	275.00	),
+(	10000.01	,	11000.00	,	151.25	,	151.25	,	302.50	),
+(	11000.01	,	12000.00	,	165.00	,	165.00	,	330.00	),
+(	12000.01	,	13000.00	,	178.75	,	178.75	,	357.50	),
+(	13000.01	,	14000.00	,	192.50	,	192.50	,	385.00	),
+(	14000.01	,	15000.00	,	206.25	,	206.25	,	412.50	),
+(	15000.01	,	16000.00	,	220.00	,	220.00	,	440.00	),
+(	16000.01	,	17000.00	,	233.75	,	233.75	,	467.50	),
+(	17000.01	,	18000.00	,	247.50	,	247.50	,	495.00	),
+(	18000.01	,	19000.00	,	261.25	,	261.25	,	522.50	),
+(	19000.01	,	20000.00	,	275.00	,	275.00	,	550.00	),
+(	20000.01	,	21000.00	,	288.75	,	288.75	,	577.50	),
+(	21000.01	,	22000.00	,	302.50	,	302.50	,	605.00	),
+(	22000.01	,	23000.00	,	316.25	,	316.25	,	632.50	),
+(	23000.01	,	24000.00	,	330.00	,	330.00	,	660.00	),
+(	24000.01	,	25000.00	,	343.75	,	343.75	,	687.50	),
+(	25000.01	,	26000.00	,	357.50	,	357.50	,	715.00	),
+(	26000.01	,	27000.00	,	371.25	,	371.25	,	742.50	),
+(	27000.01	,	28000.00	,	385.00	,	385.00	,	770.00	),
+(	28000.01	,	29000.00	,	398.75	,	398.75	,	797.50	),
+(	29000.01	,	30000.00	,	412.50	,	412.50	,	825.00	),
+(	30000.01	,	31000.00	,	426.25	,	426.25	,	852.50	),
+(	31000.01	,	32000.00	,	440.00	,	440.00	,	880.00	),
+(	32000.01	,	33000.00	,	453.75	,	453.75	,	907.50	),
+(	33000.01	,	34000.00	,	467.50	,	467.50	,	935.00	),
+(	34000.01	,	35000.00	,	481.25	,	481.25	,	962.50	),
+(	35000.01	,	36000.00	,	495.00	,	495.00	,	990.00	),
+(	36000.01	,	37000.00	,	508.75	,	508.75	,	1017.50	),
+(	37000.01	,	38000.00	,	522.50	,	522.50	,	1045.00	),
+(	38000.01	,	39000.00	,	536.25	,	536.25	,	1072.50	),
+(	39000.01	,	39999.99	,	543.13	,	543.13	,	1086.26	),
+(	0.00	,	40000.00	,	550.00	,	550.00	,	1100.00	);
+
+DELIMITER \\
+CREATE PROCEDURE allTax_PHIL()
+BEGIN
+SELECT Philhealth_min,Philhealth_max,Philhealth_employeeShare,Philhealth_employerShare,Philhealth_totalMonthlyPremium FROM Philhealth_table;
+END \\
+DELIMITER ;
+call allTax_PHIL();
+drop procedure allTax_PHIL;

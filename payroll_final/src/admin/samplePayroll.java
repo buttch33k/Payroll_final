@@ -19,211 +19,191 @@ public class samplePayroll {
 
 	public static void main(String[] args) {
 		Scanner in = new Scanner(System.in);
-		String taxTable_sss[][] = new String[37][6];
-		int cSSS = 0;
-		int rSSS = 0;
-		System.out.println("enter rate");
-		double grossincome_sss = in.nextInt();
 		
-		double taxrate_sss = 0;
+		System.out.println("enter rate");
+		
 		
 		try {
+			double grossincome_PHIL = in.nextInt();
 			
-			
+			double taxrate_PHIL = 0;
+			String taxTable_PHIL[][] = new String[32][6];
+			int cPHIL = 0;
+			int rPHIL = 0;
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "root");
 			/* select table */			
-			 cs = conn.prepareCall("{call allTax_sss()}");			 
+			 cs = conn.prepareCall("{call allTax_PHIL()}");			 
 			 cs.execute();			 
 			 rs = cs.executeQuery();			 		 
 			 while(rs.next()) { 
 
-				 for( rSSS = 0; rSSS <= 5;rSSS++) {
+				 for( rPHIL = 0; rPHIL <= 4;rPHIL++) {
 					 
-					 if(rSSS == 0) {
-						 taxTable_sss[cSSS][rSSS] = rs.getString(1);
-					 }else if(rSSS == 1) {
-						 taxTable_sss[cSSS][rSSS] = rs.getString(2);
-					 }else if(rSSS == 2) {
-						 taxTable_sss[cSSS][rSSS] = rs.getString(3);
-					 }else if(rSSS == 3) {
-						 taxTable_sss[cSSS][rSSS] = rs.getString(4);
-					 }else if(rSSS == 4) {
-						 taxTable_sss[cSSS][rSSS] = rs.getString(5);
-					 }else if(rSSS == 5) {
-						 taxTable_sss[cSSS][rSSS] = rs.getString(6);
-					 } 
+					 if(rPHIL == 0) {
+						 taxTable_PHIL[cPHIL][rPHIL] = rs.getString(1);
+					 }else if(rPHIL == 1) {
+						 taxTable_PHIL[cPHIL][rPHIL] = rs.getString(2);
+					 }else if(rPHIL == 2) {
+						 taxTable_PHIL[cPHIL][rPHIL] = rs.getString(3);
+					 }else if(rPHIL == 3) {
+						 taxTable_PHIL[cPHIL][rPHIL] = rs.getString(4);
+					 }else if(rPHIL == 4) {
+						 taxTable_PHIL[cPHIL][rPHIL] = rs.getString(5);
+					 }
 				 }
-				 cSSS = cSSS+ 1;
+				 cPHIL = cPHIL+ 1;
 
 			 }	
 
-			 System.out.println(taxTable_sss[0][0]+" "+taxTable_sss[0][1]+" "+taxTable_sss[0][5]);
-			 System.out.println(taxTable_sss[1][0]+" "+taxTable_sss[1][1]+" "+taxTable_sss[1][5]);
-			 System.out.println(taxTable_sss[2][0]+" "+taxTable_sss[2][1]+" "+taxTable_sss[2][5]);
-			 System.out.println(taxTable_sss[3][0]+" "+taxTable_sss[3][1]+" "+taxTable_sss[3][5]);
-			 System.out.println(taxTable_sss[4][0]+" "+taxTable_sss[4][1]+" "+taxTable_sss[4][5]);
-			 System.out.println(taxTable_sss[5][0]+" "+taxTable_sss[5][1]+" "+taxTable_sss[5][5]);
-			 System.out.println(taxTable_sss[6][0]+" "+taxTable_sss[6][1]+" "+taxTable_sss[6][5]);
-			 System.out.println(taxTable_sss[7][0]+" "+taxTable_sss[7][1]+" "+taxTable_sss[7][5]);
-			 System.out.println(taxTable_sss[8][0]+" "+taxTable_sss[8][1]+" "+taxTable_sss[8][5]);
-			 System.out.println(taxTable_sss[9][0]+" "+taxTable_sss[9][1]+" "+taxTable_sss[9][5]);
-			 System.out.println(taxTable_sss[10][0]+" "+taxTable_sss[10][1]+" "+taxTable_sss[10][5]);
-			 System.out.println(taxTable_sss[11][0]+" "+taxTable_sss[11][1]+" "+taxTable_sss[11][5]);
-			 System.out.println(taxTable_sss[12][0]+" "+taxTable_sss[12][1]+" "+taxTable_sss[12][5]);
-			 System.out.println(taxTable_sss[13][0]+" "+taxTable_sss[13][1]+" "+taxTable_sss[13][5]);
-			 System.out.println(taxTable_sss[14][0]+" "+taxTable_sss[14][1]+" "+taxTable_sss[14][5]);
-			 System.out.println(taxTable_sss[15][0]+" "+taxTable_sss[15][1]+" "+taxTable_sss[15][5]);
-			 System.out.println(taxTable_sss[16][0]+" "+taxTable_sss[16][1]+" "+taxTable_sss[16][5]);
-			 System.out.println(taxTable_sss[17][0]+" "+taxTable_sss[17][1]+" "+taxTable_sss[17][5]);
-			 System.out.println(taxTable_sss[18][0]+" "+taxTable_sss[18][1]+" "+taxTable_sss[18][5]);
-			 System.out.println(taxTable_sss[19][0]+" "+taxTable_sss[19][1]+" "+taxTable_sss[19][5]);
-			 System.out.println(taxTable_sss[20][0]+" "+taxTable_sss[20][1]+" "+taxTable_sss[20][5]);
-			 System.out.println(taxTable_sss[21][0]+" "+taxTable_sss[21][1]+" "+taxTable_sss[21][5]);
-			 System.out.println(taxTable_sss[22][0]+" "+taxTable_sss[22][1]+" "+taxTable_sss[22][5]);
-			 System.out.println(taxTable_sss[23][0]+" "+taxTable_sss[23][1]+" "+taxTable_sss[23][5]);
-			 System.out.println(taxTable_sss[24][0]+" "+taxTable_sss[24][1]+" "+taxTable_sss[24][5]);
-			 System.out.println(taxTable_sss[25][0]+" "+taxTable_sss[25][1]+" "+taxTable_sss[25][5]);
-			 System.out.println(taxTable_sss[26][0]+" "+taxTable_sss[26][1]+" "+taxTable_sss[26][5]);
-			 System.out.println(taxTable_sss[27][0]+" "+taxTable_sss[27][1]+" "+taxTable_sss[27][5]);
-			 System.out.println(taxTable_sss[28][0]+" "+taxTable_sss[28][1]+" "+taxTable_sss[28][5]);
-			 System.out.println(taxTable_sss[29][0]+" "+taxTable_sss[29][1]+" "+taxTable_sss[29][5]);
-			 System.out.println(taxTable_sss[30][0]+" "+taxTable_sss[30][1]+" "+taxTable_sss[30][5]);
-			 System.out.println(taxTable_sss[31][0]+" "+taxTable_sss[31][1]+" "+taxTable_sss[31][5]);
-			 System.out.println(taxTable_sss[32][0]+" "+taxTable_sss[32][1]+" "+taxTable_sss[32][5]);
-			 System.out.println(taxTable_sss[33][0]+" "+taxTable_sss[33][1]+" "+taxTable_sss[33][5]);
-			 System.out.println(taxTable_sss[34][0]+" "+taxTable_sss[34][1]+" "+taxTable_sss[34][5]);
-			 System.out.println(taxTable_sss[35][0]+" "+taxTable_sss[35][1]+" "+taxTable_sss[35][5]);
-			 System.out.println(taxTable_sss[36][0]+" "+taxTable_sss[36][1]+" "+taxTable_sss[36][5]);
+			 System.out.println(taxTable_PHIL[0][0]+" "+taxTable_PHIL[0][1]+" "+taxTable_PHIL[0][4]);
+			 System.out.println(taxTable_PHIL[1][0]+" "+taxTable_PHIL[1][1]+" "+taxTable_PHIL[1][4]);
+			 System.out.println(taxTable_PHIL[2][0]+" "+taxTable_PHIL[2][1]+" "+taxTable_PHIL[2][4]);
+			 System.out.println(taxTable_PHIL[3][0]+" "+taxTable_PHIL[3][1]+" "+taxTable_PHIL[3][4]);
+			 System.out.println(taxTable_PHIL[4][0]+" "+taxTable_PHIL[4][1]+" "+taxTable_PHIL[4][4]);
+			 System.out.println(taxTable_PHIL[5][0]+" "+taxTable_PHIL[5][1]+" "+taxTable_PHIL[5][4]);
+			 System.out.println(taxTable_PHIL[6][0]+" "+taxTable_PHIL[6][1]+" "+taxTable_PHIL[6][4]);
+			 System.out.println(taxTable_PHIL[7][0]+" "+taxTable_PHIL[7][1]+" "+taxTable_PHIL[7][4]);
+			 System.out.println(taxTable_PHIL[8][0]+" "+taxTable_PHIL[8][1]+" "+taxTable_PHIL[8][5]);
+			 System.out.println(taxTable_PHIL[9][0]+" "+taxTable_PHIL[9][1]+" "+taxTable_PHIL[9][5]);
+			 System.out.println(taxTable_PHIL[10][0]+" "+taxTable_PHIL[10][1]+" "+taxTable_PHIL[10][4]);
+			 System.out.println(taxTable_PHIL[11][0]+" "+taxTable_PHIL[11][1]+" "+taxTable_PHIL[11][4]);
+			 System.out.println(taxTable_PHIL[12][0]+" "+taxTable_PHIL[12][1]+" "+taxTable_PHIL[12][4]);
+			 System.out.println(taxTable_PHIL[13][0]+" "+taxTable_PHIL[13][1]+" "+taxTable_PHIL[13][4]);
+			 System.out.println(taxTable_PHIL[14][0]+" "+taxTable_PHIL[14][1]+" "+taxTable_PHIL[14][4]);
+			 System.out.println(taxTable_PHIL[15][0]+" "+taxTable_PHIL[15][1]+" "+taxTable_PHIL[15][4]);
+			 System.out.println(taxTable_PHIL[16][0]+" "+taxTable_PHIL[16][1]+" "+taxTable_PHIL[16][4]);
+			 System.out.println(taxTable_PHIL[17][0]+" "+taxTable_PHIL[17][1]+" "+taxTable_PHIL[17][4]);
+			 System.out.println(taxTable_PHIL[18][0]+" "+taxTable_PHIL[18][1]+" "+taxTable_PHIL[18][4]);
+			 System.out.println(taxTable_PHIL[19][0]+" "+taxTable_PHIL[19][1]+" "+taxTable_PHIL[19][4]);
+			 System.out.println(taxTable_PHIL[20][0]+" "+taxTable_PHIL[20][1]+" "+taxTable_PHIL[20][4]);
+			 System.out.println(taxTable_PHIL[21][0]+" "+taxTable_PHIL[21][1]+" "+taxTable_PHIL[21][4]);
+			 System.out.println(taxTable_PHIL[22][0]+" "+taxTable_PHIL[22][1]+" "+taxTable_PHIL[22][4]);
+			 System.out.println(taxTable_PHIL[23][0]+" "+taxTable_PHIL[23][1]+" "+taxTable_PHIL[23][4]);
+			 System.out.println(taxTable_PHIL[24][0]+" "+taxTable_PHIL[24][1]+" "+taxTable_PHIL[24][4]);
+			 System.out.println(taxTable_PHIL[25][0]+" "+taxTable_PHIL[25][1]+" "+taxTable_PHIL[25][4]);
+			 System.out.println(taxTable_PHIL[26][0]+" "+taxTable_PHIL[26][1]+" "+taxTable_PHIL[26][4]);
+			 System.out.println(taxTable_PHIL[27][0]+" "+taxTable_PHIL[27][1]+" "+taxTable_PHIL[27][4]);
+			 System.out.println(taxTable_PHIL[28][0]+" "+taxTable_PHIL[28][1]+" "+taxTable_PHIL[28][4]);
+			 System.out.println(taxTable_PHIL[29][0]+" "+taxTable_PHIL[29][1]+" "+taxTable_PHIL[29][4]);
+			 System.out.println(taxTable_PHIL[30][0]+" "+taxTable_PHIL[30][1]+" "+taxTable_PHIL[30][4]);
+			 System.out.println(taxTable_PHIL[31][0]+" "+taxTable_PHIL[31][1]+" "+taxTable_PHIL[31][4]);
 			 
-			 if (grossincome_sss <= Integer.parseInt(taxTable_sss[0][1])) {
-		            taxrate_sss = Integer.parseInt(taxTable_sss[0][5]);
+			 
+			 if (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[0][1])) {
+		            taxrate_PHIL = Double.parseDouble(taxTable_PHIL[0][4]);
 		     }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[1][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[1][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[1][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[1][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[1][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[1][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[2][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[2][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[2][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[2][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[2][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[2][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[3][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[3][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[3][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[3][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[3][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[3][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[4][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[4][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[4][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[4][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[4][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[4][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[5][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[5][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[5][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[5][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[5][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[5][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[6][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[6][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[6][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[6][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[6][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[6][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[7][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[7][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[7][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[7][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[7][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[7][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[8][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[8][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[8][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[8][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[8][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[8][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[9][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[9][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[9][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[9][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[9][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[9][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[10][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[10][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[10][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[10][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[10][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[10][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[11][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[11][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[11][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[11][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[11][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[11][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[12][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[12][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[12][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[12][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[12][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[12][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[13][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[13][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[13][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[13][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[13][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[13][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[14][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[14][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[14][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[14][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[14][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[14][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[15][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[15][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[15][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[15][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[15][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[15][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[16][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[16][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[16][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[16][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[16][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[16][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[17][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[17][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[17][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[17][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[17][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[17][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[18][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[18][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[18][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[18][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[18][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[18][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[19][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[19][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[19][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[19][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[19][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[19][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[20][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[20][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[20][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[20][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[20][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[20][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[21][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[21][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[21][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[21][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[21][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[21][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[22][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[22][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[22][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[22][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[22][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[22][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[23][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[23][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[23][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[23][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[23][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[23][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[24][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[24][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[24][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[24][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[24][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[24][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[25][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[25][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[25][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[25][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[25][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[25][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[26][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[26][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[26][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[26][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[26][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[26][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[27][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[27][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[27][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[27][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[27][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[27][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[28][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[28][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[28][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[28][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[28][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[28][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[24][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[24][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[24][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[24][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[24][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[24][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[25][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[25][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[25][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[25][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[25][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[25][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[26][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[26][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[26][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[26][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[26][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[26][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[27][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[27][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[27][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[27][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[27][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[27][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[28][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[28][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[28][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[28][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[28][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[28][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[29][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[29][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[29][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[29][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[29][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[29][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[30][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[30][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[30][5]);
+			 else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[30][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[30][1]))){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[30][4]);
 			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[31][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[31][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[31][5]);
-			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[32][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[32][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[32][5]);
-			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[33][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[33][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[33][5]);
-			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[34][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[34][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[34][5]);
-			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[35][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[35][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[35][5]);
-			 }
-			 else if((grossincome_sss >= Integer.parseInt(taxTable_sss[36][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[36][1]))){
-				 taxrate_sss = Integer.parseInt(taxTable_sss[36][5]);
+			 else if(grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[31][1])){
+				 taxrate_PHIL = Double.parseDouble(taxTable_PHIL[31][4]);
+			 
 			 }
 			 System.out.println("");
-			 System.out.println(taxrate_sss);
+			 System.out.println(taxrate_PHIL);
 
 			  
 		} catch (Exception e) {
