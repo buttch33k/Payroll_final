@@ -38,7 +38,14 @@ delimiter ;
 call viewAlljob();
 drop procedure viewAlljob;
 
-
+-- view all job
+delimiter \\
+create procedure addjobz()
+begin
+select job_id,job_code,job_title,job_salary from JobTitle_Table;
+end \\
+delimiter ;
+call addjobz;
 
 
 

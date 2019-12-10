@@ -785,22 +785,22 @@ public class AdminPayrollGui extends JFrame {
 		panel_TAX.add(lblTaxTable);
 		
 		textField_taxMin = new JTextField();
-		textField_taxMin.setBounds(178, 536, 116, 22);
+		textField_taxMin.setBounds(57, 536, 116, 22);
 		panel_TAX.add(textField_taxMin);
 		textField_taxMin.setColumns(10);
 		
 		textField_tax_Max = new JTextField();
-		textField_tax_Max.setBounds(178, 568, 116, 22);
+		textField_tax_Max.setBounds(182, 536, 116, 22);
 		panel_TAX.add(textField_tax_Max);
 		textField_tax_Max.setColumns(10);
 		
 		textField_TaxOnLowerLimit = new JTextField();
-		textField_TaxOnLowerLimit.setBounds(440, 536, 116, 22);
+		textField_TaxOnLowerLimit.setBounds(308, 536, 116, 22);
 		panel_TAX.add(textField_TaxOnLowerLimit);
 		textField_TaxOnLowerLimit.setColumns(10);
 		
 		textField_TaxOnExcessOverLimit = new JTextField();
-		textField_TaxOnExcessOverLimit.setBounds(440, 568, 116, 22);
+		textField_TaxOnExcessOverLimit.setBounds(434, 536, 116, 22);
 		panel_TAX.add(textField_TaxOnExcessOverLimit);
 		textField_TaxOnExcessOverLimit.setColumns(10);
 		
@@ -838,7 +838,7 @@ public class AdminPayrollGui extends JFrame {
 		btnLoadTable.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					String showTax = "call allTax()";
+					String showTax = "call allTaxT()";
 					
 					rs=stmt.executeQuery(showTax);
 					taxTable.setModel(DbUtils.resultSetToTableModel(rs));
@@ -856,9 +856,33 @@ public class AdminPayrollGui extends JFrame {
 		btnLoadTable.setBounds(687, 535, 132, 25);
 		panel_TAX.add(btnLoadTable);
 		
-		JButton btnNewButton = new JButton("UPDATE");
-		btnNewButton.setBounds(689, 567, 130, 25);
-		panel_TAX.add(btnNewButton);
+		JButton btnNewButton_updateTax = new JButton("UPDATE");
+		btnNewButton_updateTax.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					int value1 = Integer.parseInt( textField_id.getText());
+					int value2 = Integer.parseInt( textField_taxMin.getText());
+					double value3 = Double.parseDouble( textField_tax_Max.getText());
+					double value4 = Double.parseDouble( textField_TaxOnLowerLimit.getText());
+					double value5 = Double.parseDouble( textField_TaxOnExcessOverLimit.getText());
+					
+					String updateTax = "UPDATE Taxtable_Table set tax_id='"+value1+"' ,tax_Min = '"+value2+"',tax_Max='"+value3+"',tax_TaxOnLowerLimit='"+value4+"',tax_TaxOnExcessOverLimit='"+value5+"'";
+					PreparedStatement pst = conn.prepareStatement(updateTax);
+					stmt = conn.prepareCall(updateTax);
+					stmt.execute(updateTax);
+					System.out.println(updateTax);
+					JOptionPane.showConfirmDialog(null, "Updated");
+			
+						
+					
+				}catch(Exception e1) {
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+		btnNewButton_updateTax.setBounds(689, 567, 130, 25);
+		panel_TAX.add(btnNewButton_updateTax);
 		
 		textField_id = new JTextField();
 		textField_id.setBounds(10, 535, 27, 22);

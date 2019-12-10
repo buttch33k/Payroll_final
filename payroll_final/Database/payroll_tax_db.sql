@@ -1,7 +1,7 @@
 drop table Taxtable_Table;
 
 create table Taxtable_Table(
-tax_id int auto_increment,
+tax_id int ,
 tax_Min int,
 tax_Max int,
 tax_TaxOnLowerLimit int,
@@ -9,13 +9,13 @@ tax_TaxOnExcessOverLimit double,
 primary key(tax_id)
 );
 
-insert into Taxtable_Table(tax_Min,tax_Max,tax_TaxOnLowerLimit,tax_TaxOnExcessOverLimit)
-values(0,250000,0,0),(250000,400000,0,.20),(400000,800000,30000,.25),(800000,2000000,130000,.30),(2000000,8000000,490000,.32),(8000000,8000001,2410000,.35);
+insert into Taxtable_Table(tax_id,tax_Min,tax_Max,tax_TaxOnLowerLimit,tax_TaxOnExcessOverLimit)
+values(1,0,250000,0,0),(2,250000,400000,0,.20),(3,400000,800000,30000,.25),(4,800000,2000000,130000,.30),(5,2000000,8000000,490000,.32),(6,8000000,8000001,2410000,.35);
 
 DELIMITER \\
 CREATE PROCEDURE allTax()
 BEGIN
-SELECT tax_id,tax_Min,tax_Max,tax_TaxOnLowerLimit,tax_TaxOnExcessOverLimit FROM Taxtable_Table;
+SELECT tax_Min,tax_Max,tax_TaxOnLowerLimit,tax_TaxOnExcessOverLimit FROM Taxtable_Table;
 END \\
 DELIMITER ;
 call allTax();
@@ -79,7 +79,7 @@ SELECT sss_min, sss_max, sss_ec, sss_er, sss_ee, sss_total FROM sss_table;
 END \\
 DELIMITER ;
 call allTax_sss();
-drop procedure allTax;
+drop procedure allTax_sss;
 
 
 create table Philhealth_table(
