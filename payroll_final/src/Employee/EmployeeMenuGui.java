@@ -79,7 +79,6 @@ public class EmployeeMenuGui extends JFrame {
 	private JTextField textField_city;
 	private JTextField textField_email;
 	private JTextField textField_Mobile;
-	private static JLabel lblClock;
 	Connection conn;
 	Statement stmt;
 	ResultSet rs;
@@ -113,7 +112,7 @@ public class EmployeeMenuGui extends JFrame {
 					EmployeeMenuGui frame = new EmployeeMenuGui();
 					frame.setVisible(true);
 					frame.setTitle("Employee Menu");
-					clock();
+					
 					WindowAdapter exitListener = new WindowAdapter() {
 
 						@Override
@@ -138,28 +137,7 @@ public class EmployeeMenuGui extends JFrame {
 			}
 		});
 	}
-	public static void clock() {
-		Thread clock = new Thread() {
-			public void run() {
-
-					try {
-						for(;;) {
-						Calendar calz = new GregorianCalendar();
-						
-						int second = calz.get(Calendar.SECOND);
-						int minute = calz.get(Calendar.MINUTE);
-						int hour = calz.get(Calendar.HOUR);
-						
-						lblClock.setText("Time: " + hour + ";"+ minute + ";" + second);
-						sleep(1000);
-						}
-					} catch(InterruptedException e){
-						e.printStackTrace();			
-					}
-				}
-	};
-		clock.start();
-	}
+	
 
 	/**
 	 * Create the frame.
@@ -504,10 +482,6 @@ public class EmployeeMenuGui extends JFrame {
 		JLabel lblDate = new JLabel(dtf1.format(now));
 		lblDate.setBounds(310, 17, 101, 14);
 		panel_time.add(lblDate);
-		
-		lblClock = new JLabel("Clock");
-		lblClock.setBounds(310, 42, 138, 14);
-		panel_time.add(lblClock);
 
 		JPanel panel_updatedetails = new JPanel();
 		tabbedPane.addTab("Update Details", null, panel_updatedetails, null);
@@ -631,14 +605,9 @@ public class EmployeeMenuGui extends JFrame {
 		panel_updatedetails.add(lblupdate);
 
 		JXSearchField srchfldEnterempId = new JXSearchField();
-		srchfldEnterempId.setText(String.valueOf(EmployeeName.empid).toString());
-		srchfldEnterempId.setToolTipText("Search");
-		srchfldEnterempId.setPromptFontStyle(2);
-		srchfldEnterempId.setPrompt("Enter Employee ID: ");
-		srchfldEnterempId.setLayoutStyle(LayoutStyle.VISTA);
-		srchfldEnterempId.setUseSeperatePopupButton(true);
-		srchfldEnterempId.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		srchfldEnterempId.setEditable(false);
+		srchfldEnterempId.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent arg0) {
 				try {
 					String sql = "Select * from employee_Table  where emp_id = '"
 							+ srchfldEnterempId.getText().toString() + "' ";
@@ -751,6 +720,16 @@ public class EmployeeMenuGui extends JFrame {
 				}
 			}
 		});
+			
+		srchfldEnterempId.setText(String.valueOf(EmployeeName.empid).toString());
+		srchfldEnterempId.setToolTipText("Search");
+		srchfldEnterempId.setPromptFontStyle(2);
+		srchfldEnterempId.setPrompt("Enter Employee ID: ");
+		srchfldEnterempId.setLayoutStyle(LayoutStyle.VISTA);
+		srchfldEnterempId.setUseSeperatePopupButton(true);
+		
+			
+				
 
 		btnUpdate.setBounds(207, 350, 89, 23);
 		panel_updatedetails.add(btnUpdate);

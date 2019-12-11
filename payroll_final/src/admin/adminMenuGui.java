@@ -115,10 +115,11 @@ public class adminMenuGui extends JFrame {
 	LocalDateTime now = LocalDateTime.now();
 	DateTimeFormatter dtfAP = DateTimeFormatter.ofPattern("a");
 	LocalTime ltAP = LocalTime.now();
-	 
+
 	static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("h:m a");
 	static LocalTime lt = LocalTime.now();
-	
+	private JTextField textField_jobIdchange;
+
 	/**
 	 * Launch the application.
 	 */
@@ -135,8 +136,8 @@ public class adminMenuGui extends JFrame {
 		});
 	}
 
-//	 * Create the frame
-	
+	//	 * Create the frame
+
 	public adminMenuGui() {
 		conn = ConnectDB.doConnect();
 
@@ -180,43 +181,43 @@ public class adminMenuGui extends JFrame {
 		panel_home.add(btnTimeI);
 		btnTimeI.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-				
-					if(!btnTimeI.isEnabled()) {
-						btnTimeOut.setEnabled(true);
-						Time_O.setEnabled(true);
-					}
+
+				if(!btnTimeI.isEnabled()) {
+					btnTimeOut.setEnabled(true);
+					Time_O.setEnabled(true);
+				}
 			}
 		});
 		btnTimeI.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-					
-//					if(e.getActionCommand().equals("Time in")) {
-						btnTimeI.setEnabled(false);
-						Time_I.setEnabled(false);
-//						btnTimeOut.setEnabled(true);
-						
-						try {
-						
-						Class.forName("com.mysql.jdbc.Driver");
-						Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "root");
-						
-					 	 CallableStatement statement = conn.prepareCall("CALL insertTI(?,?,?)");
-					     statement.setString(1, String.valueOf(EmployeeName.empid).toString());
-						 statement.setString(2, dtf1.format(now));
-						 statement.setString(3, timein);
-						 
-						 statement.executeQuery();
-						 
-						 btnTimeI.setEnabled(false);
-						 
-						} catch (SQLException |ClassNotFoundException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-						
+
+				//					if(e.getActionCommand().equals("Time in")) {
+				btnTimeI.setEnabled(false);
+				Time_I.setEnabled(false);
+				//						btnTimeOut.setEnabled(true);
+
+				try {
+
+					Class.forName("com.mysql.jdbc.Driver");
+					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "root");
+
+					CallableStatement statement = conn.prepareCall("CALL insertTI(?,?,?)");
+					statement.setString(1, String.valueOf(EmployeeName.empid).toString());
+					statement.setString(2, dtf1.format(now));
+					statement.setString(3, timein);
+
+					statement.executeQuery();
+
+					btnTimeI.setEnabled(false);
+
+				} catch (SQLException |ClassNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
 			}
 		});
-		
+
 		JLabel label_empId = new JLabel("null");
 		label_empId.setText(String.valueOf(EmployeeName.empid).toString());
 		label_empId.setBounds(114, 36, 101, 14);
@@ -225,66 +226,66 @@ public class adminMenuGui extends JFrame {
 			public void propertyChange(PropertyChangeEvent evt) {
 				String empId = label_empId.getText();
 				String datenow = dtf1.format(now);
-				
-					try {
-						Class.forName("com.mysql.jdbc.Driver");
-						Connection conn2 = DriverManager
-								.getConnection(
-								"jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false",
-								"root", "root");
-						
-						PreparedStatement pst = null;
-						pst = conn2.prepareStatement("select * from Attendance_NowTI");
-						rs = pst.executeQuery();
-						
-						while(rs.next()) {
-							
-							if(rs.getString(1).equals(empId) && rs.getString(2).equals(datenow)) {
-								btnTimeI.setEnabled(false);
-								Time_I.setEnabled(false);
-								Time_I.setText(rs.getString(3));
-				
-								break;
-							}
-								
+
+				try {
+					Class.forName("com.mysql.jdbc.Driver");
+					Connection conn2 = DriverManager
+							.getConnection(
+									"jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false",
+									"root", "root");
+
+					PreparedStatement pst = null;
+					pst = conn2.prepareStatement("select * from Attendance_NowTI");
+					rs = pst.executeQuery();
+
+					while(rs.next()) {
+
+						if(rs.getString(1).equals(empId) && rs.getString(2).equals(datenow)) {
+							btnTimeI.setEnabled(false);
+							Time_I.setEnabled(false);
+							Time_I.setText(rs.getString(3));
+
+							break;
 						}
-						
-					} catch (ClassNotFoundException | SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+
 					}
-					
-					try {
-						Class.forName("com.mysql.jdbc.Driver");
-						Connection conn2 = DriverManager
-								.getConnection(
-								"jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false",
-								"root", "root");
-						
-						PreparedStatement pst = null;
-						pst = conn2.prepareStatement("select A.emp_id, A.username, A.passwords, A.emp_type, B.date, B.time_in,C.time_out,C.no_of_hours \r\n" + 
-								"from employee_Table A inner join Attendance_NowTI B on A.emp_id= B.employee_id join timeout C on A.emp_id = C.e_id;");
-						rs = pst.executeQuery();
-						
-						while(rs.next()) {
-							
-							if(rs.getString(1).equals(empId) && rs.getString(5).equals(datenow)) {
-								btnTimeOut.setEnabled(false);
-								Time_O.setEnabled(false);
-								Time_O.setText(rs.getString(7));
-								
-								break;
-							}
+
+				} catch (ClassNotFoundException | SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				try {
+					Class.forName("com.mysql.jdbc.Driver");
+					Connection conn2 = DriverManager
+							.getConnection(
+									"jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false",
+									"root", "root");
+
+					PreparedStatement pst = null;
+					pst = conn2.prepareStatement("select A.emp_id, A.username, A.passwords, A.emp_type, B.date, B.time_in,C.time_out,C.no_of_hours \r\n" + 
+							"from employee_Table A inner join Attendance_NowTI B on A.emp_id= B.employee_id join timeout C on A.emp_id = C.e_id;");
+					rs = pst.executeQuery();
+
+					while(rs.next()) {
+
+						if(rs.getString(1).equals(empId) && rs.getString(5).equals(datenow)) {
+							btnTimeOut.setEnabled(false);
+							Time_O.setEnabled(false);
+							Time_O.setText(rs.getString(7));
+
+							break;
 						}
-						
-					} catch (ClassNotFoundException | SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
 					}
-					
+
+				} catch (ClassNotFoundException | SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 			}
 		});
-		
+
 		Time_O.setEnabled(false);			
 		Time_O.setBackground(Color.WHITE);
 		Time_O.setFont(new Font("Times New Roman", Font.PLAIN, 15));
@@ -353,17 +354,17 @@ public class adminMenuGui extends JFrame {
 				}
 			}
 		});
-		
+
 		btnTimeOut.setEnabled(false);
 		btnTimeOut.setBounds(202, 110, 89, 23);
 		panel_home.add(btnTimeOut);
 		btnTimeOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-						
+
 				if(e.getActionCommand().equals("Time out") || (!btnTimeOut.isEnabled())){
 					btnTimeOut.setEnabled(false);
 					Time_O.setEnabled(false);
-					
+
 					try {
 
 						Class.forName("com.mysql.jdbc.Driver");
@@ -375,7 +376,7 @@ public class adminMenuGui extends JFrame {
 							Class.forName("com.mysql.jdbc.Driver");
 							Connection conn1 = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "root");
 							PreparedStatement pst = null;
-							
+
 							pst = conn1.prepareStatement("select * from Attendance_NowTI");
 							rs = pst.executeQuery();
 
@@ -387,31 +388,31 @@ public class adminMenuGui extends JFrame {
 								Date d2 = sdf.parse(timeout);
 
 								if(d1.after(d2)){
-							    float diffMs = d1.getTime() - d2.getTime();
-							    float diffSec = diffMs / 1000;
-							    
-							    float min = diffSec / 60;
-							    hours = (min /60)-1;
-							   
-							     System.out.println("Difference in Hours "+hours);
-							   
-							    }
-							    if(d1.before(d2)){
-							     float diffMs = d2.getTime() - d1.getTime();
-							     float diffSec = diffMs / 1000;
-							    
-							    
-							     float min = diffSec / 60;
-							      hours = (min /60)-1;
-							     
-							     System.out.println("Difference in Hours "+hours);
-							    
-							    }
+									float diffMs = d1.getTime() - d2.getTime();
+									float diffSec = diffMs / 1000;
 
-							    if(d1.equals(d2)){
-							     System.out.println("The difference is 0 minutes and 0 seconds.");
-							    }
-								
+									float min = diffSec / 60;
+									hours = (min /60)-1;
+
+									System.out.println("Difference in Hours "+hours);
+
+								}
+								if(d1.before(d2)){
+									float diffMs = d2.getTime() - d1.getTime();
+									float diffSec = diffMs / 1000;
+
+
+									float min = diffSec / 60;
+									hours = (min /60)-1;
+
+									System.out.println("Difference in Hours "+hours);
+
+								}
+
+								if(d1.equals(d2)){
+									System.out.println("The difference is 0 minutes and 0 seconds.");
+								}
+
 							}
 
 
@@ -426,9 +427,9 @@ public class adminMenuGui extends JFrame {
 						statement1.setFloat(3, hours);
 
 						statement1.executeUpdate();
-						
+
 						JOptionPane.showMessageDialog(null, "Successfully added");	
-						
+
 					} catch (ClassNotFoundException |SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -439,8 +440,8 @@ public class adminMenuGui extends JFrame {
 					btnTimeOut.setEnabled(false);
 			}	
 		});
-		
-		
+
+
 		JButton btnLogOut = new JButton("Log out");
 		btnLogOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -451,16 +452,26 @@ public class adminMenuGui extends JFrame {
 		btnLogOut.setBounds(518, 322, 89, 23);
 		btnLogOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-					LoginGui log = new LoginGui();	
-					
-					dispose(); //to exit
-					
-					log.main(null);
-					//System.exit(0);
+
+				LoginGui log = new LoginGui();	
+
+				dispose(); //to exit
+
+				log.main(null);
+				//System.exit(0);
 			}
 		});
 		panel_home.add(btnLogOut);
+
+		JButton btnPayroll = new JButton("PAYROLL");
+		btnPayroll.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				AdminPayrollGui Payframe = new AdminPayrollGui();
+				Payframe.setVisible(true);
+			}
+		});
+		btnPayroll.setBounds(624, 377, 97, 25);
+		panel_home.add(btnPayroll);
 
 		JPanel panel = new JPanel();
 		tabbedPane.addTab("Employee Settings", null, panel, null);
@@ -809,30 +820,30 @@ public class adminMenuGui extends JFrame {
 		panel_updtEmp.add(textArea_1);
 
 		JLabel label_28 = new JLabel("City: ");
-		label_28.setBounds(380, 147, 78, 20);
+		label_28.setBounds(359, 147, 56, 20);
 		panel_updtEmp.add(label_28);
 
 		textField_City = new JTextField();
 		textField_City.setColumns(10);
-		textField_City.setBounds(463, 141, 146, 26);
+		textField_City.setBounds(421, 144, 146, 26);
 		panel_updtEmp.add(textField_City);
 
 		JLabel label_29 = new JLabel("Email: ");
-		label_29.setBounds(380, 178, 78, 20);
+		label_29.setBounds(359, 178, 56, 20);
 		panel_updtEmp.add(label_29);
 
 		textField_Email = new JTextField();
 		textField_Email.setColumns(10);
-		textField_Email.setBounds(463, 172, 146, 26);
+		textField_Email.setBounds(421, 175, 146, 26);
 		panel_updtEmp.add(textField_Email);
 
 		JLabel label_30 = new JLabel("Mobile: ");
-		label_30.setBounds(377, 209, 69, 20);
+		label_30.setBounds(359, 209, 56, 20);
 		panel_updtEmp.add(label_30);
 
 		textField_mobil = new JTextField();
 		textField_mobil.setColumns(10);
-		textField_mobil.setBounds(463, 203, 146, 26);
+		textField_mobil.setBounds(421, 206, 146, 26);
 		panel_updtEmp.add(textField_mobil);
 
 		JLabel label_31 = new JLabel("Employee type:");
@@ -905,6 +916,7 @@ public class adminMenuGui extends JFrame {
 						textField_Age.setText("");
 						textField_Empt1.setText("");
 						textField_Stat1.setText("");
+						textField_jobIdchange.setText("");
 						dateChooser_1.setDate(d);
 						comboBox_1.setSelectedItem("Select Country");
 
@@ -931,6 +943,7 @@ public class adminMenuGui extends JFrame {
 							textField_Password.setText(rs.getString("passwords"));
 							dateChooser_1.setDate(rs.getDate("dob"));
 							textField_Age.setText(rs.getString("age"));
+							textField_jobIdchange.setText(rs.getString("job_id"));
 
 							String gen1= rs.getString("gender");
 
@@ -965,94 +978,7 @@ public class adminMenuGui extends JFrame {
 
 			}
 		});
-//		srchfldEnterempId.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				try {
-//					String sql = "Select * from employee_Table where emp_id = '"+srchfldEnterempId.getText().toString()+"' ";
-//					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "root");
-//					PreparedStatement pst = conn.prepareStatement(sql);
-//					stmt = conn.prepareCall(sql);
-//					ResultSet rs = stmt.executeQuery(sql);
-//
-//
-//					rs = stmt.executeQuery(sql);
-//					System.out.println(sql);
-//					if (!rs.isBeforeFirst()) {
-//						System.out.println("no data found");
-//						notfound.setText("No Record Found");
-//						java.util.Date d = new java.util.Date();
-//						d.toString();
-//						textField_Firstname.setText("");
-//						textField_Lastname.setText("");
-//						textField_Username.setText("");
-//						textField_Password.setText("");
-//						textField_City.setText("");
-//						textField_Email.setText("");
-//						textField_mobil.setText("");
-//						textField_Age.setText("");
-//						textField_Empt1.setText("");
-//						textField_Stat1.setText("");
-//						dateChooser_1.setDate(d);
-//						comboBox_1.setSelectedItem("Select Country");
-//
-//						textArea_1.setText("");
-//						radioButton.setSelected(false);
-//						radioButton_1.setSelected(false);
-//
-//						// rdbtnAdmin.setSelected(false);
-//						// rdbtnInactive.setSelected(false);
-//						//
-//						// rdbtnActive.setSelected(false);
-//						// rdbtnInactive.setSelected(false);
-//
-//
-//
-//					}
-//					else {
-//
-//						while(rs.next()){
-//
-//							textField_Firstname.setText(rs.getString("first_name"));
-//							textField_Lastname.setText(rs.getString("last_name"));
-//							textField_Username.setText(rs.getString("username"));
-//							textField_Password.setText(rs.getString("passwords"));
-//							dateChooser_1.setDate(rs.getDate("dob"));
-//							textField_Age.setText(rs.getString("age"));
-//
-//							String gen1= rs.getString("gender");
-//
-//							if(gen1.equals("male")){
-//								radioButton.setSelected(true);
-//								radioButton_1.setSelected(false);
-//							}
-//							else{
-//								radioButton.setSelected(false);
-//								radioButton_1.setSelected(true);
-//							}
-//							String type = rs.getString("emp_type");
-//
-//							comboBox_1.setSelectedItem(rs.getString("country"));
-//							textField_City.setText(rs.getString("city"));
-//							textArea_1.setText(rs.getString("address"));
-//							textField_Email.setText(rs.getString("email"));
-//							textField_mobil.setText(rs.getString("mobile_no"));
-//							textField_Empt1.setText(rs.getString("emp_type"));
-//							textField_Stat1.setText(rs.getString("status_id"));
-//
-//
-//						}
-//
-//					}
-//
-//
-//				} catch (SQLException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
-//
-//			}
-//		});
-//		srchfldEnterempId.setUseSeperatePopupButton(true);
+		
 		srchfldEnterempId.setToolTipText("Search");
 		srchfldEnterempId.setPromptFontStyle(2);
 		srchfldEnterempId.setPrompt("Enter Employee ID: ");
@@ -1077,11 +1003,12 @@ public class adminMenuGui extends JFrame {
 				String country1 = comboBox_1.getSelectedItem().toString();
 				String add1 = textArea_1.getText();
 				String gen1  =bG1.getSelection().getActionCommand();
+				int changeJob = Integer.parseInt(textField_jobIdchange.getText());
 				int emptypers = Integer.parseInt(textField_Empt1.getText());
 				int empStatus= Integer.parseInt(textField_Stat1.getText());
 				//
 				try {
-					String sql = "update employee_Table set emp_type = '"+emptypers+"', status_id = '"+empStatus+"', username = '"+Usern1+"',passwords = '"+Passw1+"',last_name = '"+lname1+"',first_name ='"+fname1+"',dob = '"+dat1+"',gender = '"+gen1+"',country ='"+country1+ "', city = '"+City1+"', address ='"+add1+"',email='"+ emil1+"', mobile_no = '"+num1+"' where emp_id = '"+srchfldEnterempId.getText().toString()+"' ";
+					String sql = "update employee_Table set job_id = '"+changeJob+"',emp_type = '"+emptypers+"', status_id = '"+empStatus+"', username = '"+Usern1+"',passwords = '"+Passw1+"',last_name = '"+lname1+"',first_name ='"+fname1+"',dob = '"+dat1+"',gender = '"+gen1+"',country ='"+country1+ "', city = '"+City1+"', address ='"+add1+"',email='"+ emil1+"', mobile_no = '"+num1+"' where emp_id = '"+srchfldEnterempId.getText().toString()+"' ";
 
 					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "root");
 					PreparedStatement pst = conn.prepareStatement(sql);
@@ -1103,6 +1030,15 @@ public class adminMenuGui extends JFrame {
 
 		button_1.setBounds(296, 329, 89, 23);
 		panel_updtEmp.add(button_1);
+		
+		textField_jobIdchange = new JTextField();
+		textField_jobIdchange.setBounds(650, 146, 34, 22);
+		panel_updtEmp.add(textField_jobIdchange);
+		textField_jobIdchange.setColumns(10);
+		
+		JLabel lblJobId_1 = new JLabel("Job ID");
+		lblJobId_1.setBounds(596, 149, 47, 16);
+		panel_updtEmp.add(lblJobId_1);
 
 		JPanel panel_PendingEmployee = new JPanel();
 		panel_PendingEmployee.setToolTipText("");
@@ -1146,7 +1082,7 @@ public class adminMenuGui extends JFrame {
 		tabbedPane_1.addTab("Job Details", null, panel_addjobdetails, null);
 		panel_addjobdetails.setLayout(null);
 
-		
+
 		JLabel lblEmployeeId = new JLabel("Job id");
 		lblEmployeeId.setBounds(10, 14, 93, 14);
 		panel_addjobdetails.add(lblEmployeeId);
@@ -1237,7 +1173,7 @@ public class adminMenuGui extends JFrame {
 		});
 		btnShowAllJob.setBounds(337, 333, 149, 23);
 		panel_addjobdetails.add(btnShowAllJob);
-		
+
 		JButton btnNewButton_addJob = new JButton("view job");
 		btnNewButton_addJob.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1256,7 +1192,7 @@ public class adminMenuGui extends JFrame {
 		});
 		btnNewButton_addJob.setBounds(496, 333, 149, 23);
 		panel_addjobdetails.add(btnNewButton_addJob);
-		
+
 		textField_id = new JTextField();
 		textField_id.setBounds(113, 11, 137, 20);
 		panel_addjobdetails.add(textField_id);
