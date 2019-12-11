@@ -96,6 +96,11 @@ public class AdminPayrollGui extends JFrame {
 	boolean isOct=false;
 	boolean isNov=false;
 	boolean isDec=false;
+	private JTextField textField_genTax;
+	private JTextField textField_genSSS;
+	private JTextField textField_genPHILHEALTH;
+	private JTextField textField_Pagibig;
+	private JTextField textField_1;
 	/**
 	 * Launch the application.
 	 */
@@ -457,7 +462,7 @@ public class AdminPayrollGui extends JFrame {
 		btnLoadPhilhealthTable.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					String showphil = "call allTax_PHIL()";
+					String showphil = "call allTax_PHILV1Table()";
 
 					rs2=stmt1.executeQuery(showphil);
 					PHILTable.setModel(DbUtils.resultSetToTableModel(rs2));
@@ -593,7 +598,7 @@ public class AdminPayrollGui extends JFrame {
 		searchFieldIDpayslip.addCaretListener(new CaretListener() {
 			public void caretUpdate(CaretEvent arg0) {
 				try {
-					String sql = "Select * from employee_Table e INNER join JobTitle_Table j on e.emp_id =j.job_id where emp_id = '"+searchFieldIDpayslip.getText().toString()+"'";
+					String sql = "Select * from employee_Table e INNER join JobTitle_Table j on e.job_id = j.job_id where emp_id =  '"+searchFieldIDpayslip.getText().toString()+"'";
 					PreparedStatement pst = conn.prepareStatement(sql);
 					stmt = conn.prepareCall(sql);
 					ResultSet rs = stmt.executeQuery(sql);
@@ -632,12 +637,12 @@ public class AdminPayrollGui extends JFrame {
 						String chekzTax =("call allTax()");
 
 						try {
-							double taxrate = 0;
+							float taxrate = 0;
 							String taxTable[][] = new String[6][4];
 							int i = 0;
 							int j = 0;
-							double grossincome = EmployeeName.gi*12;
-
+							float grossincome = EmployeeName.gi*12;
+							System.out.println("ANNUALINCOME"+grossincome);
 							Class.forName("com.mysql.jdbc.Driver");
 							Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "root");
 							stmt = conn.prepareCall(chekzTax);
@@ -676,39 +681,42 @@ public class AdminPayrollGui extends JFrame {
 							System.out.println("");
 							//							 1
 							if (grossincome <= Integer.parseInt(taxTable[0][1])) {
-								taxrate =(grossincome);
+								taxrate =grossincome*0;
 							}
 							//							2
 							else if((grossincome >= Integer.parseInt(taxTable[1][0])) && (grossincome <= Integer.parseInt(taxTable[1][1]))){
-								taxrate = (grossincome - Integer.parseInt(taxTable[1][0]))*  Double.parseDouble(taxTable[1][3]);
+								taxrate = (grossincome - Integer.parseInt(taxTable[1][0])) *  Float.parseFloat(taxTable[1][3]);
 							}
 							//							3
 							else if((grossincome >= Integer.parseInt(taxTable[2][0])) && (grossincome <= Integer.parseInt(taxTable[2][1]))){
-								taxrate = (((Integer.parseInt(taxTable[2][0]) -grossincome  ) * Double.parseDouble(taxTable[2][3]))+Integer.parseInt(taxTable[2][2]));
+								taxrate = (((Integer.parseInt(taxTable[2][0]) -grossincome  ) * Float.parseFloat(taxTable[2][3]))+Integer.parseInt(taxTable[2][2]));
 							}
 							//							415000
 							else if((grossincome >= Integer.parseInt(taxTable[3][0])) && (grossincome <= Integer.parseInt(taxTable[3][1]))){
-								taxrate = (((grossincome - Integer.parseInt(taxTable[3][0])) * Double.parseDouble(taxTable[3][3]))+Integer.parseInt(taxTable[3][2]));
+								taxrate = (((grossincome - Integer.parseInt(taxTable[3][0])) * Float.parseFloat(taxTable[3][3]))+Integer.parseInt(taxTable[3][2]));
 							}
 							//							5
 
 							else if((grossincome >= Integer.parseInt(taxTable[4][0])) && (grossincome <= Integer.parseInt(taxTable[4][1]))){
-								taxrate = (((grossincome - Integer.parseInt(taxTable[4][0])) * Double.parseDouble(taxTable[4][3]))+Integer.parseInt(taxTable[4][2]));
+								taxrate = (((grossincome - Integer.parseInt(taxTable[4][0])) * Float.parseFloat(taxTable[4][3]))+Integer.parseInt(taxTable[4][2]));
 							}
 							//							6
 							else if(grossincome > Integer.parseInt(taxTable[5][0])) {
-								taxrate = (((grossincome - Integer.parseInt(taxTable[5][0])) * Double.parseDouble(taxTable[5][3]))+Integer.parseInt(taxTable[5][2]));
+								taxrate = (((grossincome - Integer.parseInt(taxTable[5][0])) * Float.parseFloat(taxTable[5][3]))+Integer.parseInt(taxTable[5][2]));
 							}else {
 
 							}
 
 							System.out.println(taxrate);
-							double montlyTaxrate = taxrate/12;
-
-							System.out.println(montlyTaxrate);
-							String month = Double.toString(montlyTaxrate);
+							System.out.println("taxrate "+taxrate);
+							float montlyTaxrate = taxrate/12;
+							
+							System.out.println("monthly rate " +montlyTaxrate);
+							String month = Float.toString(montlyTaxrate);
 
 							textField_tax.setText(month);
+							System.out.println("month tax "+ month);
+							
 							String checkSSS = ("{call allTax_sss()}");
 
 							try {
@@ -908,22 +916,24 @@ public class AdminPayrollGui extends JFrame {
 								else if((grossincome_sss >= Integer.parseInt(taxTable_sss[36][0])) && (grossincome_sss <= Double.parseDouble(taxTable_sss[36][1]))){
 									taxrate_sss = Integer.parseInt(taxTable_sss[36][5]);
 								}
-								System.out.println("");
+								
 								System.out.println(taxrate_sss);
 
 								String SSSOut = Double.toString(taxrate_sss);
 
 								textField_SSS.setText(SSSOut);
-								
+								System.out.println("");
 
 
 							
-							String checkPHIL = ("{call allTax_PHIL()}");
+							String checkPHIL = ("{call allTax_PHILV1()}");
 							try {
-								double grossincome_PHIL = EmployeeName.gi;
+								
+								float grossincome_PHIL = EmployeeName.gi;
+								System.out.println("philhealth: "+grossincome_PHIL);
 
-								double taxrate_PHIL = 0;
-								String taxTable_PHIL[][] = new String[32][6];
+								float taxrate_PHIL = 0;
+								String taxTable_PHIL[][] = new String[3][3];
 								int cPHIL = 0;
 								int rPHIL = 0;
 								Class.forName("com.mysql.jdbc.Driver");
@@ -932,7 +942,7 @@ public class AdminPayrollGui extends JFrame {
 								ResultSet rs4 = stmt.executeQuery(checkPHIL);		 		 
 								while(rs4.next()) { 
 
-									for( rPHIL = 0; rPHIL <= 4;rPHIL++) {
+									for( rPHIL = 0; rPHIL <= 2;rPHIL++) {
 
 										if(rPHIL == 0) {
 											taxTable_PHIL[cPHIL][rPHIL] = rs4.getString(1);
@@ -940,167 +950,34 @@ public class AdminPayrollGui extends JFrame {
 											taxTable_PHIL[cPHIL][rPHIL] = rs4.getString(2);
 										}else if(rPHIL == 2) {
 											taxTable_PHIL[cPHIL][rPHIL] = rs4.getString(3);
-										}else if(rPHIL == 3) {
-											taxTable_PHIL[cPHIL][rPHIL] = rs4.getString(4);
-										}else if(rPHIL == 4) {
-											taxTable_PHIL[cPHIL][rPHIL] = rs4.getString(5);
+										
 										}
 									}
 									cPHIL = cPHIL+ 1;
 
 								}	
 
-								System.out.println(taxTable_PHIL[0][0]+" "+taxTable_PHIL[0][1]+" "+taxTable_PHIL[0][4]);
-								System.out.println(taxTable_PHIL[1][0]+" "+taxTable_PHIL[1][1]+" "+taxTable_PHIL[1][4]);
-								System.out.println(taxTable_PHIL[2][0]+" "+taxTable_PHIL[2][1]+" "+taxTable_PHIL[2][4]);
-								System.out.println(taxTable_PHIL[3][0]+" "+taxTable_PHIL[3][1]+" "+taxTable_PHIL[3][4]);
-								System.out.println(taxTable_PHIL[4][0]+" "+taxTable_PHIL[4][1]+" "+taxTable_PHIL[4][4]);
-								System.out.println(taxTable_PHIL[5][0]+" "+taxTable_PHIL[5][1]+" "+taxTable_PHIL[5][4]);
-								System.out.println(taxTable_PHIL[6][0]+" "+taxTable_PHIL[6][1]+" "+taxTable_PHIL[6][4]);
-								System.out.println(taxTable_PHIL[7][0]+" "+taxTable_PHIL[7][1]+" "+taxTable_PHIL[7][4]);
-								System.out.println(taxTable_PHIL[8][0]+" "+taxTable_PHIL[8][1]+" "+taxTable_PHIL[8][5]);
-								System.out.println(taxTable_PHIL[9][0]+" "+taxTable_PHIL[9][1]+" "+taxTable_PHIL[9][5]);
-								System.out.println(taxTable_PHIL[10][0]+" "+taxTable_PHIL[10][1]+" "+taxTable_PHIL[10][4]);
-								System.out.println(taxTable_PHIL[11][0]+" "+taxTable_PHIL[11][1]+" "+taxTable_PHIL[11][4]);
-								System.out.println(taxTable_PHIL[12][0]+" "+taxTable_PHIL[12][1]+" "+taxTable_PHIL[12][4]);
-								System.out.println(taxTable_PHIL[13][0]+" "+taxTable_PHIL[13][1]+" "+taxTable_PHIL[13][4]);
-								System.out.println(taxTable_PHIL[14][0]+" "+taxTable_PHIL[14][1]+" "+taxTable_PHIL[14][4]);
-								System.out.println(taxTable_PHIL[15][0]+" "+taxTable_PHIL[15][1]+" "+taxTable_PHIL[15][4]);
-								System.out.println(taxTable_PHIL[16][0]+" "+taxTable_PHIL[16][1]+" "+taxTable_PHIL[16][4]);
-								System.out.println(taxTable_PHIL[17][0]+" "+taxTable_PHIL[17][1]+" "+taxTable_PHIL[17][4]);
-								System.out.println(taxTable_PHIL[18][0]+" "+taxTable_PHIL[18][1]+" "+taxTable_PHIL[18][4]);
-								System.out.println(taxTable_PHIL[19][0]+" "+taxTable_PHIL[19][1]+" "+taxTable_PHIL[19][4]);
-								System.out.println(taxTable_PHIL[20][0]+" "+taxTable_PHIL[20][1]+" "+taxTable_PHIL[20][4]);
-								System.out.println(taxTable_PHIL[21][0]+" "+taxTable_PHIL[21][1]+" "+taxTable_PHIL[21][4]);
-								System.out.println(taxTable_PHIL[22][0]+" "+taxTable_PHIL[22][1]+" "+taxTable_PHIL[22][4]);
-								System.out.println(taxTable_PHIL[23][0]+" "+taxTable_PHIL[23][1]+" "+taxTable_PHIL[23][4]);
-								System.out.println(taxTable_PHIL[24][0]+" "+taxTable_PHIL[24][1]+" "+taxTable_PHIL[24][4]);
-								System.out.println(taxTable_PHIL[25][0]+" "+taxTable_PHIL[25][1]+" "+taxTable_PHIL[25][4]);
-								System.out.println(taxTable_PHIL[26][0]+" "+taxTable_PHIL[26][1]+" "+taxTable_PHIL[26][4]);
-								System.out.println(taxTable_PHIL[27][0]+" "+taxTable_PHIL[27][1]+" "+taxTable_PHIL[27][4]);
-								System.out.println(taxTable_PHIL[28][0]+" "+taxTable_PHIL[28][1]+" "+taxTable_PHIL[28][4]);
-								System.out.println(taxTable_PHIL[29][0]+" "+taxTable_PHIL[29][1]+" "+taxTable_PHIL[29][4]);
-								System.out.println(taxTable_PHIL[30][0]+" "+taxTable_PHIL[30][1]+" "+taxTable_PHIL[30][4]);
-								System.out.println(taxTable_PHIL[31][0]+" "+taxTable_PHIL[31][1]+" "+taxTable_PHIL[31][4]);
+								System.out.println(taxTable_PHIL[0][0]+" "+taxTable_PHIL[0][1]+" "+taxTable_PHIL[0][2]);
+								System.out.println(taxTable_PHIL[1][0]+" "+taxTable_PHIL[1][1]+" "+taxTable_PHIL[1][2]);
+								System.out.println(taxTable_PHIL[2][0]+" "+taxTable_PHIL[2][1]+" "+taxTable_PHIL[2][2]);
+								
 
 
-								if (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[0][1])) {
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[0][4]);
+								if (grossincome_PHIL <= Float.parseFloat(taxTable_PHIL[0][1])) {
+									taxrate_PHIL =(grossincome_PHIL* Float.parseFloat(taxTable_PHIL[0][2]));
 								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[1][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[1][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[1][4]);
+								else if((grossincome_PHIL >= Float.parseFloat(taxTable_PHIL[1][0])) && (grossincome_PHIL <= Float.parseFloat(taxTable_PHIL[1][1]))){
+									taxrate_PHIL = (grossincome_PHIL*Float.parseFloat(taxTable_PHIL[1][2]));
 								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[2][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[2][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[2][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[3][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[3][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[3][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[4][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[4][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[4][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[5][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[5][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[5][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[6][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[6][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[6][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[7][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[7][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[7][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[8][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[8][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[8][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[9][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[9][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[9][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[10][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[10][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[10][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[11][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[11][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[11][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[12][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[12][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[12][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[13][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[13][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[13][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[14][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[14][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[14][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[15][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[15][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[15][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[16][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[16][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[16][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[17][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[17][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[17][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[18][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[18][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[18][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[19][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[19][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[19][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[20][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[20][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[20][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[21][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[21][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[21][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[22][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[22][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[22][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[23][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[23][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[23][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[24][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[24][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[24][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[25][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[25][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[25][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[26][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[26][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[26][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[27][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[27][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[27][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[28][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[28][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[28][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[24][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[24][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[24][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[25][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[25][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[25][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[26][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[26][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[26][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[27][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[27][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[27][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[28][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[28][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[28][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[29][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[29][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[29][4]);
-								}
-								else if((grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[30][0])) && (grossincome_PHIL <= Double.parseDouble(taxTable_PHIL[30][1]))){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[30][4]);
-								}
-								else if(grossincome_PHIL >= Double.parseDouble(taxTable_PHIL[31][1])){
-									taxrate_PHIL = Double.parseDouble(taxTable_PHIL[31][4]);
+								else if(grossincome_PHIL >= Float.parseFloat(taxTable_PHIL[2][1])){
+									taxrate_PHIL = (grossincome_PHIL*Float.parseFloat(taxTable_PHIL[2][2]));
 
 								}
-								System.out.println("");
-								System.out.println(taxrate_PHIL);
+								
+								System.out.println("taxxrate phil"+taxrate_PHIL);
 								String PHILOut = Double.toString(taxrate_PHIL);
 								textField_PHILHEALTH.setText(PHILOut);
-								
+								System.out.println("");
 								String checkpagbigz = ("{call allTax_PAGibig()}");
 								try {
 								
@@ -1200,19 +1077,19 @@ public class AdminPayrollGui extends JFrame {
 		btnGenerate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(isJan && isMonthly) {
-					System.out.println("montly to");
+					System.out.println("montly jan");
 				}else if(isFeb && isMonthly) {
 					System.out.println("feb monhtlu");
 				}else if(isMar && isMonthly) {
-					System.out.println("feb monhtlu");
+					System.out.println("Mar monhtlu");
 				}else if(isApr && isMonthly) {
-					System.out.println("feb monhtlu");
+					System.out.println("Apr monhtlu");
 				}else if(isMay && isMonthly) {
-					System.out.println("feb monhtlu");
+					System.out.println("May monhtlu");
 				}else if(isJune && isMonthly) {
-					System.out.println("feb monhtlu");
+					System.out.println("June monhtlu");
 				}else if(isJuly && isMonthly) {
-					System.out.println("feb monhtlu");
+					System.out.println("July monhtlu");
 				}else if(isAug && isMonthly) {
 					System.out.println("feb monhtlu");
 				}else if(isSept && isMonthly) {
@@ -1233,7 +1110,7 @@ public class AdminPayrollGui extends JFrame {
 		panel_PAYSLIP.add(btnGenerate);
 
 		textField = new JTextField();
-		textField.setBounds(85, 245, 116, 22);
+		textField.setBounds(109, 245, 116, 22);
 		panel_PAYSLIP.add(textField);
 		textField.setColumns(10);
 		
@@ -1446,6 +1323,13 @@ public class AdminPayrollGui extends JFrame {
 		panel_PAYSLIP.add(btnPrint);
 
 		JButton btnHome = new JButton("Home");
+		btnHome.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				adminMenuGui adminGui = new adminMenuGui();
+				adminGui.setVisible(true);
+				
+			}
+		});
 		btnHome.setBounds(119, 623, 97, 25);
 		panel_PAYSLIP.add(btnHome);
 
@@ -1473,6 +1357,44 @@ public class AdminPayrollGui extends JFrame {
 		textField_PAGIBIG.setBounds(618, 75, 116, 22);
 		panel_PAYSLIP.add(textField_PAGIBIG);
 		textField_PAGIBIG.setColumns(10);
+		
+		textField_genTax = new JTextField();
+		textField_genTax.setBounds(386, 245, 116, 22);
+		panel_PAYSLIP.add(textField_genTax);
+		textField_genTax.setColumns(10);
+		
+		textField_genSSS = new JTextField();
+		textField_genSSS.setBounds(386, 274, 116, 22);
+		panel_PAYSLIP.add(textField_genSSS);
+		textField_genSSS.setColumns(10);
+		
+		textField_genPHILHEALTH = new JTextField();
+		textField_genPHILHEALTH.setBounds(386, 303, 116, 22);
+		panel_PAYSLIP.add(textField_genPHILHEALTH);
+		textField_genPHILHEALTH.setColumns(10);
+		
+		textField_Pagibig = new JTextField();
+		textField_Pagibig.setBounds(386, 332, 116, 22);
+		panel_PAYSLIP.add(textField_Pagibig);
+		textField_Pagibig.setColumns(10);
+		
+		JLabel lblBasicSalary = new JLabel("Basic salary");
+		lblBasicSalary.setBounds(10, 248, 87, 16);
+		panel_PAYSLIP.add(lblBasicSalary);
+		
+		JLabel lblNetIncome = new JLabel("Net Income");
+		lblNetIncome.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblNetIncome.setBounds(280, 426, 134, 26);
+		panel_PAYSLIP.add(lblNetIncome);
+		
+		textField_1 = new JTextField();
+		textField_1.setBounds(386, 462, 116, 22);
+		panel_PAYSLIP.add(textField_1);
+		textField_1.setColumns(10);
+		
+		JLabel lblNet = new JLabel("Net");
+		lblNet.setBounds(280, 465, 56, 16);
+		panel_PAYSLIP.add(lblNet);
 		
 		
 	}

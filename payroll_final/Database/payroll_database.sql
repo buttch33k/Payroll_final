@@ -48,7 +48,7 @@ drop table JobTitle_Table;
 
 INSERT INTO JobTitle_Table(job_id,job_code,job_title,job_salary)
 VALUES 
-(1,'JT1','Admin',4000),(2,'JT2','Janitor',8000),(3,'JT3','programmer',11000),(4,'JT4','senior programmer',15000);
+(1,'JT1','Admin',20000),(2,'JT2','Janitor',25000),(3,'JT3','programmer',30000),(4,'JT4','senior programmer',40000);
 
 create table roleType_Table(
 emp_type int,
@@ -73,8 +73,8 @@ values(1, 'ACTIVE'),(2, 'INACTIVE'),(3, 'DEACTIVATED');
 create table Attendance_NowTI(
 employee_id int not null,
 date varchar(255) not null,
-time_in varchar(255) default null
-
+time_in varchar(255) default null,
+foreign key(employee_id)references employee_Table(emp_id)
 );
 drop table Attendance_NowTI;
 drop table timeout;
@@ -94,7 +94,8 @@ insert into Attendance_NowTI(employee_id, date, time_in)values
 create table timeout(
 e_id int not null,
 time_out varchar(255) default null,
-no_of_hours long default null
+no_of_hours long default null,
+FOREIGN KEY (e_id) REFERENCES employee_Table(emp_id)
 );
 
 insert into timeout()values

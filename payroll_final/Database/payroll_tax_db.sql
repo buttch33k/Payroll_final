@@ -134,3 +134,24 @@ END \\
 DELIMITER ;
 call allTax_PHIL();
 drop procedure allTax_PHIL;
+
+create table Pagibig_table(
+	Pagibig_id int primary key auto_increment not null,
+	Pagibig_min float not null,
+	Pagibig_max float not null,
+    Pagibig_employeeShare float not null,
+    Pagibig_employerShare float not null
+);
+
+insert into Pagibig_table(Pagibig_min,Pagibig_max,Pagibig_employeeShare,Pagibig_employerShare) values
+(0,1500,.01,.02),(1500,0,.02,.02);
+
+DELIMITER \\
+CREATE PROCEDURE allTax_PAGibig()
+BEGIN
+SELECT Pagibig_min,Pagibig_max,Pagibig_employeeShare,Pagibig_employerShare FROM Pagibig_table;
+END \\
+DELIMITER ;
+call allTax_PAGibig();
+drop procedure allTax_PAGibig;
+
