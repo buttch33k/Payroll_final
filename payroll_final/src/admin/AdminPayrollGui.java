@@ -101,6 +101,15 @@ public class AdminPayrollGui extends JFrame {
 	private JTextField textField_genPHILHEALTH;
 	private JTextField textField_Pagibig;
 	private JTextField textField_1;
+	private JTextField textField_updtphilID;
+	private JTextField textField_updtMIN;
+	private JTextField textField_updtMAX;
+	private JTextField textField_UPDTRATE;
+	private JTextField textField_idpagibig;
+	private JTextField textField_min;
+	private JTextField textField_pagibigmax;
+	private JTextField textField_employeeSharepagibig;
+	private JTextField textField_employersharepagibig;
 	/**
 	 * Launch the application.
 	 */
@@ -446,6 +455,18 @@ public class AdminPayrollGui extends JFrame {
 		panel_PHILHEALTH.add(lblPhilhealthTable);
 
 		JScrollPane scrollPane_PHIL = new JScrollPane();
+		scrollPane_PHIL.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				int selectedRowPhil=PHILTable.getSelectedRow();
+				DefaultTableModel model1 =  (DefaultTableModel) PHILTable.getModel();
+				textField_updtphilID.setText(model1.getValueAt(selectedRowPhil, 0).toString());
+				textField_updtMIN.setText(model1.getValueAt(selectedRowPhil, 1).toString());
+				textField_updtMAX.setText(model1.getValueAt(selectedRowPhil, 2).toString());
+				textField_UPDTRATE.setText(model1.getValueAt(selectedRowPhil, 3).toString());
+				
+			}
+		});
 		scrollPane_PHIL.setBounds(12, 65, 809, 451);
 		panel_PHILHEALTH.add(scrollPane_PHIL);
 
@@ -474,12 +495,55 @@ public class AdminPayrollGui extends JFrame {
 				}
 			}
 		});
-		btnLoadPhilhealthTable.setBounds(343, 529, 153, 25);
+		btnLoadPhilhealthTable.setBounds(639, 535, 182, 25);
 		panel_PHILHEALTH.add(btnLoadPhilhealthTable);
 
 		JButton btnNewButton_UPDATEPHIL = new JButton("UPDATE");
-		btnNewButton_UPDATEPHIL.setBounds(343, 567, 147, 25);
+		btnNewButton_UPDATEPHIL.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					int PHIL1 = Integer.parseInt( textField_updtphilID.getText());
+					float PHIL2 = Float.parseFloat( textField_updtMIN.getText());
+					float PHIL3 = Float.parseFloat( textField_updtMAX.getText());
+					float PHIL4 = Float.parseFloat( textField_UPDTRATE.getText());
+					
+					String updatePhil = "UPDATE Philhealth_tableV1 set  Philhealth_min='"+PHIL2+"', Philhealth_max='"+PHIL3+"',"
+							+ " Philhealth_Premiumrate='"+PHIL4+"' where Philhealth_id ='"+PHIL1+"'";
+
+					stmt1 = conn.prepareCall(updatePhil);
+					stmt1.execute(updatePhil);
+					System.out.println(updatePhil);
+					JOptionPane.showMessageDialog(null, "Updated");
+
+
+
+				}catch(Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		btnNewButton_UPDATEPHIL.setBounds(674, 571, 147, 25);
 		panel_PHILHEALTH.add(btnNewButton_UPDATEPHIL);
+		
+		textField_updtphilID = new JTextField();
+		textField_updtphilID.setBounds(12, 527, 27, 20);
+		panel_PHILHEALTH.add(textField_updtphilID);
+		textField_updtphilID.setColumns(10);
+		
+		textField_updtMIN = new JTextField();
+		textField_updtMIN.setBounds(136, 527, 86, 20);
+		panel_PHILHEALTH.add(textField_updtMIN);
+		textField_updtMIN.setColumns(10);
+		
+		textField_updtMAX = new JTextField();
+		textField_updtMAX.setBounds(298, 527, 86, 20);
+		panel_PHILHEALTH.add(textField_updtMAX);
+		textField_updtMAX.setColumns(10);
+		
+		textField_UPDTRATE = new JTextField();
+		textField_UPDTRATE.setBounds(466, 527, 86, 20);
+		panel_PHILHEALTH.add(textField_UPDTRATE);
+		textField_UPDTRATE.setColumns(10);
 
 		JPanel panel_pagibig = new JPanel();
 		tabbedPane_settings.addTab("Pagibig", null, panel_pagibig, null);
@@ -491,6 +555,19 @@ public class AdminPayrollGui extends JFrame {
 		panel_pagibig.add(lblPagibigTable);
 
 		JScrollPane scrollPane_PAGIBIG = new JScrollPane();
+		scrollPane_PAGIBIG.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int selectedRowPhil=PAGIBIGTable.getSelectedRow();
+				DefaultTableModel model1 =  (DefaultTableModel) PAGIBIGTable.getModel();
+				textField_idpagibig.setText(model1.getValueAt(selectedRowPhil, 0).toString());
+				textField_min.setText(model1.getValueAt(selectedRowPhil, 1).toString());
+				textField_pagibigmax.setText(model1.getValueAt(selectedRowPhil, 2).toString());
+				textField_employeeSharepagibig.setText(model1.getValueAt(selectedRowPhil, 3).toString());
+				textField_employersharepagibig.setText(model1.getValueAt(selectedRowPhil, 4).toString());
+				
+			}
+		});
 		scrollPane_PAGIBIG.setBounds(12, 65, 809, 430);
 		panel_pagibig.add(scrollPane_PAGIBIG);
 
@@ -508,7 +585,7 @@ public class AdminPayrollGui extends JFrame {
 		btnNewButton_LOADpAGIBIG.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					String showPGIBIG = "call allTax_PAGibig()";
+					String showPGIBIG = "call allTax_PAGibigT()";
 
 					rs3=stmt3.executeQuery(showPGIBIG);
 					PAGIBIGTable.setModel(DbUtils.resultSetToTableModel(rs3));
@@ -524,8 +601,57 @@ public class AdminPayrollGui extends JFrame {
 		panel_pagibig.add(btnNewButton_LOADpAGIBIG);
 		
 		JButton btnUpdate_PAGIBIG = new JButton("UPDATE");
+		btnUpdate_PAGIBIG.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					int PAGIBIG1 = Integer.parseInt( textField_idpagibig.getText());
+					float PAGIBIG2 = Float.parseFloat( textField_min.getText());
+					float PAGIBIG3 = Float.parseFloat( textField_pagibigmax.getText());
+					float PAGIBIG4 = Float.parseFloat( textField_employeeSharepagibig.getText());
+					float PAGIBIG5 = Float.parseFloat( textField_employersharepagibig.getText());
+					
+					String updatepagibig = "UPDATE Pagibig_table set  Pagibig_min='"+PAGIBIG2+"', Pagibig_max='"+PAGIBIG3+"',"
+							+ " Pagibig_employeeShare='"+PAGIBIG4+"',  Pagibig_employerShare='"+PAGIBIG5+"' where Pagibig_id ='"+PAGIBIG1+"'";
+				
+					stmt1 = conn.prepareCall(updatepagibig);
+					stmt1.execute(updatepagibig);
+					System.out.println(updatepagibig);
+					JOptionPane.showMessageDialog(null, "Updated");
+
+
+
+				}catch(Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		btnUpdate_PAGIBIG.setBounds(658, 567, 163, 25);
 		panel_pagibig.add(btnUpdate_PAGIBIG);
+		
+		textField_idpagibig = new JTextField();
+		textField_idpagibig.setBounds(12, 506, 39, 20);
+		panel_pagibig.add(textField_idpagibig);
+		textField_idpagibig.setColumns(10);
+		
+		textField_min = new JTextField();
+		textField_min.setBounds(143, 506, 86, 20);
+		panel_pagibig.add(textField_min);
+		textField_min.setColumns(10);
+		
+		textField_pagibigmax = new JTextField();
+		textField_pagibigmax.setBounds(143, 537, 86, 20);
+		panel_pagibig.add(textField_pagibigmax);
+		textField_pagibigmax.setColumns(10);
+		
+		textField_employeeSharepagibig = new JTextField();
+		textField_employeeSharepagibig.setBounds(344, 506, 86, 20);
+		panel_pagibig.add(textField_employeeSharepagibig);
+		textField_employeeSharepagibig.setColumns(10);
+		
+		textField_employersharepagibig = new JTextField();
+		textField_employersharepagibig.setBounds(344, 531, 86, 20);
+		panel_pagibig.add(textField_employersharepagibig);
+		textField_employersharepagibig.setColumns(10);
 
 		JPanel panel_PAYSLIP = new JPanel();
 		tabbedPane.addTab("PAYSLIP", null, panel_PAYSLIP, null);
@@ -937,7 +1063,6 @@ public class AdminPayrollGui extends JFrame {
 								int cPHIL = 0;
 								int rPHIL = 0;
 								Class.forName("com.mysql.jdbc.Driver");
-								//									Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "root");
 								stmt = conn.prepareCall(checkPHIL);
 								ResultSet rs4 = stmt.executeQuery(checkPHIL);		 		 
 								while(rs4.next()) { 
