@@ -21,6 +21,14 @@ DELIMITER ;
 call allTax();
 drop procedure allTax;
 
+DELIMITER \\
+CREATE PROCEDURE allTaxT()
+BEGIN
+SELECT tax_id,tax_Min,tax_Max,tax_TaxOnLowerLimit,tax_TaxOnExcessOverLimit FROM Taxtable_Table;
+END \\
+DELIMITER ;
+call allTaxT();
+drop procedure allTax;
 
 create table sss_table(
 	sss_id int primary key auto_increment not null,
@@ -99,14 +107,15 @@ create table Philhealth_tableV1(
 );
 insert into Philhealth_tableV1(Philhealth_min,Philhealth_max,Philhealth_Premiumrate)values
 (0,10000,0.0275),(10000.01,49999.99,0.0275),(0,50000,0.0275);
-DELIMITER \\
 
+DELIMITER \\
 CREATE PROCEDURE allTax_PHILV1()
 BEGIN
 SELECT Philhealth_min,Philhealth_max,Philhealth_Premiumrate FROM Philhealth_tableV1;
 END \\
 DELIMITER ;
 call allTax_PHILV1();
+
 DELIMITER \\
 CREATE PROCEDURE allTax_PHILV1Table()
 BEGIN
@@ -124,8 +133,6 @@ create table Pagibig_table(
     Pagibig_employeeShare float not null,
     Pagibig_employerShare float not null
 );
-
-
 insert into Pagibig_table(Pagibig_min,Pagibig_max,Pagibig_employeeShare,Pagibig_employerShare) values
 (0,1500,.01,.02),(1500,0,.02,.02);
 

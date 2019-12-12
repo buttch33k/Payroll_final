@@ -611,9 +611,9 @@ public class EmployeeMenuGui extends JFrame {
 				try {
 					String sql = "Select * from employee_Table  where emp_id = '"
 							+ srchfldEnterempId.getText().toString() + "' ";
-					Connection conn = DriverManager.getConnection(
-							"jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false", "root",
-							"root");
+//					Connection conn = DriverManager.getConnection(
+//							"jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false", "root",
+//							"root");
 					PreparedStatement pst = conn.prepareStatement(sql);
 					stmt = conn.prepareCall(sql);
 					ResultSet rs = stmt.executeQuery(sql);

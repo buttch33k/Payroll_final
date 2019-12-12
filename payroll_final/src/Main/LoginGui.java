@@ -35,6 +35,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.Font;
 
 public class LoginGui extends JFrame {
 
@@ -125,7 +126,7 @@ public class LoginGui extends JFrame {
 						
 				try {
 					
-					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "root");
+//					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "root");
 					PreparedStatement pst = conn.prepareStatement(query);
 					stmt = conn.prepareCall(query);
 					ResultSet rs = stmt.executeQuery(query);
@@ -146,9 +147,29 @@ public class LoginGui extends JFrame {
 							String loginas = rs.getString("last_name");
 							EmployeeName.emp_lstname =loginas;
 							
+							String stat_id = rs.getString("status_id");
+							EmployeeName.Statz_ID =stat_id;
 							
-							adminMenuGui admin = new adminMenuGui();
-							admin.setVisible(true);
+							String stat_Active = "1";
+							String stat_Inactive = "2";
+							String stat_Deact = "3";
+							
+							if (stat_id.equals(stat_Active)) {
+								adminMenuGui admin = new adminMenuGui();
+								admin.setVisible(true);
+							}else if (stat_id.equals(stat_Inactive)) {
+								JOptionPane.showMessageDialog(null, "Your account is innactive");
+								LoginGui frame = new LoginGui();
+								frame.setVisible(true);
+								frame.setTitle("Login");
+							}else if (stat_id.equals(stat_Deact)) {
+								JOptionPane.showMessageDialog(null, "Your account is Deactivated");
+								LoginGui frame = new LoginGui();
+								frame.setVisible(true);
+								frame.setTitle("Login");
+							}
+							
+							
 							flag = true;
 							break;
 							} else if (username.equals(rs.getString(1)) && passwords.equals(rs.getString(2)) && roleEmployee.equals(rs.getString(3))) {
@@ -160,10 +181,31 @@ public class LoginGui extends JFrame {
 								String loginas = rs.getString("last_name");
 								EmployeeName.emp_lstname =loginas;
 										
+								String stat_id = rs.getString("status_id");
+								EmployeeName.Statz_ID =stat_id;
 								
-								EmployeeMenuGui empMenu = new EmployeeMenuGui();
-								empMenu.setVisible(true);
-								empMenu.setTitle("Employee Menu");
+								String stat_Active = "1";
+								String stat_Inactive = "2";
+								String stat_Deact = "3";
+								
+								if (stat_id.equals(stat_Active)) {
+									EmployeeMenuGui empMenu = new EmployeeMenuGui();
+									empMenu.setVisible(true);
+									empMenu.setTitle("Employee Menu");
+								}else if (stat_id.equals(stat_Inactive)) {
+									JOptionPane.showMessageDialog(null, "Your account is innactive");
+									LoginGui frame = new LoginGui();
+									frame.setVisible(true);
+									frame.setTitle("Login");
+								}else if (stat_id.equals(stat_Deact)) {
+									JOptionPane.showMessageDialog(null, "Your account is Deactivated");
+									LoginGui frame = new LoginGui();
+									frame.setVisible(true);
+									frame.setTitle("Login");
+								}
+								
+								
+								
 								flag = true;
 								break;
 							}
@@ -227,6 +269,12 @@ public class LoginGui extends JFrame {
 		});
 		chckbxShowPassword.setBounds(211, 157, 140, 20);
 		contentPane.add(chckbxShowPassword);
+		
+		JLabel lblPayrollManagementSystem = new JLabel("Payroll Management System");
+		lblPayrollManagementSystem.setFont(new Font("Viner Hand ITC", Font.PLAIN, 30));
+		lblPayrollManagementSystem.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPayrollManagementSystem.setBounds(12, 31, 420, 46);
+		contentPane.add(lblPayrollManagementSystem);
 	
 	}
 }

@@ -119,6 +119,9 @@ public class adminMenuGui extends JFrame {
 	static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("h:m a");
 	static LocalTime lt = LocalTime.now();
 	private JTextField textField_jobIdchange;
+	private JTextField textField_lnjobdits;
+	private JTextField textField_fnjobdits;
+	private JTextField textField_jobID;
 
 	/**
 	 * Launch the application.
@@ -142,14 +145,14 @@ public class adminMenuGui extends JFrame {
 		conn = ConnectDB.doConnect();
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 774, 506);
+		setBounds(100, 100, 774, 553);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(10, 11, 738, 445);
+		tabbedPane.setBounds(10, 40, 738, 453);
 		contentPane.add(tabbedPane);
 
 		JPanel panel_home = new JPanel();
@@ -157,27 +160,14 @@ public class adminMenuGui extends JFrame {
 		tabbedPane.addTab("Home", null, panel_home, null);
 		panel_home.setLayout(null);
 
-		JLabel lblhiz = new JLabel("");
-		lblhiz.setText(String.valueOf(EmployeeName.emp_lstname).toString());
-		lblhiz.setBounds(114, 11, 46, 14);
-		panel_home.add(lblhiz);
-
-		JLabel label_39 = new JLabel("Logged in As:");
-		label_39.setBounds(10, 11, 101, 14);
-		panel_home.add(label_39);
-
-		JLabel label_Emp = new JLabel("Employee #:");
-		label_Emp.setBounds(10, 36, 101, 14);
-		panel_home.add(label_Emp);
-
 		Time_I.setBackground(Color.WHITE);
 		Time_I.setFont(new Font("Times New Roman", Font.PLAIN, 15));
 		Time_I.setForeground(Color.RED);
-		Time_I.setBounds(50, 80, 120, 20);
+		Time_I.setBounds(12, 80, 120, 20);
 		panel_home.add(Time_I);
 
 		JButton btnTimeI = new JButton("Time in");
-		btnTimeI.setBounds(202, 79, 89, 23);
+		btnTimeI.setBounds(144, 79, 89, 23);
 		panel_home.add(btnTimeI);
 		btnTimeI.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -219,8 +209,9 @@ public class adminMenuGui extends JFrame {
 		});
 
 		JLabel label_empId = new JLabel("null");
+		label_empId.setForeground(Color.RED);
 		label_empId.setText(String.valueOf(EmployeeName.empid).toString());
-		label_empId.setBounds(114, 36, 101, 14);
+		label_empId.setBounds(125, 13, 120, 14);
 		panel_home.add(label_empId);
 		label_empId.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -290,7 +281,7 @@ public class adminMenuGui extends JFrame {
 		Time_O.setBackground(Color.WHITE);
 		Time_O.setFont(new Font("Times New Roman", Font.PLAIN, 15));
 		Time_O.setForeground(Color.RED);
-		Time_O.setBounds(50, 111, 120, 20);
+		Time_O.setBounds(12, 113, 120, 20);
 		panel_home.add(Time_O);
 		Time_O.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -356,7 +347,7 @@ public class adminMenuGui extends JFrame {
 		});
 
 		btnTimeOut.setEnabled(false);
-		btnTimeOut.setBounds(202, 110, 89, 23);
+		btnTimeOut.setBounds(144, 112, 89, 23);
 		panel_home.add(btnTimeOut);
 		btnTimeOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -449,7 +440,7 @@ public class adminMenuGui extends JFrame {
 				LoginGui frame = new LoginGui();
 			}
 		});
-		btnLogOut.setBounds(518, 322, 89, 23);
+		btnLogOut.setBounds(12, 378, 89, 23);
 		btnLogOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -470,15 +461,23 @@ public class adminMenuGui extends JFrame {
 				Payframe.setVisible(true);
 			}
 		});
-		btnPayroll.setBounds(624, 377, 97, 25);
+		btnPayroll.setBounds(12, 340, 97, 25);
 		panel_home.add(btnPayroll);
+
+		JLabel label_Emp = new JLabel("Employee #:");
+		label_Emp.setBounds(12, 13, 101, 14);
+		panel_home.add(label_Emp);
+
+		JLabel lblTimeManagement = new JLabel("Time Management");
+		lblTimeManagement.setBounds(12, 51, 158, 16);
+		panel_home.add(lblTimeManagement);
 
 		JPanel panel = new JPanel();
 		tabbedPane.addTab("Employee Settings", null, panel, null);
 		panel.setLayout(null);
 
 		JTabbedPane tabbedPane_1 = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane_1.setBounds(10, 11, 713, 395);
+		tabbedPane_1.setBounds(10, 11, 713, 399);
 		panel.add(tabbedPane_1);
 
 		JPanel panel_addEmp = new JPanel();
@@ -710,6 +709,9 @@ public class adminMenuGui extends JFrame {
 		separator_3.setOrientation(SwingConstants.VERTICAL);
 		separator_3.setBounds(341, 56, 12, 248);
 		panel_addEmp.add(separator_3);
+		ButtonGroup bG1 = new ButtonGroup();
+
+		String[] cb= new String[]{"US", "PH", "CHINA"};
 
 
 
@@ -802,11 +804,8 @@ public class adminMenuGui extends JFrame {
 		JRadioButton radioButton_1 = new JRadioButton("female");
 		radioButton_1.setBounds(192, 231, 92, 29);
 		panel_updtEmp.add(radioButton_1);
-		ButtonGroup bG1 = new ButtonGroup();
 		bG1.add(radioButton);
 		bG1.add(radioButton_1);
-
-		String[] cb= new String[]{"US", "PH", "CHINA"};
 		JComboBox comboBox_1 = new JComboBox(cb);
 		comboBox_1.setBounds(138, 271, 146, 26);
 		panel_updtEmp.add(comboBox_1);
@@ -978,7 +977,7 @@ public class adminMenuGui extends JFrame {
 
 			}
 		});
-		
+
 		srchfldEnterempId.setToolTipText("Search");
 		srchfldEnterempId.setPromptFontStyle(2);
 		srchfldEnterempId.setPrompt("Enter Employee ID: ");
@@ -1030,53 +1029,22 @@ public class adminMenuGui extends JFrame {
 
 		button_1.setBounds(296, 329, 89, 23);
 		panel_updtEmp.add(button_1);
-		
+
 		textField_jobIdchange = new JTextField();
+		textField_jobIdchange.setEditable(false);
 		textField_jobIdchange.setBounds(650, 146, 34, 22);
 		panel_updtEmp.add(textField_jobIdchange);
 		textField_jobIdchange.setColumns(10);
-		
+
 		JLabel lblJobId_1 = new JLabel("Job ID");
 		lblJobId_1.setBounds(596, 149, 47, 16);
 		panel_updtEmp.add(lblJobId_1);
-
-		JPanel panel_PendingEmployee = new JPanel();
-		panel_PendingEmployee.setToolTipText("");
-		tabbedPane_1.addTab("Pending Employee", null, panel_PendingEmployee, null);
-		panel_PendingEmployee.setLayout(null);
-
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 11, 688, 167);
-		panel_PendingEmployee.add(scrollPane);
-
-		table = new JTable();
-		scrollPane.setViewportView(table);
 		try {
 			stmt = conn.createStatement();
 		} catch (SQLException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-
-		JButton btnShowAllPending = new JButton("Show all pending Employee");
-		btnShowAllPending.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					String sql = "call viewAllInactiveUser()";
-
-					rs=stmt.executeQuery(sql);
-					table.setModel(DbUtils.resultSetToTableModel(rs));
-
-
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-		});
-
-		btnShowAllPending.setBounds(10, 189, 177, 23);
-		panel_PendingEmployee.add(btnShowAllPending);
 
 		JPanel panel_addjobdetails = new JPanel();
 		tabbedPane_1.addTab("Job Details", null, panel_addjobdetails, null);
@@ -1198,12 +1166,169 @@ public class adminMenuGui extends JFrame {
 		panel_addjobdetails.add(textField_id);
 		textField_id.setColumns(10);
 
+		JLabel lblNotFound = new JLabel("Record Not Found");
+		lblNotFound.setBounds(151, 162, 115, 16);
+		panel_addjobdetails.add(lblNotFound);
+
+		JXSearchField searchField_forChangeJob = new JXSearchField();
+		searchField_forChangeJob.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					String sqlchangeJOb = "Select first_name,last_name,job_id from employee_Table  where emp_id = '"
+							+ searchField_forChangeJob.getText().toString() + "' ";
+					PreparedStatement pst = conn.prepareStatement(sqlchangeJOb);
+					stmt = conn.prepareCall(sqlchangeJOb);
+					ResultSet rs = stmt.executeQuery(sqlchangeJOb);
+
+					rs = stmt.executeQuery(sqlchangeJOb);
+					System.out.println(sqlchangeJOb);
+					if (!rs.isBeforeFirst()) {
+						lblNotFound.setText("No Record Found");
+						System.out.println("no data found");
+						textField_lnjobdits.setText("");
+						textField_fnjobdits.setText("");
+						textField_jobID.setText("");
+					} else {
+						while (rs.next()) {
+							lblNotFound.setText("");
+							textField_lnjobdits.setText(rs.getString("first_name"));
+							textField_fnjobdits.setText(rs.getString("last_name"));
+							textField_jobID.setText(rs.getString("job_id"));
+						}
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+
+			}
+		});
+
+
+		searchField_forChangeJob.setPrompt("Enter Employee ID");
+		searchField_forChangeJob.setBounds(12, 160, 127, 20);
+		panel_addjobdetails.add(searchField_forChangeJob);
+
+		textField_lnjobdits = new JTextField();
+		textField_lnjobdits.setEditable(false);
+		textField_lnjobdits.setBounds(113, 193, 137, 22);
+		panel_addjobdetails.add(textField_lnjobdits);
+		textField_lnjobdits.setColumns(10);
+
+		JLabel lblLastName = new JLabel("Last Name");
+		lblLastName.setBounds(10, 196, 91, 16);
+		panel_addjobdetails.add(lblLastName);
+
+		JLabel lblFirstName = new JLabel("First Name");
+		lblFirstName.setBounds(10, 225, 93, 16);
+		panel_addjobdetails.add(lblFirstName);
+
+		textField_fnjobdits = new JTextField();
+		textField_fnjobdits.setEditable(false);
+		textField_fnjobdits.setBounds(113, 222, 137, 22);
+		panel_addjobdetails.add(textField_fnjobdits);
+		textField_fnjobdits.setColumns(10);
+
+		textField_jobID = new JTextField();
+		textField_jobID.setBounds(113, 257, 137, 22);
+		panel_addjobdetails.add(textField_jobID);
+		textField_jobID.setColumns(10);
+
+		JLabel lblJobId_2 = new JLabel("Job ID");
+		lblJobId_2.setBounds(10, 260, 56, 16);
+		panel_addjobdetails.add(lblJobId_2);
+
+		JButton btnUpdateJob = new JButton("Update Job");
+		btnUpdateJob.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String fnameJObup = textField_fnjobdits.getText();
+				String lnameJObup = textField_lnjobdits.getText();
+				int changeJobx = Integer.parseInt(textField_jobID.getText());
+
+				try {
+					String sql = "update employee_Table set job_id = '"+changeJobx+"' where emp_id = '"+searchField_forChangeJob.getText().toString()+"' ";
+
+					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "root");
+					PreparedStatement pst = conn.prepareStatement(sql);
+					stmt = conn.prepareCall(sql);
+					stmt.executeUpdate(sql);
+					System.out.println(sql);
+
+					JOptionPane.showMessageDialog(null, "Successfully Change Job");
+
+
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+					//JOptionPane.showMessageDialog(null, e1);
+
+				}
+
+			}
+		});
+		btnUpdateJob.setBounds(10, 297, 129, 25);
+		panel_addjobdetails.add(btnUpdateJob);
+
+		JPanel panel_PendingEmployee = new JPanel();
+		panel_PendingEmployee.setToolTipText("");
+		tabbedPane_1.addTab("Employee Status", null, panel_PendingEmployee, null);
+		panel_PendingEmployee.setLayout(null);
+
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 13, 688, 307);
+		panel_PendingEmployee.add(scrollPane);
+
+		table = new JTable();
+		scrollPane.setViewportView(table);
+
+		JButton btnShowAllPending = new JButton("Show all Employee Status");
+		btnShowAllPending.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					String sql = "call viewAllsTATUSUser()";
+
+					rs=stmt.executeQuery(sql);
+					table.setModel(DbUtils.resultSetToTableModel(rs));
+
+
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+
+		btnShowAllPending.setBounds(109, 333, 222, 23);
+		panel_PendingEmployee.add(btnShowAllPending);
+
+		JButton btnShowAllEmployee_1 = new JButton("Show all Employee Type");
+		btnShowAllEmployee_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+				String sql = "call viewAllTypeUser()";
+
+				rs=stmt.executeQuery(sql);
+				table.setModel(DbUtils.resultSetToTableModel(rs));
+
+
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		});
+		btnShowAllEmployee_1.setBounds(343, 333, 216, 25);
+		panel_PendingEmployee.add(btnShowAllEmployee_1);
+
+
+
 		JPanel panel_1 = new JPanel();
 		tabbedPane.addTab("Reports", null, panel_1, null);
 		panel_1.setLayout(null);
 
 		JTabbedPane tabbedPane_2 = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane_2.setBounds(12, 13, 709, 389);
+		tabbedPane_2.setBounds(12, 13, 709, 397);
 		panel_1.add(tabbedPane_2);
 
 		JPanel panel_2 = new JPanel();
@@ -1217,6 +1342,16 @@ public class adminMenuGui extends JFrame {
 		JButton btnShowAllEmployee = new JButton("Show All Employee");
 		btnShowAllEmployee.setBounds(284, 328, 141, 25);
 		panel_2.add(btnShowAllEmployee);
+
+		JLabel label_39 = new JLabel("Logged in As:");
+		label_39.setBounds(10, 13, 101, 14);
+		contentPane.add(label_39);
+
+		JLabel lblhiz = new JLabel("");
+		lblhiz.setBounds(137, 13, 120, 14);
+		contentPane.add(lblhiz);
+		lblhiz.setForeground(Color.RED);
+		lblhiz.setText(String.valueOf(EmployeeName.emp_lstname).toString());
 
 
 

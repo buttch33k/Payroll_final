@@ -260,7 +260,7 @@ public class RegisterGui extends JFrame {
 				String gen  =bG.getSelection().getActionCommand();
 //				String empT = textField_emptype.getText().toString();
 //				String empStat = textField_status.getText().toString();;
-				
+				int JObzregis =1;
 				int empT = 2;
 				int empStat = 2;
 				
@@ -285,8 +285,8 @@ public class RegisterGui extends JFrame {
 				
 				try {
 					
-				String sqladd = "insert into employee_Table(username, passwords, emp_type, status_id,last_name,first_name,dob,age,gender,country,city,address,email,mobile_no)"
-				+"values('"+Usern+"','"+Passw+"','"+empT+"','"+empStat+"','"+lname+"','"+fname+"','"+dat+"','"+Age+"','"+gen+"','"+country+"','"+City+"','"+addres+"','"+emil+"','"+num+"')";
+				String sqladd = "insert into employee_Table(username, passwords, emp_type, status_id,job_id,last_name,first_name,dob,age,gender,country,city,address,email,mobile_no)"
+				+"values('"+Usern+"','"+Passw+"','"+empT+"','"+empStat+"','"+JObzregis+"','"+lname+"','"+fname+"','"+dat+"','"+Age+"','"+gen+"','"+country+"','"+City+"','"+addres+"','"+emil+"','"+num+"')";
 				
 						if(testEmail && testMob){
 						JOptionPane.showMessageDialog(null, "Are You Sure to add this Record?");
