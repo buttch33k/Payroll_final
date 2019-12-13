@@ -62,26 +62,60 @@ primary key(status_id)
 insert into userStatus_table
 values(1, 'ACTIVE'),(2, 'INACTIVE'),(3, 'DEACTIVATED');
 
-create table Attendance_NowTI(
+create table Attendance(
 employee_id int not null,
 date varchar(255) not null,
-time_in varchar(255) default null,
-foreign key(employee_id)references employee_Table(emp_id)
-);
-
-insert into Attendance_NowTI(employee_id, date, time_in)values
-(5, CURDATE(), "8:01 am");
-
-create table timeout(
-e_id int not null,
+time_in varchar(255) not null,
 time_out varchar(255) default null,
-no_of_hours long default null,
-FOREIGN KEY (e_id) REFERENCES employee_Table(emp_id)
+totalhr float default null,
+month_ int not null,
+foreign key(employee_id)references employee_Table(emp_id)
+
 );
 
-insert into timeout()values
-(5,"5:00pm",8);
+insert into Attendance(employee_id, date, time_in,time_out,totalhr,month_)values
+(1, "2019-1-1", "8:01 am","5:00pm", 8,1),
+(1, "2019-1-2", "8:01 am","5:00pm", 8,1),
+(1, "2019-1-4", "8:01 am","5:00pm", 8,1),
+(1, "2019-1-6", "8:01 am","5:00pm", 8,1),
+(1, "2019-1-7", "8:01 am","5:00pm", 8,1),#5
+(1, "2019-1-8", "8:01 am","5:00pm", 8,1),
+(1, "2019-1-9", "8:01 am","5:00pm", 8,1),
+(1, "2019-1-10", "8:01 am","5:00pm", 8,1),
+(1, "2019-1-12", "8:01 am","5:00pm", 8,1),
+(1, "2019-1-14", "8:01 am","5:00pm", 8,1),#10
+(1, "2019-1-15", "8:01 am","5:00pm", 8,1),
+(1, "2019-1-16", "8:01 am","5:00pm", 8,1),
+(1, "2019-1-17", "8:01 am","5:00pm", 8,1),
+(1, "2019-1-18", "8:01 am","5:00pm", 8,1),
+(1, "2019-1-19", "8:01 am","5:00pm", 8,1),#15
+(1, "2019-1-21", "8:01 am","5:00pm", 8,1),
+(1, "2019-1-22", "8:01 am","5:00pm", 8,1),
+(1, "2019-1-23", "8:01 am","5:00pm", 8,1),
+(1, "2019-1-24", "8:01 am","5:00pm", 8,1),
+(1, "2019-1-25", "8:01 am","5:00pm", 8,1),#20
+(2, "2019-1-1", "8:01 am","5:00pm", 8,1),
+(2, "2019-1-2", "8:01 am","5:00pm", 8,1),
+(2, "2019-1-4", "8:01 am","5:00pm", 8,1),
+(2, "2019-1-6", "8:01 am","5:00pm", 8,1),
+(2, "2019-1-7", "8:01 am","5:00pm", 8,1),#5
+(2, "2019-1-8", "8:01 am","5:00pm", 8,1),
+(2, "2019-1-9", "8:01 am","5:00pm", 8,1),
+(2, "2019-1-10", "8:01 am","5:00pm", 8,1),
+(2, "2019-1-12", "8:01 am","5:00pm", 8,1),
+(2, "2019-1-14", "8:01 am","5:00pm", 8,1),#10
+(2, "2019-1-15", "8:01 am","5:00pm", 8,1),
+(2, "2019-1-16", "8:01 am","5:00pm", 8,1),
+(2, "2019-1-17", "8:01 am","5:00pm", 8,1),
+(2, "2019-1-18", "8:01 am","5:00pm", 8,1),
+(2, "2019-1-19", "8:01 am","5:00pm", 8,1),#15
+(2, "2019-1-21", "8:01 am","5:00pm", 8,1),
+(2, "2019-1-22", "8:01 am","5:00pm", 8,1),
+(2, "2019-1-23", "8:01 am","5:00pm", 8,1),
+(2, "2019-1-24", "8:01 am","5:00pm", 8,1),
+(2, "2019-1-25", "8:01 am","5:00pm", 8,1),#20
 
+(1, "2019-12-10", "8:01 am","5:00pm", 8,12);
 -- #foreign key
 -- ALTER TABLE  Attendance_NowTI
 -- ADD constraint fk_employee_id

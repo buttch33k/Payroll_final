@@ -18,6 +18,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Date;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -48,6 +49,7 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JTextArea;
 
 public class AdminPayrollGui extends JFrame {
 
@@ -66,7 +68,7 @@ public class AdminPayrollGui extends JFrame {
 	private JTable taxTable;
 	private JTable SSSTable;
 	private JTable PAGIBIGTable;
-	private JTextField textField;
+	private JTextField textField_basesalary;
 	private JTextField textField_taxMin;
 	private JTextField textField_tax_Max;
 	private JTextField textField_TaxOnLowerLimit;
@@ -99,8 +101,8 @@ public class AdminPayrollGui extends JFrame {
 	private JTextField textField_genTax;
 	private JTextField textField_genSSS;
 	private JTextField textField_genPHILHEALTH;
-	private JTextField textField_Pagibig;
-	private JTextField textField_1;
+	private JTextField textField_genPagibig;
+	private JTextField textField_genNet;
 	private JTextField textField_updtphilID;
 	private JTextField textField_updtMIN;
 	private JTextField textField_updtMAX;
@@ -142,9 +144,6 @@ public class AdminPayrollGui extends JFrame {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(12, 13, 863, 691);
 		contentPane.add(tabbedPane);
-
-		
-
 
 
 		JPanel panel_TAXSETTINGS = new JPanel();
@@ -541,9 +540,21 @@ public class AdminPayrollGui extends JFrame {
 		textField_updtMAX.setColumns(10);
 		
 		textField_UPDTRATE = new JTextField();
-		textField_UPDTRATE.setBounds(466, 527, 86, 20);
+		textField_UPDTRATE.setBounds(502, 529, 86, 20);
 		panel_PHILHEALTH.add(textField_UPDTRATE);
 		textField_UPDTRATE.setColumns(10);
+		
+		JLabel lblMin_1 = new JLabel("Min");
+		lblMin_1.setBounds(64, 529, 56, 16);
+		panel_PHILHEALTH.add(lblMin_1);
+		
+		JLabel lblMax_1 = new JLabel("Max");
+		lblMax_1.setBounds(234, 529, 56, 16);
+		panel_PHILHEALTH.add(lblMax_1);
+		
+		JLabel lblPremiumRate = new JLabel("Premium Rate");
+		lblPremiumRate.setBounds(398, 529, 105, 16);
+		panel_PHILHEALTH.add(lblPremiumRate);
 
 		JPanel panel_pagibig = new JPanel();
 		tabbedPane_settings.addTab("Pagibig", null, panel_pagibig, null);
@@ -1201,32 +1212,1644 @@ public class AdminPayrollGui extends JFrame {
 		JButton btnGenerate = new JButton("generate");
 		btnGenerate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				try {
 				if(isJan && isMonthly) {
-					System.out.println("montly jan");
+
+					System.out.println("montly jan");	
+//					tax
+					float taxdivideby2 = Float.parseFloat(textField_tax.getText());
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = Float.parseFloat(textField_SSS.getText());
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = Float.parseFloat(textField_PHILHEALTH.getText());
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig
+					float IBIGdivideby2 = Float.parseFloat(textField_PAGIBIG.getText());
+					String IBIGdivibyTwo = Float.toString(IBIGdivideby2);
+					textField_genPagibig.setText(IBIGdivibyTwo);
+					String motmot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"1\"");
+					try {
+						stmt = conn.prepareCall(motmot);
+						ResultSet rs = stmt.executeQuery(motmot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							String convert = Float.toString(totalSalaryperMonth);
+							textField_basesalary.setText(convert);
+						
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=totalSalaryperMonth-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							
+							break;						
+						}			
+						
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}else if(isFeb && isMonthly) {
 					System.out.println("feb monhtlu");
+//					tax
+					float taxdivideby2 = Float.parseFloat(textField_tax.getText());
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = Float.parseFloat(textField_SSS.getText());
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = Float.parseFloat(textField_PHILHEALTH.getText());
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig
+					float IBIGdivideby2 = Float.parseFloat(textField_PAGIBIG.getText());
+					String IBIGdivibyTwo = Float.toString(IBIGdivideby2);
+					textField_genPagibig.setText(IBIGdivibyTwo);
+					String motmot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"2\"");
+					try {
+						stmt = conn.prepareCall(motmot);
+						ResultSet rs = stmt.executeQuery(motmot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							String convert = Float.toString(totalSalaryperMonth);
+							textField_basesalary.setText(convert);
+							
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=totalSalaryperMonth-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}else if(isMar && isMonthly) {
 					System.out.println("Mar monhtlu");
+//					tax
+					float taxdivideby2 = Float.parseFloat(textField_tax.getText());
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = Float.parseFloat(textField_SSS.getText());
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = Float.parseFloat(textField_PHILHEALTH.getText());
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig
+					float IBIGdivideby2 = Float.parseFloat(textField_PAGIBIG.getText());
+					String IBIGdivibyTwo = Float.toString(IBIGdivideby2);
+					textField_genPagibig.setText(IBIGdivibyTwo);
+					String motmot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"3\"");
+					try {
+						stmt = conn.prepareCall(motmot);
+						ResultSet rs = stmt.executeQuery(motmot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							String convert = Float.toString(totalSalaryperMonth);
+							textField_basesalary.setText(convert);
+							
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=totalSalaryperMonth-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}else if(isApr && isMonthly) {
 					System.out.println("Apr monhtlu");
+//					tax
+					float taxdivideby2 = Float.parseFloat(textField_tax.getText());
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = Float.parseFloat(textField_SSS.getText());
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = Float.parseFloat(textField_PHILHEALTH.getText());
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig
+					float IBIGdivideby2 = Float.parseFloat(textField_PAGIBIG.getText());
+					String IBIGdivibyTwo = Float.toString(IBIGdivideby2);
+					textField_genPagibig.setText(IBIGdivibyTwo);
+					String motmot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"4\"");
+					try {
+						stmt = conn.prepareCall(motmot);
+						ResultSet rs = stmt.executeQuery(motmot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							String convert = Float.toString(totalSalaryperMonth);
+							textField_basesalary.setText(convert);
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=totalSalaryperMonth-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}else if(isMay && isMonthly) {
 					System.out.println("May monhtlu");
+//					tax
+					float taxdivideby2 = Float.parseFloat(textField_tax.getText());
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = Float.parseFloat(textField_SSS.getText());
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = Float.parseFloat(textField_PHILHEALTH.getText());
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig
+					float IBIGdivideby2 = Float.parseFloat(textField_PAGIBIG.getText());
+					String IBIGdivibyTwo = Float.toString(IBIGdivideby2);
+					textField_genPagibig.setText(IBIGdivibyTwo);
+					String motmot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"5\"");
+					try {
+						stmt = conn.prepareCall(motmot);
+						ResultSet rs = stmt.executeQuery(motmot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							String convert = Float.toString(totalSalaryperMonth);
+							textField_basesalary.setText(convert);
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=totalSalaryperMonth-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}else if(isJune && isMonthly) {
 					System.out.println("June monhtlu");
+//					tax
+					float taxdivideby2 = Float.parseFloat(textField_tax.getText());
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = Float.parseFloat(textField_SSS.getText());
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = Float.parseFloat(textField_PHILHEALTH.getText());
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig
+					float IBIGdivideby2 = Float.parseFloat(textField_PAGIBIG.getText());
+					String IBIGdivibyTwo = Float.toString(IBIGdivideby2);
+					textField_genPagibig.setText(IBIGdivibyTwo);
+					String motmot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"6\"");
+					try {
+						stmt = conn.prepareCall(motmot);
+						ResultSet rs = stmt.executeQuery(motmot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							String convert = Float.toString(totalSalaryperMonth);
+							textField_basesalary.setText(convert);
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=totalSalaryperMonth-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}else if(isJuly && isMonthly) {
 					System.out.println("July monhtlu");
+//					tax
+					float taxdivideby2 = Float.parseFloat(textField_tax.getText());
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = Float.parseFloat(textField_SSS.getText());
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = Float.parseFloat(textField_PHILHEALTH.getText());
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig
+					float IBIGdivideby2 = Float.parseFloat(textField_PAGIBIG.getText());
+					String IBIGdivibyTwo = Float.toString(IBIGdivideby2);
+					textField_genPagibig.setText(IBIGdivibyTwo);
+					String motmot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"7\"");
+					try {
+						stmt = conn.prepareCall(motmot);
+						ResultSet rs = stmt.executeQuery(motmot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							String convert = Float.toString(totalSalaryperMonth);
+							textField_basesalary.setText(convert);
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=totalSalaryperMonth-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}else if(isAug && isMonthly) {
-					System.out.println("feb monhtlu");
+					System.out.println("Aug monhtlu");
+//					tax
+					float taxdivideby2 = Float.parseFloat(textField_tax.getText());
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = Float.parseFloat(textField_SSS.getText());
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = Float.parseFloat(textField_PHILHEALTH.getText());
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig
+					float IBIGdivideby2 = Float.parseFloat(textField_PAGIBIG.getText());
+					String IBIGdivibyTwo = Float.toString(IBIGdivideby2);
+					textField_genPagibig.setText(IBIGdivibyTwo);
+					String motmot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"8\"");
+					try {
+						stmt = conn.prepareCall(motmot);
+						ResultSet rs = stmt.executeQuery(motmot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							String convert = Float.toString(totalSalaryperMonth);
+							textField_basesalary.setText(convert);
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=totalSalaryperMonth-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}else if(isSept && isMonthly) {
-					System.out.println("feb monhtlu");
+					System.out.println("sept monhtlu");
+//					tax
+					float taxdivideby2 = Float.parseFloat(textField_tax.getText());
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = Float.parseFloat(textField_SSS.getText());
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = Float.parseFloat(textField_PHILHEALTH.getText());
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig
+					float IBIGdivideby2 = Float.parseFloat(textField_PAGIBIG.getText());
+					String IBIGdivibyTwo = Float.toString(IBIGdivideby2);
+					textField_genPagibig.setText(IBIGdivibyTwo);
+					String motmot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"9\"");
+					try {
+						stmt = conn.prepareCall(motmot);
+						ResultSet rs = stmt.executeQuery(motmot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							String convert = Float.toString(totalSalaryperMonth);
+							textField_basesalary.setText(convert);
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}else if(isOct && isMonthly) {
-					System.out.println("feb monhtlu");
+					System.out.println("oct monhtlu");
+//					tax
+					float taxdivideby2 = Float.parseFloat(textField_tax.getText());
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = Float.parseFloat(textField_SSS.getText());
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = Float.parseFloat(textField_PHILHEALTH.getText());
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig
+					float IBIGdivideby2 = Float.parseFloat(textField_PAGIBIG.getText());
+					String IBIGdivibyTwo = Float.toString(IBIGdivideby2);
+					textField_genPagibig.setText(IBIGdivibyTwo);
+					String motmot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"10\"");
+					try {
+						stmt = conn.prepareCall(motmot);
+						ResultSet rs = stmt.executeQuery(motmot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							String convert = Float.toString(totalSalaryperMonth);
+							textField_basesalary.setText(convert);
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=totalSalaryperMonth-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}else if(isNov && isMonthly) {
-					System.out.println("feb monhtlu");
-				}else if(isSemi_Monthly) {
+					System.out.println("nov monhtlu");
+//					tax
+					float taxdivideby2 = Float.parseFloat(textField_tax.getText());
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = Float.parseFloat(textField_SSS.getText());
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = Float.parseFloat(textField_PHILHEALTH.getText());
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig
+					float IBIGdivideby2 = Float.parseFloat(textField_PAGIBIG.getText());
+					String IBIGdivibyTwo = Float.toString(IBIGdivideby2);
+					textField_genPagibig.setText(IBIGdivibyTwo);
+					String motmot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"11\"");
+					try {
+						stmt = conn.prepareCall(motmot);
+						ResultSet rs = stmt.executeQuery(motmot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							String convert = Float.toString(totalSalaryperMonth);
+							textField_basesalary.setText(convert);
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=totalSalaryperMonth-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else if(isDec && isMonthly) {
+					System.out.println("dec monhtlu");
+//					tax
+					float taxdivideby2 = Float.parseFloat(textField_tax.getText());
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = Float.parseFloat(textField_SSS.getText());
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = Float.parseFloat(textField_PHILHEALTH.getText());
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig
+					float IBIGdivideby2 = Float.parseFloat(textField_PAGIBIG.getText());
+					String IBIGdivibyTwo = Float.toString(IBIGdivideby2);
+					textField_genPagibig.setText(IBIGdivibyTwo);
+					String motmot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"12\"");
+					try {
+						stmt = conn.prepareCall(motmot);
+						ResultSet rs = stmt.executeQuery(motmot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							String convert = Float.toString(totalSalaryperMonth);
+							textField_basesalary.setText(convert);
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=totalSalaryperMonth-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+//semi monthly
+				else if(isJan && isSemi_Monthly) {
+					System.out.println("Semi_Monthly jaN");
+//					tax
+					float taxdivideby2 = (Float.parseFloat(textField_tax.getText())/2);
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = (Float.parseFloat(textField_SSS.getText())/2);
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = (Float.parseFloat(textField_PHILHEALTH.getText())/2);
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig
+					float IBIGdivideby2 = (Float.parseFloat(textField_PAGIBIG.getText())/2);
+					String IBIGdivibyTwo = Float.toString(Phildivideby2);
+					textField_genPagibig.setText(PhildivibyTwo);
+					String semimot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"1\"");
+					try {
+						stmt = conn.prepareCall(semimot);
+						ResultSet rs = stmt.executeQuery(semimot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							float semiMotmot = totalSalaryperMonth/2;
+							String convert = Float.toString(semiMotmot);
+							textField_basesalary.setText(convert);
+							
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=semiMotmot-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else if(isFeb && isSemi_Monthly) {
+					System.out.println("Semi_Monthly feb");
+//					tax
+					float taxdivideby2 = (Float.parseFloat(textField_tax.getText())/2);
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = (Float.parseFloat(textField_SSS.getText())/2);
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = (Float.parseFloat(textField_PHILHEALTH.getText())/2);
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig					
+					float IBIGdivideby2 = (Float.parseFloat(textField_PAGIBIG.getText())/2);
+					String IBIGdivibyTwo = Float.toString(Phildivideby2);
+					textField_genPagibig.setText(PhildivibyTwo);
+					String semimot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"2\"");
+					try {
+						stmt = conn.prepareCall(semimot);
+						ResultSet rs = stmt.executeQuery(semimot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							float semiMotmot = totalSalaryperMonth/2;
+							String convert = Float.toString(semiMotmot);
+							textField_basesalary.setText(convert);
+							
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=semiMotmot-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else if(isMar && isSemi_Monthly) {
+					System.out.println("Semi_Monthly mar");
+//					tax
+					float taxdivideby2 = (Float.parseFloat(textField_tax.getText())/2);
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = (Float.parseFloat(textField_SSS.getText())/2);
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = (Float.parseFloat(textField_PHILHEALTH.getText())/2);
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig					
+					float IBIGdivideby2 = (Float.parseFloat(textField_PAGIBIG.getText())/2);
+					String IBIGdivibyTwo = Float.toString(Phildivideby2);
+					textField_genPagibig.setText(PhildivibyTwo);
+					String semimot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"3\"");
+					try {
+						stmt = conn.prepareCall(semimot);
+						ResultSet rs = stmt.executeQuery(semimot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							float semiMotmot = totalSalaryperMonth/2;
+							String convert = Float.toString(semiMotmot);
+							textField_basesalary.setText(convert);
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=semiMotmot-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else if(isApr && isSemi_Monthly) {
+					System.out.println("Semi_Monthly Apr");
+//					tax
+					float taxdivideby2 = (Float.parseFloat(textField_tax.getText())/2);
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = (Float.parseFloat(textField_SSS.getText())/2);
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = (Float.parseFloat(textField_PHILHEALTH.getText())/2);
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig					
+					float IBIGdivideby2 = (Float.parseFloat(textField_PAGIBIG.getText())/2);
+					String IBIGdivibyTwo = Float.toString(Phildivideby2);
+					textField_genPagibig.setText(PhildivibyTwo);
+					String semimot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"4\"");
+					try {
+						stmt = conn.prepareCall(semimot);
+						ResultSet rs = stmt.executeQuery(semimot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							float semiMotmot = totalSalaryperMonth/2;
+							String convert = Float.toString(semiMotmot);
+							textField_basesalary.setText(convert);
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=semiMotmot-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else if(isMay && isSemi_Monthly) {
 					System.out.println("Semi_Monthly to");
-				}else if(isWeekly) {
-					System.out.println("weekly to");
+//					tax
+					float taxdivideby2 = (Float.parseFloat(textField_tax.getText())/2);
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = (Float.parseFloat(textField_SSS.getText())/2);
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = (Float.parseFloat(textField_PHILHEALTH.getText())/2);
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig					
+					float IBIGdivideby2 = (Float.parseFloat(textField_PAGIBIG.getText())/2);
+					String IBIGdivibyTwo = Float.toString(Phildivideby2);
+					textField_genPagibig.setText(PhildivibyTwo);
+					String semimot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"5\"");
+					try {
+						stmt = conn.prepareCall(semimot);
+						ResultSet rs = stmt.executeQuery(semimot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							float semiMotmot = totalSalaryperMonth/2;
+							String convert = Float.toString(semiMotmot);
+							textField_basesalary.setText(convert);
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=semiMotmot-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else if(isJune && isSemi_Monthly) {
+					System.out.println("Semi_Monthly June");
+//					tax
+					float taxdivideby2 = (Float.parseFloat(textField_tax.getText())/2);
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = (Float.parseFloat(textField_SSS.getText())/2);
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = (Float.parseFloat(textField_PHILHEALTH.getText())/2);
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig					
+					float IBIGdivideby2 = (Float.parseFloat(textField_PAGIBIG.getText())/2);
+					String IBIGdivibyTwo = Float.toString(Phildivideby2);
+					textField_genPagibig.setText(PhildivibyTwo);
+					String semimot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"6\"");
+					try {
+						stmt = conn.prepareCall(semimot);
+						ResultSet rs = stmt.executeQuery(semimot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							float semiMotmot = totalSalaryperMonth/2;
+							String convert = Float.toString(semiMotmot);
+							textField_basesalary.setText(convert);
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=semiMotmot-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else if(isJuly && isSemi_Monthly) {
+					System.out.println("Semi_Monthly July");
+//					tax
+					float taxdivideby2 = (Float.parseFloat(textField_tax.getText())/2);
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = (Float.parseFloat(textField_SSS.getText())/2);
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = (Float.parseFloat(textField_PHILHEALTH.getText())/2);
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig					
+					float IBIGdivideby2 = (Float.parseFloat(textField_PAGIBIG.getText())/2);
+					String IBIGdivibyTwo = Float.toString(Phildivideby2);
+					textField_genPagibig.setText(PhildivibyTwo);
+					String semimot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"7\"");
+					try {
+						stmt = conn.prepareCall(semimot);
+						ResultSet rs = stmt.executeQuery(semimot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							float semiMotmot = totalSalaryperMonth/2;
+							String convert = Float.toString(semiMotmot);
+							textField_basesalary.setText(convert);
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=semiMotmot-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else if(isAug && isSemi_Monthly) {
+					System.out.println("Semi_Monthly to");
+//					tax
+					float taxdivideby2 = (Float.parseFloat(textField_tax.getText())/2);
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = (Float.parseFloat(textField_SSS.getText())/2);
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = (Float.parseFloat(textField_PHILHEALTH.getText())/2);
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig					
+					float IBIGdivideby2 = (Float.parseFloat(textField_PAGIBIG.getText())/2);
+					String IBIGdivibyTwo = Float.toString(Phildivideby2);
+					textField_genPagibig.setText(PhildivibyTwo);
+					String semimot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"8\"");
+					try {
+						stmt = conn.prepareCall(semimot);
+						ResultSet rs = stmt.executeQuery(semimot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							float semiMotmot = totalSalaryperMonth/2;
+							String convert = Float.toString(semiMotmot);
+							textField_basesalary.setText(convert);
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=semiMotmot-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else if(isSept && isSemi_Monthly) {
+					System.out.println("Semi_Monthly Sept");
+//					tax
+					float taxdivideby2 = (Float.parseFloat(textField_tax.getText())/2);
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = (Float.parseFloat(textField_SSS.getText())/2);
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = (Float.parseFloat(textField_PHILHEALTH.getText())/2);
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig					
+					float IBIGdivideby2 = (Float.parseFloat(textField_PAGIBIG.getText())/2);
+					String IBIGdivibyTwo = Float.toString(Phildivideby2);
+					textField_genPagibig.setText(PhildivibyTwo);
+					String semimot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"9\"");
+					try {
+						stmt = conn.prepareCall(semimot);
+						ResultSet rs = stmt.executeQuery(semimot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							float semiMotmot = totalSalaryperMonth/2;
+							String convert = Float.toString(semiMotmot);
+							textField_basesalary.setText(convert);
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=semiMotmot-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else if(isOct && isSemi_Monthly) {
+					System.out.println("Semi_Monthly Oct");
+//					tax
+					float taxdivideby2 = (Float.parseFloat(textField_tax.getText())/2);
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = (Float.parseFloat(textField_SSS.getText())/2);
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = (Float.parseFloat(textField_PHILHEALTH.getText())/2);
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig					
+					float IBIGdivideby2 = (Float.parseFloat(textField_PAGIBIG.getText())/2);
+					String IBIGdivibyTwo = Float.toString(Phildivideby2);
+					textField_genPagibig.setText(PhildivibyTwo);
+					String semimot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"10\"");
+					try {
+						stmt = conn.prepareCall(semimot);
+						ResultSet rs = stmt.executeQuery(semimot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							float semiMotmot = totalSalaryperMonth/2;
+							String convert = Float.toString(semiMotmot);
+							textField_basesalary.setText(convert);
+							
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=semiMotmot-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else if(isNov && isSemi_Monthly) {
+					System.out.println("Semi_Monthly to Nov");
+//					tax
+					float taxdivideby2 = (Float.parseFloat(textField_tax.getText())/2);
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = (Float.parseFloat(textField_SSS.getText())/2);
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = (Float.parseFloat(textField_PHILHEALTH.getText())/2);
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig					
+					float IBIGdivideby2 = (Float.parseFloat(textField_PAGIBIG.getText())/2);
+					String IBIGdivibyTwo = Float.toString(Phildivideby2);
+					textField_genPagibig.setText(PhildivibyTwo);
+					String semimot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"11\"");
+					try {
+						stmt = conn.prepareCall(semimot);
+						ResultSet rs = stmt.executeQuery(semimot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							float semiMotmot = totalSalaryperMonth/2;
+							String convert = Float.toString(semiMotmot);
+							textField_basesalary.setText(convert);
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=semiMotmot-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else if(isDec && isSemi_Monthly) {
+					System.out.println("Semi_Monthly to Dec");
+//					tax
+					float taxdivideby2 = (Float.parseFloat(textField_tax.getText())/2);
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = (Float.parseFloat(textField_SSS.getText())/2);
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = (Float.parseFloat(textField_PHILHEALTH.getText())/2);
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig					
+					float IBIGdivideby2 = (Float.parseFloat(textField_PAGIBIG.getText())/2);
+					String IBIGdivibyTwo = Float.toString(Phildivideby2);
+					textField_genPagibig.setText(PhildivibyTwo);
+					String semimot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"12\"");
+					try {
+						stmt = conn.prepareCall(semimot);
+						ResultSet rs = stmt.executeQuery(semimot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							float semiMotmot = totalSalaryperMonth/2;
+							String convert = Float.toString(semiMotmot);
+							textField_basesalary.setText(convert);
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=semiMotmot-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+//				Weekly
+				else if(isJan && isWeekly) {
+					System.out.println("weekly jan");
+//					tax
+					float taxdivideby2 = (Float.parseFloat(textField_tax.getText())/4);
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = (Float.parseFloat(textField_SSS.getText())/4);
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = (Float.parseFloat(textField_PHILHEALTH.getText())/4);
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig					
+					float IBIGdivideby2 = (Float.parseFloat(textField_PAGIBIG.getText())/4);
+					String IBIGdivibyTwo = Float.toString(Phildivideby2);
+					textField_genPagibig.setText(PhildivibyTwo);
+					String weeklymot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"1\"");
+					try {
+						stmt = conn.prepareCall(weeklymot);
+						ResultSet rs = stmt.executeQuery(weeklymot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							float semiMotmot = totalSalaryperMonth/4;
+							String convert = Float.toString(semiMotmot);
+							textField_basesalary.setText(convert);
+							
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=semiMotmot-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							
+							break;			
+							
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else if(isFeb && isWeekly) {
+					System.out.println("weekly feb");
+//					tax
+					float taxdivideby2 = (Float.parseFloat(textField_tax.getText())/4);
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = (Float.parseFloat(textField_SSS.getText())/4);
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = (Float.parseFloat(textField_PHILHEALTH.getText())/4);
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig					
+					float IBIGdivideby2 = (Float.parseFloat(textField_PAGIBIG.getText())/4);
+					String IBIGdivibyTwo = Float.toString(Phildivideby2);
+					textField_genPagibig.setText(PhildivibyTwo);
+					String weeklymot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"2\"");
+					try {
+						stmt = conn.prepareCall(weeklymot);
+						ResultSet rs = stmt.executeQuery(weeklymot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							float semiMotmot = totalSalaryperMonth/4;
+							String convert = Float.toString(semiMotmot);
+							textField_basesalary.setText(convert);
+							
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=semiMotmot-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else if(isMar && isWeekly) {
+					System.out.println("weekly mar");
+//					tax
+					float taxdivideby2 = (Float.parseFloat(textField_tax.getText())/4);
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = (Float.parseFloat(textField_SSS.getText())/4);
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = (Float.parseFloat(textField_PHILHEALTH.getText())/4);
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig					
+					float IBIGdivideby2 = (Float.parseFloat(textField_PAGIBIG.getText())/4);
+					String IBIGdivibyTwo = Float.toString(Phildivideby2);
+					textField_genPagibig.setText(PhildivibyTwo);
+					String weeklymot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"3\"");
+					try {
+						stmt = conn.prepareCall(weeklymot);
+						ResultSet rs = stmt.executeQuery(weeklymot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							float semiMotmot = totalSalaryperMonth/4;
+							String convert = Float.toString(semiMotmot);
+							textField_basesalary.setText(convert);
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=semiMotmot-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else if(isApr && isWeekly) {
+					System.out.println("weekly apr");
+//					tax
+					float taxdivideby2 = (Float.parseFloat(textField_tax.getText())/4);
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = (Float.parseFloat(textField_SSS.getText())/4);
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = (Float.parseFloat(textField_PHILHEALTH.getText())/4);
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig					
+					float IBIGdivideby2 = (Float.parseFloat(textField_PAGIBIG.getText())/4);
+					String IBIGdivibyTwo = Float.toString(Phildivideby2);
+					textField_genPagibig.setText(PhildivibyTwo);
+					String weeklymot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"4\"");
+					try {
+						stmt = conn.prepareCall(weeklymot);
+						ResultSet rs = stmt.executeQuery(weeklymot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							float semiMotmot = totalSalaryperMonth/4;
+							String convert = Float.toString(semiMotmot);
+							textField_basesalary.setText(convert);
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=semiMotmot-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else if(isMay && isWeekly) {
+					System.out.println("weekly may");
+//					tax
+					float taxdivideby2 = (Float.parseFloat(textField_tax.getText())/4);
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = (Float.parseFloat(textField_SSS.getText())/4);
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = (Float.parseFloat(textField_PHILHEALTH.getText())/4);
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig					
+					float IBIGdivideby2 = (Float.parseFloat(textField_PAGIBIG.getText())/4);
+					String IBIGdivibyTwo = Float.toString(Phildivideby2);
+					textField_genPagibig.setText(PhildivibyTwo);
+					String weeklymot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"5\"");
+					try {
+						stmt = conn.prepareCall(weeklymot);
+						ResultSet rs = stmt.executeQuery(weeklymot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							float semiMotmot = totalSalaryperMonth/4;
+							String convert = Float.toString(semiMotmot);
+							textField_basesalary.setText(convert);
+							
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=semiMotmot-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else if(isJune && isWeekly) {
+					System.out.println("weekly june");
+//					tax
+					float taxdivideby2 = (Float.parseFloat(textField_tax.getText())/4);
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = (Float.parseFloat(textField_SSS.getText())/4);
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = (Float.parseFloat(textField_PHILHEALTH.getText())/4);
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig					
+					float IBIGdivideby2 = (Float.parseFloat(textField_PAGIBIG.getText())/4);
+					String IBIGdivibyTwo = Float.toString(Phildivideby2);
+					textField_genPagibig.setText(PhildivibyTwo);
+					String weeklymot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"6\"");
+					try {
+						stmt = conn.prepareCall(weeklymot);
+						ResultSet rs = stmt.executeQuery(weeklymot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							float semiMotmot = totalSalaryperMonth/4;
+							String convert = Float.toString(semiMotmot);
+							textField_basesalary.setText(convert);
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=semiMotmot-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else if(isJuly && isWeekly) {
+					System.out.println("weekly july");
+//					tax
+					float taxdivideby2 = (Float.parseFloat(textField_tax.getText())/4);
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = (Float.parseFloat(textField_SSS.getText())/4);
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = (Float.parseFloat(textField_PHILHEALTH.getText())/4);
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig					
+					float IBIGdivideby2 = (Float.parseFloat(textField_PAGIBIG.getText())/4);
+					String IBIGdivibyTwo = Float.toString(Phildivideby2);
+					textField_genPagibig.setText(PhildivibyTwo);
+					String weeklymot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"7\"");
+					try {
+						stmt = conn.prepareCall(weeklymot);
+						ResultSet rs = stmt.executeQuery(weeklymot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							float semiMotmot = totalSalaryperMonth/4;
+							String convert = Float.toString(semiMotmot);
+							textField_basesalary.setText(convert);
+							
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=semiMotmot-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else if(isAug && isWeekly) {
+					System.out.println("weekly aug");
+//					tax
+					float taxdivideby2 = (Float.parseFloat(textField_tax.getText())/4);
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = (Float.parseFloat(textField_SSS.getText())/4);
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = (Float.parseFloat(textField_PHILHEALTH.getText())/4);
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig					
+					float IBIGdivideby2 = (Float.parseFloat(textField_PAGIBIG.getText())/4);
+					String IBIGdivibyTwo = Float.toString(Phildivideby2);
+					textField_genPagibig.setText(PhildivibyTwo);
+					String weeklymot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"8\"");
+					try {
+						stmt = conn.prepareCall(weeklymot);
+						ResultSet rs = stmt.executeQuery(weeklymot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							float semiMotmot = totalSalaryperMonth/4;
+							String convert = Float.toString(semiMotmot);
+							textField_basesalary.setText(convert);
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=semiMotmot-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else if(isSept && isWeekly) {
+					System.out.println("weekly sept");
+//					tax
+					float taxdivideby2 = (Float.parseFloat(textField_tax.getText())/4);
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = (Float.parseFloat(textField_SSS.getText())/4);
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = (Float.parseFloat(textField_PHILHEALTH.getText())/4);
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig					
+					float IBIGdivideby2 = (Float.parseFloat(textField_PAGIBIG.getText())/4);
+					String IBIGdivibyTwo = Float.toString(Phildivideby2);
+					textField_genPagibig.setText(PhildivibyTwo);
+					String weeklymot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"9\"");
+					try {
+						stmt = conn.prepareCall(weeklymot);
+						ResultSet rs = stmt.executeQuery(weeklymot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							float semiMotmot = totalSalaryperMonth/4;
+							String convert = Float.toString(semiMotmot);
+							textField_basesalary.setText(convert);
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=semiMotmot-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else if(isOct && isWeekly) {
+					System.out.println("weekly oct");
+//					tax
+					float taxdivideby2 = (Float.parseFloat(textField_tax.getText())/4);
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = (Float.parseFloat(textField_SSS.getText())/4);
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = (Float.parseFloat(textField_PHILHEALTH.getText())/4);
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig					
+					float IBIGdivideby2 = (Float.parseFloat(textField_PAGIBIG.getText())/4);
+					String IBIGdivibyTwo = Float.toString(Phildivideby2);
+					textField_genPagibig.setText(PhildivibyTwo);
+					String weeklymot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"10\"");
+					try {
+						stmt = conn.prepareCall(weeklymot);
+						ResultSet rs = stmt.executeQuery(weeklymot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							float semiMotmot = totalSalaryperMonth/4;
+							String convert = Float.toString(semiMotmot);
+							textField_basesalary.setText(convert);
+
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=semiMotmot-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else if(isNov && isWeekly) {
+					System.out.println("weekly nov");
+//					tax
+					float taxdivideby2 = (Float.parseFloat(textField_tax.getText())/4);
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = (Float.parseFloat(textField_SSS.getText())/4);
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = (Float.parseFloat(textField_PHILHEALTH.getText())/4);
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig					
+					float IBIGdivideby2 = (Float.parseFloat(textField_PAGIBIG.getText())/4);
+					String IBIGdivibyTwo = Float.toString(Phildivideby2);
+					textField_genPagibig.setText(PhildivibyTwo);
+					String weeklymot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"11\"");
+					try {
+						stmt = conn.prepareCall(weeklymot);
+						ResultSet rs = stmt.executeQuery(weeklymot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							float semiMotmot = totalSalaryperMonth/4;
+							String convert = Float.toString(semiMotmot);
+							textField_basesalary.setText(convert);
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=semiMotmot-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else if(isDec && isWeekly) {
+					System.out.println("weekly dec");
+//					tax
+					float taxdivideby2 = (Float.parseFloat(textField_tax.getText())/4);
+					String taxdivibyTwo = Float.toString(taxdivideby2);
+					textField_genTax.setText(taxdivibyTwo);
+//					sss
+					float SSSdivideby2 = (Float.parseFloat(textField_SSS.getText())/4);
+					String SSSdivibyTwo = Float.toString(SSSdivideby2);
+					textField_genSSS.setText(SSSdivibyTwo);
+//					Philhealth
+					float Phildivideby2 = (Float.parseFloat(textField_PHILHEALTH.getText())/4);
+					String PhildivibyTwo = Float.toString(Phildivideby2);
+					textField_genPHILHEALTH.setText(PhildivibyTwo);
+//					pagibig					
+					float IBIGdivideby2 = (Float.parseFloat(textField_PAGIBIG.getText())/4);
+					String IBIGdivibyTwo = Float.toString(Phildivideby2);
+					textField_genPagibig.setText(PhildivibyTwo);
+					String weeklymot =("select sum(totalhr) from attendance where employee_id ='"+searchFieldIDpayslip.getText()+"' and month_ = \"12\"");
+					try {
+						stmt = conn.prepareCall(weeklymot);
+						ResultSet rs = stmt.executeQuery(weeklymot);
+						
+						while(rs.next()) {
+							System.out.println("");
+							float totalh = rs.getFloat(1);
+							System.out.println(totalh);
+							float bSalary = (Float.parseFloat(textField_salary.getText())/20);
+							float hourdivide = bSalary/8;
+							float totalSalaryperMonth = hourdivide*totalh;
+							
+							System.out.println( "cmpute HOur salary: " +totalSalaryperMonth);
+							float semiMotmot = totalSalaryperMonth/4;
+							String convert = Float.toString(semiMotmot);
+							textField_basesalary.setText(convert);
+							float taxTotal= taxdivideby2+SSSdivideby2+Phildivideby2+IBIGdivideby2;
+							float taxfinal=semiMotmot-taxTotal;
+							String convertnet =Float.toString(taxfinal);
+							textField_genNet.setText(convertnet);
+							
+							break;						
+						}			
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				}catch (Exception e) {
+					// TODO: handle exception
 				}
 
 			}
@@ -1234,10 +2857,10 @@ public class AdminPayrollGui extends JFrame {
 		btnGenerate.setBounds(280, 171, 97, 25);
 		panel_PAYSLIP.add(btnGenerate);
 
-		textField = new JTextField();
-		textField.setBounds(109, 245, 116, 22);
-		panel_PAYSLIP.add(textField);
-		textField.setColumns(10);
+		textField_basesalary = new JTextField();
+		textField_basesalary.setBounds(109, 245, 116, 22);
+		panel_PAYSLIP.add(textField_basesalary);
+		textField_basesalary.setColumns(10);
 		
 		String[] dit= new  String[]{"JAN", "FEB", "MAR", "APR", "MAY", "JUNE", "JULY", "AUG", "SEPT", "OCT", "NOV", "DEC"};
 		JComboBox comboBox_date = new JComboBox(dit);
@@ -1306,7 +2929,7 @@ public class AdminPayrollGui extends JFrame {
 					isJune=false;
 					isJuly=false;
 					isAug=false;
-					isSept= false;
+					isSept=false;
 					isOct=false;
 					isNov=false;
 					isDec=false;
@@ -1406,11 +3029,11 @@ public class AdminPayrollGui extends JFrame {
 				
 			}
 		});
-		comboBox_date.setBounds(10, 171, 111, 22);
+		comboBox_date.setBounds(10, 172, 111, 22);
 		panel_PAYSLIP.add(comboBox_date);
 
 
-		String[] bayad= new String[]{"Monthly", "Semi-Monthly","Weekly"};
+		String[] bayad= new String[]{"Monthly", "Semi_Monthly","Weekly"};
 		JComboBox comboBox_pay = new JComboBox(bayad);
 		comboBox_pay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -1444,7 +3067,7 @@ public class AdminPayrollGui extends JFrame {
 		panel_PAYSLIP.add(label);
 
 		JButton btnPrint = new JButton("Print");
-		btnPrint.setBounds(10, 623, 97, 25);
+		btnPrint.setBounds(721, 602, 97, 25);
 		panel_PAYSLIP.add(btnPrint);
 
 		JButton btnHome = new JButton("Home");
@@ -1455,7 +3078,7 @@ public class AdminPayrollGui extends JFrame {
 				
 			}
 		});
-		btnHome.setBounds(119, 623, 97, 25);
+		btnHome.setBounds(10, 623, 97, 25);
 		panel_PAYSLIP.add(btnHome);
 
 		JLabel lblTax_1 = new JLabel("TAX");
@@ -1498,12 +3121,12 @@ public class AdminPayrollGui extends JFrame {
 		panel_PAYSLIP.add(textField_genPHILHEALTH);
 		textField_genPHILHEALTH.setColumns(10);
 		
-		textField_Pagibig = new JTextField();
-		textField_Pagibig.setBounds(386, 332, 116, 22);
-		panel_PAYSLIP.add(textField_Pagibig);
-		textField_Pagibig.setColumns(10);
+		textField_genPagibig = new JTextField();
+		textField_genPagibig.setBounds(386, 332, 116, 22);
+		panel_PAYSLIP.add(textField_genPagibig);
+		textField_genPagibig.setColumns(10);
 		
-		JLabel lblBasicSalary = new JLabel("Basic salary");
+		JLabel lblBasicSalary = new JLabel("Base salary");
 		lblBasicSalary.setBounds(10, 248, 87, 16);
 		panel_PAYSLIP.add(lblBasicSalary);
 		
@@ -1512,14 +3135,46 @@ public class AdminPayrollGui extends JFrame {
 		lblNetIncome.setBounds(280, 426, 134, 26);
 		panel_PAYSLIP.add(lblNetIncome);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(386, 462, 116, 22);
-		panel_PAYSLIP.add(textField_1);
-		textField_1.setColumns(10);
+		textField_genNet = new JTextField();
+		textField_genNet.setBounds(386, 462, 116, 22);
+		panel_PAYSLIP.add(textField_genNet);
+		textField_genNet.setColumns(10);
 		
 		JLabel lblNet = new JLabel("Net");
 		lblNet.setBounds(280, 465, 56, 16);
 		panel_PAYSLIP.add(lblNet);
+		
+		JTextArea textArea = new JTextArea();
+		textArea.setBounds(546, 211, 288, 379);
+		panel_PAYSLIP.add(textArea);
+		
+		JButton btnGeneratePayslip = new JButton("Generate payslip");
+		btnGeneratePayslip.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textArea.setText("***************************************\n");
+				textArea.setText(textArea.getText()+"          *PAYROLL MANAGEMENT*         \n");
+				textArea.setText(textArea.getText()+"***************************************\n");
+				Date obj = new Date();
+				String Date = obj.toString();
+				textArea.setText(textArea.getText()+"\n"+Date+"\n");
+				textArea.setText(textArea.getText()+"Gross Income\n");
+				textArea.setText(textArea.getText()+"Base Salary: "+textField_basesalary.getText()+" \n");
+				textArea.setText(textArea.getText()+"Deduction\n");
+				textArea.setText(textArea.getText()+"Tax: "+textField_genTax.getText()+" \n");
+				textArea.setText(textArea.getText()+"SSS: "+textField_genSSS.getText()+" \n");
+				textArea.setText(textArea.getText()+"Philhealth: "+textField_genPHILHEALTH.getText()+" \n");
+				textArea.setText(textArea.getText()+"Pagibig: "+textField_genPagibig.getText()+" \n");
+				textArea.setText(textArea.getText()+"NET INCOME\n");
+				textArea.setText(textArea.getText()+"NET: "+textField_genNet.getText()+" \n");
+				textArea.setText(textArea.getText()+"\n");
+				textArea.setText(textArea.getText()+"\n");
+				textArea.setText(textArea.getText()+"                              Signiture\n");
+				textArea.setText(textArea.getText()+"***************************************\n");
+
+			}
+		});
+		btnGeneratePayslip.setBounds(556, 603, 153, 23);
+		panel_PAYSLIP.add(btnGeneratePayslip);
 		
 		
 	}

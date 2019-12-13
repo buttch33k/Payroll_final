@@ -54,61 +54,26 @@ end \\
 delimiter ;
 call addjobz;
 
-delimiter \\
-create procedure ccheckti()
-begin
-select *
-from Attendance_NowTI;
-end \\
-delimiter ; 
-call ccheckti;
-
-
 DELIMITER &&
-CREATE PROCEDURE insertTI(in empID int, in petsa varchar(255), in pumasok varchar(255))
+CREATE PROCEDURE insertTI(in empID int, in petsa varchar(255), in pumasok varchar(255), in buwan int)
 BEGIN
-INSERT INTO Attendance_NowTI(employee_id, date, time_in) VALUES (empID, petsa,pumasok);
-SELECT * FROM Attendance_NowTI;
+INSERT INTO Attendance(employee_id, date, time_in, month_) VALUES (empID, petsa,pumasok, buwan);
+SELECT * FROM Attendance;
 END &&
 DELIMITER ;
 
-drop procedure insertti;
+drop procedure insertTI;
 
 Delimiter &&
-create procedure inserTO(in empid int,IN timeout varchar(255), IN totalhours varchar(255))
+create procedure inserTO(IN timeout varchar(255), IN totalhours varchar(255))
 begin
-insert into timeout(e_id, time_out, no_of_hours) values (empid, timeout, totalhours);
-select * from timeout;
+insert into attendance(time_out,totalhr) values (timeout,totalhours);
 end &&
 delimiter ;
-drop procedure inserTO;
+drop procedure inserto;
 
 
 
-delimiter \\
-create procedure viewtime()
-begin
-select A.emp_id, A.username, A.passwords, A.emp_type, B.date, B.time_in,C.time_out,C.no_of_hours 
-from employee_Table A inner join Attendance_NowTI B on A.emp_id= B.employee_id join timeout C on A.emp_id = C.e_id;
-end \\
-delimiter ;
-call viewtime;
 
-
-delimiter \\
-create procedure checktimeindate()
-begin
-select employee_id,  date from Attendance_NowTI;
-end \\
-delimiter ;
-drop procedure checktimeindate;
-call checktimeindate();
-
-select A.emp_id, A.username, A.passwords, A.emp_type, B.date, B.time_in,C.time_out,C.no_of_hours 
-from employee_Table A inner join Attendance_NowTI B on A.emp_id= B.employee_id join timeout C on A.emp_id = C.e_id;
-
-
-
-Select * from employee_Table e INNER join JobTitle_Table j on e.emp_id =j.job_id where emp_id = 1;
 
 
