@@ -104,7 +104,6 @@ public class adminMenuGui extends JFrame {
 	private JTextField textField_salaray;
 	private JTable table1;
 	private JTextField textField_id;
-
 	float hours;
 
 	JLabel Time_O = new JLabel(dtf.format(lt));
@@ -135,8 +134,8 @@ public class adminMenuGui extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					adminMenuGui frame = new adminMenuGui();
-					frame.setVisible(true);
+					adminMenuGui adminGUiframe = new adminMenuGui();
+					adminGUiframe.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -147,6 +146,8 @@ public class adminMenuGui extends JFrame {
 	//	 * Create the frame
 
 	public adminMenuGui() {
+		setTitle("Admin Menu");
+		setResizable(false);
 		conn = ConnectDB.doConnect();
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -157,7 +158,7 @@ public class adminMenuGui extends JFrame {
 		contentPane.setLayout(null);
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(10, 40, 738, 453);
+		tabbedPane.setBounds(10, 40, 738, 465);
 		contentPane.add(tabbedPane);
 
 		JPanel panel_home = new JPanel();
@@ -170,14 +171,14 @@ public class adminMenuGui extends JFrame {
 		Time_I.setForeground(Color.RED);
 		Time_I.setBounds(12, 80, 120, 20);
 		panel_home.add(Time_I);
-		
-		btnTimeOut = new JButton("Time out");
+
+		btnTimeOut = new JButton("TIME OUT");
 		btnTimeOut.setEnabled(false);
-		btnTimeOut.setBounds(144, 112, 89, 23);
+		btnTimeOut.setBounds(144, 112, 101, 23);
 		panel_home.add(btnTimeOut);
 
-		JButton btnTimeI = new JButton("Time in");
-		btnTimeI.setBounds(144, 79, 89, 23);
+		JButton btnTimeI = new JButton("TIME IN");
+		btnTimeI.setBounds(144, 79, 101, 23);
 		panel_home.add(btnTimeI);
 		btnTimeI.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -234,16 +235,15 @@ public class adminMenuGui extends JFrame {
 					pst.setString(1, empId);
 					pst.setString(2, datenow);
 					ResultSet rs = pst.executeQuery();
-
+//deleted
 					while(rs.next()) {
-						
 						if(rs.getString(3) != null) {
 							btnTimeI.setEnabled(false);
 							Time_I.setEnabled(false);
 							Time_I.setText(rs.getString(3));
 							System.out.println("timeinverify");
 						}
-						
+
 						if(rs.getString(4) != null) {
 							System.out.println("disable line 248");
 							btnTimeOut.setEnabled(false);
@@ -251,18 +251,14 @@ public class adminMenuGui extends JFrame {
 							Time_O.setText(rs.getString(4));
 							System.out.println("timoutverify");
 						}
-						
-
 					}
-
-					
 
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
-						
+
 			}
 		});
 
@@ -297,7 +293,7 @@ public class adminMenuGui extends JFrame {
 						}
 					};
 					clock.start();
-					
+
 					Time_O.setEnabled(true);
 					System.out.println("enable line 397");
 					//btnTimeOut.setEnabled(true);
@@ -314,7 +310,7 @@ public class adminMenuGui extends JFrame {
 			}
 		});
 
-		
+
 		btnTimeOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Time_O.getText();
@@ -394,42 +390,9 @@ public class adminMenuGui extends JFrame {
 					c.printStackTrace();
 				}
 				System.out.println("disable line 491");
-				btnTimeOut.setEnabled(false);
 
 			}	
 		});
-
-
-		JButton btnLogOut = new JButton("Log out");
-		btnLogOut.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-				LoginGui frame = new LoginGui();
-			}
-		});
-		btnLogOut.setBounds(12, 378, 89, 23);
-		btnLogOut.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				LoginGui log = new LoginGui();	
-
-				dispose(); //to exit
-
-				log.main(null);
-				//System.exit(0);
-			}
-		});
-		panel_home.add(btnLogOut);
-
-		JButton btnPayroll = new JButton("PAYROLL");
-		btnPayroll.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				AdminPayrollGui Payframe = new AdminPayrollGui();
-				Payframe.setVisible(true);
-			}
-		});
-		btnPayroll.setBounds(12, 340, 97, 25);
-		panel_home.add(btnPayroll);
 
 		JLabel label_Emp = new JLabel("Employee #:");
 		label_Emp.setBounds(12, 13, 101, 14);
@@ -625,9 +588,9 @@ public class adminMenuGui extends JFrame {
 				String empT = textField_emptype.getText().toString();
 				String empStat = textField_stat.getText().toString();;
 
-				boolean testEmail, testMob,testpin;
-				Pattern patternEmail, patternMob,patternpin;
-				Matcher matcherEmail, matcherMob,matcherpin;
+				boolean testEmail, testMob;
+				Pattern patternEmail, patternMob;
+				Matcher matcherEmail, matcherMob;
 
 
 				patternEmail = Pattern.compile(EMAIL_PATTERN);
@@ -638,8 +601,12 @@ public class adminMenuGui extends JFrame {
 				matcherMob = patternMob.matcher(num);
 				testMob = matcherMob.matches();
 
-				if((!testEmail) || (!testMob)){
-					JOptionPane.showMessageDialog(null, "Enter Valid email or mobile");
+				if(!testEmail){
+					JOptionPane.showMessageDialog(null, "Enter Valid email");
+				}
+				if (!testMob) {
+					JOptionPane.showMessageDialog(null, "Enter Valid mobile");
+
 				}
 
 				else{
@@ -654,12 +621,11 @@ public class adminMenuGui extends JFrame {
 						}
 						System.out.println(sqladd);
 						Class.forName("com.mysql.jdbc.Driver");
-						Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "root");
 						stmt = conn.prepareCall(sqladd);
 						stmt.executeUpdate(sqladd);
 
 						JOptionPane.showMessageDialog(null, "Record Added Successfully");
-						LoginGui frame = new LoginGui();
+						new LoginGui();
 					} catch (SQLException | ClassNotFoundException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -860,7 +826,7 @@ public class adminMenuGui extends JFrame {
 				try {
 					String sql = "Select * from employee_Table where emp_id = '"+srchfldEnterempId.getText().toString()+"' ";
 					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "root");
-					PreparedStatement pst = conn.prepareStatement(sql);
+					conn.prepareStatement(sql);
 					stmt = conn.prepareCall(sql);
 					ResultSet rs = stmt.executeQuery(sql);
 
@@ -921,7 +887,7 @@ public class adminMenuGui extends JFrame {
 								radioButton.setSelected(false);
 								radioButton_1.setSelected(true);
 							}
-							String type = rs.getString("emp_type");
+		 
 
 							comboBox_1.setSelectedItem(rs.getString("country"));
 							textField_City.setText(rs.getString("city"));
@@ -964,7 +930,7 @@ public class adminMenuGui extends JFrame {
 				String City1 = textField_City.getText();
 				String emil1 =  textField_Email.getText().toString();
 				String num1 = textField_mobil.getText().toString();
-				String Age1 = textField_Age.getText().toString();
+				textField_Age.getText().toString();
 				java.sql.Date dat1 = new java.sql.Date(dateChooser_1.getDate().getTime());
 				String country1 = comboBox_1.getSelectedItem().toString();
 				String add1 = textArea_1.getText();
@@ -977,7 +943,7 @@ public class adminMenuGui extends JFrame {
 					String sql = "update employee_Table set job_id = '"+changeJob+"',emp_type = '"+emptypers+"', status_id = '"+empStatus+"', username = '"+Usern1+"',passwords = '"+Passw1+"',last_name = '"+lname1+"',first_name ='"+fname1+"',dob = '"+dat1+"',gender = '"+gen1+"',country ='"+country1+ "', city = '"+City1+"', address ='"+add1+"',email='"+ emil1+"', mobile_no = '"+num1+"' where emp_id = '"+srchfldEnterempId.getText().toString()+"' ";
 
 					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "root");
-					PreparedStatement pst = conn.prepareStatement(sql);
+					conn.prepareStatement(sql);
 					stmt = conn.prepareCall(sql);
 					stmt.executeUpdate(sql);
 					System.out.println(sql);
@@ -1143,7 +1109,7 @@ public class adminMenuGui extends JFrame {
 				try {
 					String sqlchangeJOb = "Select first_name,last_name,job_id from employee_Table  where emp_id = '"
 							+ searchField_forChangeJob.getText().toString() + "' ";
-					PreparedStatement pst = conn.prepareStatement(sqlchangeJOb);
+					conn.prepareStatement(sqlchangeJOb);
 					stmt = conn.prepareCall(sqlchangeJOb);
 					ResultSet rs = stmt.executeQuery(sqlchangeJOb);
 
@@ -1209,15 +1175,15 @@ public class adminMenuGui extends JFrame {
 		JButton btnUpdateJob = new JButton("Update Job");
 		btnUpdateJob.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String fnameJObup = textField_fnjobdits.getText();
-				String lnameJObup = textField_lnjobdits.getText();
+				textField_fnjobdits.getText();
+				textField_lnjobdits.getText();
 				int changeJobx = Integer.parseInt(textField_jobID.getText());
 
 				try {
 					String sql = "update employee_Table set job_id = '"+changeJobx+"' where emp_id = '"+searchField_forChangeJob.getText().toString()+"' ";
 
 					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/payroll_final?autoReconnect=true&useSSL=false","root", "root");
-					PreparedStatement pst = conn.prepareStatement(sql);
+					conn.prepareStatement(sql);
 					stmt = conn.prepareCall(sql);
 					stmt.executeUpdate(sql);
 					System.out.println(sql);
@@ -1306,7 +1272,26 @@ public class adminMenuGui extends JFrame {
 		scrollPane_1.setBounds(12, 13, 680, 302);
 		panel_2.add(scrollPane_1);
 
+		JTable selectAlltab = new JTable();
+		scrollPane_1.setViewportView(selectAlltab);
+
 		JButton btnShowAllEmployee = new JButton("Show All Employee");
+		btnShowAllEmployee.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					String allEmp = "Select * from employee_Table";
+
+					rs=stmt.executeQuery(allEmp);
+					selectAlltab.setModel(DbUtils.resultSetToTableModel(rs));
+
+
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
 		btnShowAllEmployee.setBounds(284, 328, 141, 25);
 		panel_2.add(btnShowAllEmployee);
 
@@ -1319,6 +1304,40 @@ public class adminMenuGui extends JFrame {
 		contentPane.add(lblhiz);
 		lblhiz.setForeground(Color.RED);
 		lblhiz.setText(String.valueOf(EmployeeName.emp_lstname).toString());
+
+		JButton btnPayroll = new JButton("PAYROLL");
+		btnPayroll.setBounds(267, 8, 97, 25);
+		contentPane.add(btnPayroll);
+
+
+		JButton btnLogOut = new JButton("LOG OUT");
+		btnLogOut.setBounds(376, 8, 108, 24);
+		contentPane.add(btnLogOut);
+		btnLogOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new LoginGui();
+			}
+		});
+		btnLogOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				LoginGui log = new LoginGui();	
+
+				dispose(); //to exit
+
+				log.main(null);
+				//System.exit(0);
+			}
+		});
+		btnPayroll.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+				AdminPayrollGui Payframe = new AdminPayrollGui();
+				Payframe.setVisible(true);
+				
+			}
+		});
 
 
 

@@ -26,10 +26,10 @@ foreign key(job_id)references JobTitle_Table(job_id)
 
 insert into employee_Table(username, passwords, emp_type, status_id, job_id,last_name,first_name,dob,age,gender,country,city,address,email,mobile_no )
 values
-('q', 'q',1,1,1,"lacsamana", "neil","1995-09-17",23,"male","ph","makati", "cavite camella","nlacsama09@gmail.com","9157018454"),
-('w', 'w',1,2,2,"nanquil", "aly","1995-09-17",21,"female","ph","makati", "cavite camella","nlacsama09@gmail.com","9157018454"),
-('e', 'e',2,1,3,"rivera", "reese","1995-09-17",21,"male","ph","makati", "cavite camella","nlacsama09@gmail.com","9157018454"),
-('r', 'r',1,2,4,"miranda", "vivian","1995-09-17",21,"female","ph","makati", "cavite camella","nlacsama09@gmail.com","9157018454");
+('q', 'q',1,1,1,"lacsamana", "neil","1995-09-17",23,"male","ph","cavite", "cavite camella","nlacsama09@gmail.com","9157018454"),
+('w', 'w',2,2,2,"nanquil", "aly","1995-09-17",21,"female","ph","makati", "bankal evang","nanquil@gmail.com","9157018454"),
+('e', 'e',2,2,3,"rivera", "reese","1995-09-17",21,"male","ph","makati", "manda","rivera@gmail.com","9157018454"),
+('r', 'r',1,2,4,"miranda", "vivian","1995-09-17",21,"female","ph","makati", "taguig ilog","miranda@gmail.com","9157018454");
 
 create table JobTitle_Table(
 job_id int,

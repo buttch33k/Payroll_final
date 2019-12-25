@@ -1,6 +1,5 @@
 package Employee;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -20,7 +19,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.JSpinner;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 import com.toedter.calendar.JDateChooser;
@@ -28,8 +26,6 @@ import com.toedter.calendar.JDateChooser;
 import Main.ConnectDB;
 import Main.EmployeeName;
 import Main.LoginGui;
-import net.proteanit.sql.DbUtils;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JRadioButton;
@@ -37,11 +33,6 @@ import javax.swing.JComboBox;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.SwingConstants;
-import org.jdesktop.xswingx.JXSearchField;
-import org.jdesktop.xswingx.JXSearchField.LayoutStyle;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -49,22 +40,12 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.Date;
-import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-import java.time.format.FormatStyle;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import javax.swing.event.CaretListener;
-import javax.swing.event.CaretEvent;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.InputMethodListener;
-import java.awt.event.InputMethodEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 
@@ -80,36 +61,32 @@ public class EmployeeMenuGui extends JFrame {
 	private JTextField textField_city;
 	private JTextField textField_email;
 	private JTextField textField_Mobile;
-	
-//	Connection conn;
-//	Statement stmt;
-//	ResultSet rs,rss;
-	
+
 	float hours;
-	
+
 	JLabel Time_O = new JLabel(dtf.format(lt));
 	String timeout = Time_O.getText();
 	JButton btnTimeOut = new JButton("Time out");
 	JLabel Time_I = new JLabel(dtf.format(lt));
 	String timein = Time_I.getText();
-	
+
 	DateTimeFormatter dtf1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	LocalDateTime now = LocalDateTime.now();
-	
+
 	DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("MM");
 	LocalDateTime now2 = LocalDateTime.now();
-	
+
 	static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("h:m a");
 	static LocalTime lt = LocalTime.now();
-	
-	 DateTimeFormatter dtfAP = DateTimeFormatter.ofPattern("a");
-	 LocalTime ltAP = LocalTime.now();
+
+	DateTimeFormatter dtfAP = DateTimeFormatter.ofPattern("a");
+	LocalTime ltAP = LocalTime.now();
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args){
-		
+
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -125,7 +102,9 @@ public class EmployeeMenuGui extends JFrame {
 									null, null, null);
 							if (confirm == JOptionPane.YES_OPTION) {
 								frame.setDefaultCloseOperation(frame.DISPOSE_ON_CLOSE);// yes
-
+								LoginGui Lframe = new LoginGui();
+								Lframe.setVisible(true);
+								Lframe.setTitle("Login");
 							} else if (confirm == JOptionPane.CANCEL_OPTION) {
 								frame.setDefaultCloseOperation(frame.DO_NOTHING_ON_CLOSE);// cancel
 							} else {
@@ -140,13 +119,14 @@ public class EmployeeMenuGui extends JFrame {
 			}
 		});
 	}
-	
+
 	/**
 	 * Create the frame.
 	 */
-	
+
 	public EmployeeMenuGui(){
-		
+		setTitle("Employee menu");
+
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 670, 482);
@@ -156,78 +136,63 @@ public class EmployeeMenuGui extends JFrame {
 		contentPane.setLayout(null);
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(0, 0, 648, 452);
+		tabbedPane.setBounds(12, 40, 640, 394);
 		contentPane.add(tabbedPane);
 
 		JPanel panel_time = new JPanel();
 
 		tabbedPane.addTab("Time in/out", null, panel_time, null);
 		panel_time.setLayout(null);
-		
+
 		Time_I.setBackground(Color.WHITE);
 		Time_I.setFont(new Font("Times New Roman", Font.PLAIN, 15));
 		Time_I.setForeground(Color.RED);
 		Time_I.setBounds(50, 80, 120, 20);
 		panel_time.add(Time_I);
-		
+
 		JButton btnTimeI = new JButton("Time in");
 		btnTimeI.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-				
-					if(!btnTimeI.isEnabled()) {
-						btnTimeOut.setEnabled(true);
-						Time_O.setEnabled(true);
-					}
+
+				if(!btnTimeI.isEnabled()) {
+					btnTimeOut.setEnabled(true);
+					Time_O.setEnabled(true);
+				}
 			}
 		});
 		btnTimeI.setBounds(202, 79, 89, 23);
 		panel_time.add(btnTimeI);
 		btnTimeI.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-					
-						btnTimeI.setEnabled(false);
-						Time_I.setEnabled(false);
-						
-						try {
-						
-						Connection	conn = ConnectDB.doConnect();
-						
-					 	 CallableStatement statement = conn.prepareCall("CALL insertTI(?,?,?,?)");
-					     statement.setString(1, String.valueOf(EmployeeName.empid).toString());
-						 statement.setString(2, dtf1.format(now));
-						 statement.setString(3, timein);
-						 statement.setString(4, dtf2.format(now2));
-						 
-						 statement.executeQuery();
-						 
-						 btnTimeI.setEnabled(false);
-						 
-						} catch (SQLException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						} 
-						
+
+				btnTimeI.setEnabled(false);
+				Time_I.setEnabled(false);
+
+				try {
+
+					Connection	conn = ConnectDB.doConnect();
+
+					CallableStatement statement = conn.prepareCall("CALL insertTI(?,?,?,?)");
+					statement.setString(1, String.valueOf(EmployeeName.empid).toString());
+					statement.setString(2, dtf1.format(now));
+					statement.setString(3, timein);
+					statement.setString(4, dtf2.format(now2));
+
+					statement.executeQuery();
+
+					btnTimeI.setEnabled(false);
+
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} 
+
 			}
 		});
-		
-		JButton btnLogOut = new JButton("Log out");
-		btnLogOut.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-					LoginGui log = new LoginGui();	
-					
-					dispose(); //to exit
-					
-					log.main(null);
-					//System.exit(0);
-			}
-		});
-		btnLogOut.setBounds(489, 374, 89, 23);
-		panel_time.add(btnLogOut);
-		
+
 		JLabel lblHi = new JLabel("");
 		lblHi.setText(String.valueOf(EmployeeName.empid).toString());
-		lblHi.setBounds(101, 42, 101, 14);
+		lblHi.setBounds(131, 42, 101, 14);
 		panel_time.add(lblHi);
 		lblHi.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -244,14 +209,14 @@ public class EmployeeMenuGui extends JFrame {
 					ResultSet rs = pst.executeQuery();
 
 					while(rs.next()) {
-						
+
 						if(rs.getString(3) != null) {
 							btnTimeI.setEnabled(false);
 							Time_I.setEnabled(false);
 							Time_I.setText(rs.getString(3));
 							System.out.println("timeinverify");
 						}
-						
+
 						if(rs.getString(4) != null) {
 							System.out.println("disable line 248");
 							btnTimeOut.setEnabled(false);
@@ -259,21 +224,21 @@ public class EmployeeMenuGui extends JFrame {
 							Time_O.setText(rs.getString(4));
 							System.out.println("timoutverify");
 						}
-						
+
 
 					}
 
-					
+
 
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
-						
+
 			}
 		});
-		
+
 		Time_O.setEnabled(false);			
 		Time_O.setBackground(Color.WHITE);
 		Time_O.setFont(new Font("Times New Roman", Font.PLAIN, 15));
@@ -305,7 +270,7 @@ public class EmployeeMenuGui extends JFrame {
 						}
 					};
 					clock.start();
-					
+
 					Time_O.setEnabled(true);
 					System.out.println("enable line 397");
 					//btnTimeOut.setEnabled(true);
@@ -313,8 +278,8 @@ public class EmployeeMenuGui extends JFrame {
 
 			}
 		});
-		
-		
+
+
 		btnTimeOut.setEnabled(false);
 		btnTimeOut.setBounds(202, 110, 89, 23);
 		panel_time.add(btnTimeOut);
@@ -403,18 +368,9 @@ public class EmployeeMenuGui extends JFrame {
 		});
 
 		JLabel lblEmployee = new JLabel("Employee #:");
-		lblEmployee.setBounds(9, 42, 71, 14);
+		lblEmployee.setBounds(9, 42, 110, 14);
 		panel_time.add(lblEmployee);
 
-		JLabel label_12 = new JLabel("Logged in As:");
-		label_12.setBounds(10, 17, 80, 14);
-		panel_time.add(label_12);
-
-		JLabel lblLastname = new JLabel("");
-		lblLastname.setText(String.valueOf(EmployeeName.emp_lstname).toString());
-		lblLastname.setBounds(101, 17, 101, 14);
-		panel_time.add(lblLastname);
-		
 		JLabel lblDate = new JLabel(dtf1.format(now));
 		lblDate.setBounds(310, 17, 101, 14);
 		panel_time.add(lblDate);
@@ -513,7 +469,7 @@ public class EmployeeMenuGui extends JFrame {
 		panel_updatedetails.add(label_9);
 
 		textField_city = new JTextField();
-		textField_city.setBounds(408, 131, 86, 20);
+		textField_city.setBounds(408, 131, 137, 20);
 		panel_updatedetails.add(textField_city);
 		textField_city.setColumns(10);
 
@@ -522,7 +478,7 @@ public class EmployeeMenuGui extends JFrame {
 		panel_updatedetails.add(label_10);
 
 		textField_email = new JTextField();
-		textField_email.setBounds(408, 162, 86, 20);
+		textField_email.setBounds(408, 162, 137, 20);
 		panel_updatedetails.add(textField_email);
 		textField_email.setColumns(10);
 
@@ -531,7 +487,7 @@ public class EmployeeMenuGui extends JFrame {
 		panel_updatedetails.add(label_11);
 
 		textField_Mobile = new JTextField();
-		textField_Mobile.setBounds(408, 193, 86, 20);
+		textField_Mobile.setBounds(408, 193, 137, 20);
 		panel_updatedetails.add(textField_Mobile);
 		textField_Mobile.setColumns(10);
 
@@ -555,7 +511,7 @@ public class EmployeeMenuGui extends JFrame {
 				String country = comboBox.getSelectedItem().toString();
 				String add = textArea.getText();
 				String gen = bG.getSelection().getActionCommand();
-//			
+				//			
 				try {
 					String sql = "update employee_Table set username = '" + Usern + "',passwords = '" + Passw
 							+ "',last_name = '" + lname + "',first_name ='" + fname + "',dob = '" + dat + "',gender = '"
@@ -587,7 +543,7 @@ public class EmployeeMenuGui extends JFrame {
 		JButton btnCancel = new JButton("CANCEL");
 		btnCancel.setBounds(306, 350, 89, 23);
 		panel_updatedetails.add(btnCancel);
-		
+
 		JLabel lblupdateDetails = new JLabel("");
 		lblupdateDetails.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -661,15 +617,36 @@ public class EmployeeMenuGui extends JFrame {
 			}
 		});
 		lblupdateDetails.setText(String.valueOf(EmployeeName.empid).toString());
-		lblupdateDetails.setBounds(118, 13, 46, 14);
+		lblupdateDetails.setBounds(95, 11, 46, 14);
 		panel_updatedetails.add(lblupdateDetails);
-		
-		JLabel lblEmployeeNumber = new JLabel("Employee number: ");
-		lblEmployeeNumber.setBounds(10, 13, 98, 14);
+
+		JLabel lblEmployeeNumber = new JLabel("Employee #: ");
+		lblEmployeeNumber.setBounds(10, 13, 78, 14);
 		panel_updatedetails.add(lblEmployeeNumber);
 
-		JPanel panel_payslipgen = new JPanel();
-		tabbedPane.addTab("New tab", null, panel_payslipgen, null);
+		JLabel label_12 = new JLabel("Logged in As:");
+		label_12.setBounds(12, 13, 80, 14);
+		contentPane.add(label_12);
+
+		JLabel lblLastname = new JLabel("");
+		lblLastname.setBounds(104, 13, 101, 14);
+		contentPane.add(lblLastname);
+		lblLastname.setText(String.valueOf(EmployeeName.emp_lstname).toString());
+
+		JButton btnLogOut = new JButton("Log out");
+		btnLogOut.setBounds(155, 9, 89, 23);
+		contentPane.add(btnLogOut);
+		btnLogOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				LoginGui log = new LoginGui();	
+
+				dispose(); //to exit
+
+				log.main(null);
+				//System.exit(0);
+			}
+		});
 
 	}
 }
